@@ -3,30 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VICTOR STORE - Sua Loja de Apps (Design Dinâmico)</title>
+    <title>VICTOR STORE - Design Transparente Profissional</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Cores Primárias e Secundárias */
-            --primary-bg-dark: #1A237E; /* NOVO: Fundo principal Azul Escuro */
-            --glass-bg: rgba(26, 35, 126, 0.7); /* Fundo do Glassmorphism (70% Opaco, Cor Base) */
-            --highlight-color: #6DE350; /* Verde de destaque */
-            --secondary-highlight-color: #007BFF; /* Azul de destaque (usado em links/botões) */
+            /* NOVO TEMA: TRANSPARÊNCIA ÁGUA AZUL PROFISSIONAL */
+            --bg-color: rgba(10, 25, 47, 0.95); /* Fundo sutilmente azul escuro */
+            --bg-transparent-card: rgba(255, 255, 255, 0.05); /* Fundo de card transparente */
+            --bg-transparent-modal: rgba(0, 0, 0, 0.85); /* Fundo de modal escuro/transparente */
             
-            /* Cores de Texto */
-            --text-color-dark: #F8F9FA; /* Texto principal CLARO */
-            --text-color-light: #F8F9FA; 
-            --text-color-muted: #ADB5BD; 
+            --highlight-color: #00BFFF; /* Azul Água/Céu */
+            --secondary-highlight-color: #3B82F6; /* Azul Profissional */
 
-            /* Sombras e Bordas (Ajustadas para fundos escuros e 3D) */
-            --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-            --border-radius-base: 16px;
+            /* Cores de Texto */
+            --text-color-dark: #FFFFFF; 
+            --text-color-light: #FFFFFF; 
+            --text-color-muted: rgba(255, 255, 255, 0.7); 
+
+            /* Sombras (Efeito 3D Sutil) */
+            --shadow-3d-light: 0 4px 8px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            --shadow-3d-medium: 0 8px 16px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.15);
+            --border-radius-base: 12px;
             
-            /* Tipografia */
             --font-family-base: 'Poppins', sans-serif;
-            
-            /* Configurações 3D */
-            perspective: 1000px;
         }
 
         /* --- Estilos Globais e Reset --- */
@@ -38,73 +37,29 @@
 
         body {
             font-family: var(--font-family-base);
-            background-color: var(--primary-bg-dark); 
+            /* Fundo com imagem ou degradê para simular transparência */
+            background: linear-gradient(135deg, #101c3d 0%, #081122 100%); 
             color: var(--text-color-dark); 
             line-height: 1.6;
-            overflow-x: hidden;
         }
         
-        /* Efeito de Vidro (Glassmorphism) */
+        /* Efeito de vidro (Glassmorphism) para transparência */
         .glass-effect {
-            background: var(--glass-bg);
-            box-shadow: var(--shadow-glass);
-            backdrop-filter: blur(10px) saturate(180%);
-            -webkit-backdrop-filter: blur(10px) saturate(180%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        /* --- Animações Profissionais (Keyframes) --- */
-        
-        /* Keyframes para Entrada/Saída de Cards */
-        @keyframes card-fade-in {
-            from { opacity: 0; transform: translateY(20px) rotateX(-5deg); }
-            to { opacity: 1; transform: translateY(0) rotateX(0deg); }
-        }
-        
-        /* Animação para o clique/hover 3D no Card */
-        .app-card {
-            /* Transição para o efeito 3D no hover */
-            transform-style: preserve-3d;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            animation: card-fade-in 0.5s ease-out forwards;
+            box-shadow: var(--shadow-3d-light);
+            background-color: var(--bg-transparent-card);
         }
 
-        .app-card:hover {
-            transform: scale(1.05) translateY(-5px) rotateY(2deg);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 10px var(--highlight-color);
-        }
-        
-        /* Animação de Entrada do Modal (3D Flip-In) */
-        @keyframes modal-3d-in {
-            from { opacity: 0; transform: scale(0.8) rotateX(-90deg); }
-            to { opacity: 1; transform: scale(1) rotateX(0deg); }
-        }
-        
-        /* Animação de Saída do Modal (Fade/Zoom Out) */
-        @keyframes modal-fade-out {
-            from { opacity: 1; transform: scale(1); }
-            to { opacity: 0; transform: scale(0.95); }
-        }
-        
-        /* Classes para o JS controlar as transições de tela */
-        .modal.animate-in .modal-content {
-            animation: modal-3d-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-        .modal.animate-out .modal-content {
-            animation: modal-fade-out 0.3s ease-out forwards;
-        }
-
-        /* --- Barra Superior e Pesquisa (sticky e glass) --- */
+        /* --- Barra Superior e Pesquisa (sticky) --- */
         .top-bar {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 10px 5%;
-            background-color: var(--glass-bg); /* Aplica o fundo de vidro */
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            background-color: var(--bg-color); /* Fundo principal sutilmente azul */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
             z-index: 1000;
             position: sticky; 
             top: 0;
@@ -116,212 +71,198 @@
             color: var(--text-color-light); 
             text-decoration: none;
             letter-spacing: -1px;
-            transition: color 0.3s;
         }
-        .logo a span { color: var(--highlight-color); } /* Logo VictorStore mantido */
+        .logo a span {
+            color: var(--highlight-color);
+        }
 
-        .search-full-bar { flex-grow: 1; margin: 0 15px; }
         .search-input-wrapper {
-            display: flex;
-            align-items: center;
-            background-color: rgba(255, 255, 255, 0.1); /* Fundo do campo de pesquisa mais claro */
+            /* Aplica o efeito de vidro na barra de pesquisa */
+            background-color: var(--bg-transparent-card); 
             border-radius: 25px;
             padding: 8px 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .search-input {
-            width: 100%; padding: 0 0 0 10px; border: none; outline: none; background: none;
-            font-size: 0.95rem; color: var(--text-color-light); 
+            color: var(--text-color-light); 
         }
-        .search-input::placeholder { color: var(--text-color-muted); }
-        .search-icon { color: var(--text-color-light); width: 20px; height: 20px; }
+        .search-input::placeholder {
+             color: var(--text-color-muted);
+        }
+        .search-icon {
+            color: var(--highlight-color); 
+        }
 
         .hamburger-btn {
-            background: none; border: none; color: var(--text-color-light); 
-            font-size: 1.5rem; cursor: pointer; padding: 5px; display: flex; 
-            z-index: 1001; margin-left: 10px;
+            color: var(--text-color-light); 
         }
         
-        /* --- Menu Hamburguer (Glassmorphism e Animação Slide) --- */
+        /* --- Menu Hamburguer --- */
         .nav-menu { 
-            display: flex; flex-direction: column; justify-content: space-between; 
-            position: fixed; top: 0; right: 0; width: 80%; max-width: 320px; height: 100%; 
-            padding: 10px 0; 
-            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Animação mais suave */
-            transform: translateX(100%); z-index: 999;
-            /* Aplicando Glassmorphism */
-            background: var(--glass-bg);
-            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: var(--bg-color); 
         }
-        .nav-menu.open { transform: translateX(0); }
-        .menu-overlay { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0, 0, 0, 0.7); z-index: 998; 
-            transition: opacity 0.4s;
-        }
-        .nav-menu.open ~ .menu-overlay { display: block; opacity: 1; }
-        
-        .nav-menu ul { list-style: none; padding: 50px 20px 20px 20px; overflow-y: auto; flex-grow: 1; }
-        
-        /* Estilo dos Botões Grandes */
-        .nav-menu li { margin-bottom: 12px; }
         .nav-menu a {
-            display: flex; align-items: center; gap: 15px; padding: 15px; 
-            background-color: rgba(255, 255, 255, 0.1); /* Fundo sutil */
-            color: var(--text-color-light); text-decoration: none;
-            border-radius: 12px;
-            font-size: 1rem; font-weight: 500;
-            transition: background-color 0.2s, transform 0.2s;
+            /* Aplica o efeito de vidro nos botões do menu */
+            background-color: var(--bg-transparent-card); 
+            color: var(--text-color-light);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         .nav-menu a:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            transform: translateX(5px);
+            background-color: rgba(255, 255, 255, 0.15);
         }
-        /* Ajuste para links SEM SVG */
         .nav-menu a.no-icon {
-            background-color: var(--highlight-color); 
-            color: var(--primary-bg-dark); font-weight: 700; /* Texto escuro no botão verde */
+            background-color: var(--secondary-highlight-color); 
+            color: white; 
+            border: none;
+            box-shadow: var(--shadow-3d-light); /* 3D Sutil */
         }
         .nav-menu a.no-icon:hover {
-            background-color: #5ac743;
+            background-color: #3b82f6cc;
+            transform: translateY(-2px); /* Efeito 3D */
         }
         .nav-menu a.logout-icon {
-            background-color: #8c2a38;
-            color: var(--text-color-light);
+            background-color: #dc3545; /* Vermelho/erro */
         }
-        .nav-menu a.logout-icon:hover {
-            background-color: #a33b4d;
+        .nav-menu a svg {
+            color: var(--highlight-color); 
         }
-        .nav-menu a svg { min-width: 24px; height: 24px; color: var(--highlight-color); }
 
-        .menu-footer {
-            padding: 15px 20px; text-align: center; font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.4); border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        /* --- Barra de Filtros (Glassmorphism) --- */
+        /* --- Barra de Filtros --- */
         .category-filter-bar {
-            display: flex; overflow-x: auto; padding: 0 5%; margin-bottom: 20px;
-            background-color: var(--glass-bg); /* Aplicando o vidro */
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            padding-top: 10px; top: 55px; position: sticky; 
-            z-index: 990; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: var(--bg-color);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
-        .category-filter-bar::-webkit-scrollbar { display: none; }
 
         .filter-button {
-            flex-shrink: 0; background-color: transparent;
+            background-color: transparent;
             border: 1px solid var(--text-color-muted);
-            color: var(--text-color-dark);
-            padding: 8px 15px; margin-right: 10px;
-            border-radius: 20px; cursor: pointer;
-            font-size: 0.85rem; font-weight: 500;
-            transition: background-color 0.2s, border-color 0.2s, transform 0.1s;
-            white-space: nowrap; display: flex; align-items: center; gap: 5px;
+            color: var(--text-color-dark); 
         }
 
-        .filter-button:hover { background-color: rgba(255, 255, 255, 0.1); transform: scale(1.05); }
+        .filter-button:hover {
+            background-color: rgba(255, 255, 255, 0.1); 
+        }
 
         .filter-button.active {
-            background-color: var(--secondary-highlight-color);
-            border-color: var(--secondary-highlight-color);
-            color: var(--text-color-light);
-        }
-
-        /* --- Layout Principal e Cards (3D) --- */
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
-        .content-section { margin-bottom: 30px; }
-        .section-header h2 { color: var(--highlight-color); }
-        .dynamic-feed-container { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); 
-            gap: 20px; 
-            padding-bottom: 30px; 
-        }
-        
-        .app-card { 
-            /* Aplica o glass-effect diretamente no card */
-            background-color: rgba(255, 255, 255, 0.05); 
-            border-radius: var(--border-radius-base); 
-            padding: 0; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            text-align: center; 
-            cursor: pointer; 
-            width: 100px; 
-            flex-shrink: 0; 
-            height: auto; 
-            padding-bottom: 10px;
-        }
-        /* Ajuste para o grid vertical ter o mesmo estilo 3D */
-        .dynamic-feed-container .app-card, .full-list-grid .app-card { width: 100%; flex-shrink: 1; }
-
-        .app-icon { width: 90px; height: 90px; border-radius: 15px; object-fit: cover; margin: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); }
-        .app-title { font-size: 0.85rem; font-weight: 500; color: var(--text-color-dark); margin-bottom: 2px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; width: 90%; }
-        .app-description { font-size: 0.75rem; color: var(--text-color-muted); line-height: 1.2; height: 30px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; width: 90%; }
-        
-        /* --- Modal Content (Detalhes e Geral) Glassmorphism + Animação --- */
-        .modal { 
-            display: none; position: fixed; z-index: 2000; left: 0; top: 0; 
-            width: 100%; height: 100%; overflow: auto; 
-            background-color: rgba(0,0,0,0.8); /* Fundo do modal (overlay) */
-            justify-content: center; align-items: center; padding: 20px; 
-        }
-        .modal-content { 
-            background: var(--glass-bg); /* Glassmorphism */
-            box-shadow: var(--shadow-glass);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-color-dark); 
-            padding: 0; border-radius: var(--border-radius-base); width: 90%; max-width: 450px; 
-            position: relative; max-height: 90vh; overflow-y: auto; 
-            transform-style: preserve-3d; /* Permite animação 3D */
-        }
-        
-        /* NOVO: Estilo para inputs no modal de Auth para ficarem transparentes */
-        .auth-input {
-            width: 100%;
-            padding: 12px 15px;
-            margin-bottom: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            background-color: rgba(255, 255, 255, 0.1); /* Fundo transparente */
-            color: var(--text-color-dark);
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-
-        .details-download-btn {
             background-color: var(--highlight-color);
-            color: var(--primary-bg-dark); /* Texto escuro no botão de destaque */
+            border-color: var(--highlight-color);
+            color: var(--bg-color); /* Texto escuro no destaque azul */
+            box-shadow: var(--shadow-3d-light); /* 3D Sutil */
         }
-        .login-prompt {
-            color: var(--highlight-color);
+
+        /* --- Cards (Reduzidos e Transparente/3D) --- */
+        .section-header h2 { color: var(--text-color-dark); }
+        .view-all-link { color: var(--highlight-color); }
+        
+        /* Ajuste para grids para suportar cards menores */
+        .dynamic-feed-container { 
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* REDUZIDO */
+            gap: 15px; 
         }
-        .modal-close {
-            text-shadow: 0 0 5px rgba(0, 0, 0, 0.8); /* Torna o 'x' mais visível */
+        .full-list-grid { 
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* REDUZIDO */
+            gap: 15px; 
+        }
+        .content-grid { 
+            gap: 12px; /* Reduzido */
         }
         
+        /* CARD PRINCIPAL - Transparente e 3D */
+        .app-card { 
+            background-color: var(--bg-transparent-card); 
+            width: 80px; /* REDUZIDO */
+            padding-bottom: 8px; /* Reduzido */
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+        .app-card:hover {
+            transform: translateY(-3px); /* Efeito 3D de levantar */
+            box-shadow: var(--shadow-3d-medium);
+        }
+        .app-icon { 
+            width: 75px; /* REDUZIDO */
+            height: 75px; /* REDUZIDO */
+            border-radius: 10px; /* Reduzido */
+            margin-bottom: 5px; /* Reduzido */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        .app-title { font-size: 0.75rem; width: 90%; }
+        .app-description { font-size: 0.65rem; color: var(--text-color-muted); line-height: 1.1; height: 25px; }
+
+
+        /* --- Modal Content (Detalhes) --- */
+        .modal { background-color: var(--bg-transparent-modal); }
+        .modal-content { 
+            background-color: var(--bg-color); /* Fundo do Modal */
+            color: var(--text-color-dark); 
+        }
+        .details-header { height: 120px; } /* Reduzido */
+        .details-info h3 { font-size: 1.1rem; }
+        .details-download-btn { 
+            background-color: var(--highlight-color); 
+            color: #101c3d; /* Texto muito escuro no destaque azul */
+            box-shadow: var(--shadow-3d-medium); /* 3D forte */
+            font-size: 0.95rem; /* Reduzido */
+        }
+        .details-download-btn:hover { 
+            background-color: #0099e0; 
+            transform: translateY(-2px); /* Efeito 3D */
+        }
+        .details-download-btn:disabled { 
+            background-color: var(--text-color-muted); 
+            transform: none; 
+            box-shadow: none;
+        }
+        #related-apps-section { border-top: 1px solid rgba(255, 255, 255, 0.1); }
+        .login-prompt { color: var(--highlight-color); }
+
+        /* --- NOVO ESTILO: Modal de Autenticação (Ajustado para Visibilidade) --- */
+        #auth-modal .modal-content {
+            padding: 20px; /* Reduzido o padding */
+            max-width: 400px; 
+            /* Importante: garante que o modal não vaze para fora da tela */
+            max-height: 95vh; 
+            overflow-y: auto; 
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+        }
+        #auth-modal h2 { margin-bottom: 15px; font-size: 1.3rem; }
+        .auth-input {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 0, 0, 0.2); /* Fundo mais transparente */
+        }
+        .auth-input:focus {
+            border-color: var(--highlight-color);
+        }
+        .auth-btn {
+            box-shadow: var(--shadow-3d-light); /* 3D Sutil */
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+        .auth-btn:hover {
+            transform: translateY(-1px);
+        }
+        .auth-submit-btn {
+            background-color: var(--highlight-color);
+            color: #101c3d; 
+        }
+        .toggle-auth-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-color-light);
+            border: 1px solid var(--secondary-highlight-color);
+        }
+        .google-login-btn {
+            background-color: #4285F4;
+        }
+
+        /* Ajustes para Desktop */
         @media (min-width: 768px) {
-            .hamburger-btn { display: none; }
-            .nav-menu { display: none !important; }
-            .menu-overlay { display: none !important; }
-            .content-grid .app-card { width: 120px; }
-            .app-icon { width: 110px; height: 110px; }
-            .dynamic-feed-container { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 25px; }
-            .full-list-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 25px; }
-            .modal-content { max-width: 500px; }
+            .app-card { width: 100px; } /* Ligeiro aumento para desktop */
+            .app-icon { width: 95px; height: 95px; }
+            .dynamic-feed-container { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 20px; }
+            .full-list-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 20px; }
         }
     </style>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
@@ -332,7 +273,7 @@
         </div>
         
         <div class="search-full-bar">
-            <div class="search-input-wrapper glass-effect">
+            <div class="search-input-wrapper">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search search-icon"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
                 <input type="text" id="search-input" class="search-input" placeholder="Pesquisar Apps, Jogos, Software...">
             </div>
@@ -343,7 +284,7 @@
         </button>
     </div>
 
-    <nav class="nav-menu glass-effect" id="hamburger-menu">
+    <nav class="nav-menu" id="hamburger-menu">
         <ul id="main-nav-ul">
              <li><a href="#" data-filter-type="jogo">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gamepad-2"><path d="M6 10a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2Z"/><path d="M12 15h1"/><path d="M11 14v1"/></svg>
@@ -371,7 +312,7 @@
     </nav>
     <div class="menu-overlay"></div> 
     
-    <nav class="category-filter-bar glass-effect" id="category-filter-bar">
+    <nav class="category-filter-bar" id="category-filter-bar">
         </nav>
 
 
