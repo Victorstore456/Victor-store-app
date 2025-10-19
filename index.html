@@ -3,29 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VICTOR STORE - Sua Loja de Apps (Design Dinâmico)</title>
+    <title>VICTOR STORE - Sua Loja de Apps e Músicas (Acesso Livre)</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             /* Cores Primárias e Secundárias */
-            --primary-bg-white: #212B36; /* Cor de Fundo PRINCIPAL (Preto/Escuro) */
-            --highlight-color: #6DE350; /* Verde de destaque */
-            --secondary-highlight-color: #007BFF; /* Azul de destaque */
-            --error-color: #DC3545; /* Vermelho para erros/alertas */
+            --primary-bg-white: #F8F9FA; /* Fundo principal mais suave */
+            --header-blue-transparent: rgba(0, 75, 150, 0.75); /* Azul para o cabeçalho, um pouco mais opaco */
+            --highlight-color: #6DE350; /* Verde de destaque vibrante */
+            --secondary-highlight-color: #007BFF; /* Azul para botões/links secundários */
 
             /* Cores de Texto */
-            --text-color-dark: #F8F9FA; /* Texto principal agora é CLARO */
-            --text-color-light: #F8F9FA; 
-            --text-color-muted: #ADB5BD; /* Cor de texto mudo mais claro para fundo escuro */
+            --text-color-dark: #212B36; /* Texto escuro para fundo claro */
+            --text-color-light: #F8F9FA; /* Texto claro para fundo escuro */
+            --text-color-muted: #6B7B8F; /* Texto mais suave para descrições */
 
-            /* Sombras e Bordas (Ajustadas para fundos escuros) */
-            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.3);
-            --shadow-medium: 0 8px 16px rgba(0, 0, 0, 0.4);
-            --border-radius-base: 8px;
+            /* Cores de Feedback */
+            --success-color: #28A745;
+            --error-color: #DC3545;
+            --info-color: #17A2B8;
+
+            /* Sombras e Bordas */
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 8px 16px rgba(0, 0, 0, 0.1);
+            --border-radius-base: 12px;
+            
+            /* Tipografia */
             --font-family-base: 'Poppins', sans-serif;
         }
 
-        /* Reset Básico */
+        /* --- Estilos Globais e Reset --- */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -37,227 +44,282 @@
             background-color: var(--primary-bg-white);
             color: var(--text-color-dark);
             line-height: 1.6;
+            padding-top: 60px; /* Espaço para o cabeçalho fixo */
         }
-
-        a {
-            text-decoration: none;
-            color: var(--text-color-dark);
-        }
-
-        /* --- Header / Barra Superior --- */
-        #header {
+        
+        /* --- Estilos do Cabeçalho (Header) --- */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
-            background-color: #1A222A; /* Um pouco mais escuro que o fundo */
+            padding: 10px 5%;
+            background-color: var(--header-blue-transparent);
             box-shadow: var(--shadow-medium);
-            position: sticky;
-            top: 0;
             z-index: 1000;
+            backdrop-filter: blur(10px);
         }
 
-        #logo {
-            font-size: 1.5em;
+        .logo a {
+            font-size: 1.5rem;
             font-weight: 700;
+            color: var(--text-color-light);
+            text-decoration: none;
+            letter-spacing: -1px;
+            transition: color 0.3s;
+        }
+
+        .logo a span {
             color: var(--highlight-color);
         }
 
-        /* --- Menu Hamburger --- */
-        #hamburger-menu {
-            width: 30px;
-            height: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            cursor: pointer;
-            z-index: 1001;
-        }
-
-        .bar {
+        /* --- Menu de Navegação --- */
+        .nav-menu {
+            display: none; /* Escondido por padrão no mobile */
+            position: absolute;
+            top: 60px;
+            left: 0;
             width: 100%;
-            height: 3px;
-            background-color: var(--text-color-dark);
-            transition: all 0.3s ease-in-out;
-        }
-
-        #hamburger-menu.open .bar:nth-child(1) {
-            transform: rotate(-45deg) translate(-5px, 6px);
-        }
-
-        #hamburger-menu.open .bar:nth-child(2) {
-            opacity: 0;
-        }
-
-        #hamburger-menu.open .bar:nth-child(3) {
-            transform: rotate(45deg) translate(-5px, -6px);
-        }
-
-        /* --- Menu Overlay --- */
-        #menu-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
+            background-color: rgba(0, 75, 150, 0.95);
+            box-shadow: var(--shadow-medium);
+            padding: 10px 0;
+            text-align: center;
+            transition: transform 0.3s ease-in-out;
+            transform: translateY(-100%);
             z-index: 999;
         }
 
-        .menu-content {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 80%; /* Menu ocupa 80% da tela */
-            max-width: 300px;
-            height: 100%;
-            background-color: #1A222A;
-            padding: 30px 20px;
-            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
-            transform: translateX(100%);
-            animation: slideIn 0.3s forwards;
+        .nav-menu.open {
+            display: block;
+            transform: translateY(0);
+        }
+
+        .nav-menu ul {
+            list-style: none;
+        }
+
+        .nav-menu ul li {
+            margin: 10px 0;
+        }
+
+        .nav-menu ul li a {
+            color: var(--text-color-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            padding: 5px 15px;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-menu ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .hamburger-btn {
+            background: none;
+            border: none;
+            color: var(--text-color-light);
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: block; /* Visível no mobile */
+            z-index: 1001;
         }
         
-        @keyframes slideIn {
-            to {
-                transform: translateX(0);
-            }
-        }
-
-        .menu-list {
-            list-style: none;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #333;
-        }
-
-        .menu-list li {
-            margin-bottom: 15px;
-            font-size: 1.1em;
-            font-weight: 500;
-            cursor: pointer;
-            transition: color 0.2s;
+        /* --- Ações do Usuário (Search e Profile) --- */
+        .user-actions {
             display: flex;
             align-items: center;
-            color: var(--text-color-muted);
+            gap: 10px;
         }
 
-        .menu-list li:hover, .menu-list li.active {
+        .search-container {
+            position: relative;
+        }
+
+        .search-bar {
+            position: absolute;
+            top: 50%;
+            right: 40px; 
+            transform: translateY(-50%);
+            width: 0;
+            opacity: 0;
+            transition: width 0.3s ease, opacity 0.3s ease;
+            overflow: hidden;
+            background: var(--text-color-light);
+            border-radius: 6px;
+            box-shadow: var(--shadow-light);
+        }
+        
+        .header.search-active .search-bar {
+            width: 200px;
+            opacity: 1;
+            padding: 0 10px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 10px;
+            border: none;
+            outline: none;
+            background: none;
+            font-size: 1rem;
+        }
+
+        .search-btn, .profile-btn {
+            background: none;
+            border: none;
+            color: var(--text-color-light);
+            cursor: pointer;
+            font-size: 1.25rem;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-btn:hover, .profile-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .profile-btn-content {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .profile-btn-content span {
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: none; /* Esconder nome no mobile */
+        }
+        
+        .profile-btn-content svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* --- Layout Principal --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 5%;
+        }
+
+        /* --- Seções e Títulos --- */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-header h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-color-dark);
+            border-left: 4px solid var(--highlight-color);
+            padding-left: 10px;
+        }
+
+        .view-all-link {
+            color: var(--secondary-highlight-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .view-all-link:hover {
             color: var(--highlight-color);
         }
 
-        .menu-list li svg {
-            width: 20px;
-            height: 20px;
-            margin-right: 10px;
-        }
-        
-        /* --- Notificação de Atualização Forçada --- */
-        #forced-update-notification {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: var(--error-color);
-            color: var(--text-color-light);
-            padding: 10px;
-            text-align: center;
-            font-weight: 600;
-            z-index: 1000;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        #forced-update-notification:hover {
-            background-color: #B02A37;
-        }
-
-
-        /* --- Main Content e Search --- */
-        #main-content {
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        #search-container {
-            margin-bottom: 25px;
-        }
-
-        #search-input {
-            width: 100%;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 50px;
-            background-color: #333; /* Fundo escuro para o campo */
-            color: var(--text-color-dark);
-            font-size: 1em;
-            box-shadow: var(--shadow-light);
-            outline: none;
-        }
-        
         /* --- Grid de Conteúdo --- */
-        #grid-title {
-            font-size: 1.5em;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: var(--text-color-dark);
-        }
-
         .content-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 15px;
-            padding-bottom: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
         }
-
-        .content-card {
-            background-color: #1A222A;
+        
+        /* --- Card do App/Música --- */
+        .app-card {
+            background-color: var(--text-color-light);
             border-radius: var(--border-radius-base);
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
             box-shadow: var(--shadow-light);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            height: 100%;
         }
 
-        .content-card:hover {
-            transform: translateY(-3px);
+        .app-card:hover {
+            transform: translateY(-5px);
             box-shadow: var(--shadow-medium);
         }
 
-        .content-card img {
-            width: 60px;
-            height: 60px;
-            border-radius: 15px;
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
             object-fit: cover;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        /* Estilo específico para APKs */
-        .apk-icon-style {
-            border-radius: 50%; /* APKs podem ser redondos ou outro estilo */
-            border: 2px solid var(--secondary-highlight-color);
-        }
-
-        .card-info {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .card-title {
-            font-size: 0.85em;
+        .app-title {
+            font-size: 1rem;
             font-weight: 600;
             color: var(--text-color-dark);
+            margin-bottom: 4px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            width: 100%;
         }
 
-        .card-category {
-            font-size: 0.7em;
+        .app-description {
+            font-size: 0.8rem;
             color: var(--text-color-muted);
+            line-height: 1.4;
+            flex-grow: 1; /* Garante que os cards tenham altura similar */
+        }
+        
+        /* Mensagem de Vazio/Loading */
+        .empty-grid-message, .loading-message {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: var(--text-color-muted);
+            padding: 40px 0;
+            font-size: 1.1rem;
         }
 
+        /* --- Estilos do Footer --- */
+        .footer {
+            background-color: var(--text-color-dark);
+            color: var(--text-color-light);
+            padding: 30px 5%;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+        
+        .footer a {
+            color: var(--highlight-color);
+            text-decoration: none;
+        }
+        
         /* --- Modal Base --- */
         .modal {
             display: none; 
@@ -268,25 +330,21 @@
             width: 100%; 
             height: 100%; 
             overflow: auto; 
-            background-color: rgba(0,0,0,0.8);
-            padding-top: 60px;
+            background-color: rgba(0,0,0,0.6); 
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
         }
 
         .modal-content {
-            background-color: #1A222A;
-            margin: 5% auto; 
-            padding: 20px;
+            background-color: var(--primary-bg-white);
+            margin: 10% auto; 
+            padding: 30px;
             border-radius: var(--border-radius-base);
-            width: 90%;
-            max-width: 500px;
-            position: relative;
             box-shadow: var(--shadow-medium);
-            animation: fadeIn 0.3s;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+            max-width: 400px;
+            width: 90%;
+            position: relative;
         }
 
         .modal-close {
@@ -294,341 +352,518 @@
             float: right;
             font-size: 28px;
             font-weight: bold;
-            line-height: 20px;
-            cursor: pointer;
-            transition: color 0.2s;
+            transition: color 0.3s;
         }
 
         .modal-close:hover,
         .modal-close:focus {
-            color: var(--highlight-color);
+            color: var(--error-color);
+            text-decoration: none;
+            cursor: pointer;
         }
-
-        /* --- Modal de Detalhes (Details Modal) --- */
+        
+        .modal h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--secondary-highlight-color);
+            text-align: center;
+        }
+        
+        /* --- Modal de Detalhes do Item --- */
+        #details-modal .modal-content {
+            max-width: 600px;
+            text-align: left;
+        }
+        
         .details-header {
             display: flex;
+            gap: 20px;
             align-items: center;
             margin-bottom: 20px;
+            border-bottom: 1px solid #E9ECEF;
             padding-bottom: 15px;
-            border-bottom: 1px solid #333;
         }
 
-        .details-header img {
-            width: 80px;
-            height: 80px;
-            border-radius: 20px;
-            object-fit: cover;
-            margin-right: 15px;
+        #details-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
-
+        
         .details-info h3 {
-            font-size: 1.5em;
+            font-size: 1.8rem;
             margin-bottom: 5px;
             color: var(--text-color-dark);
         }
-
+        
         .details-info p {
-            font-size: 0.9em;
             color: var(--text-color-muted);
+            font-weight: 500;
         }
         
         .details-full-description {
-            margin-bottom: 25px;
-            font-size: 1em;
-            color: var(--text-color-muted);
-            white-space: pre-wrap; /* Mantém quebras de linha */
+            font-size: 1rem;
+            margin-bottom: 30px;
         }
-
+        
         .details-download-btn {
             width: 100%;
-            padding: 12px;
             background-color: var(--highlight-color);
-            color: var(--primary-bg-white);
-            border: none;
-            border-radius: var(--border-radius-base);
-            font-size: 1.1em;
+            color: var(--text-color-dark);
+            padding: 15px;
+            font-size: 1.1rem;
+            border-radius: 10px;
             font-weight: 700;
+            border: none;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: background-color 0.3s, transform 0.1s;
         }
-
+        
         .details-download-btn:hover {
-            background-color: #5bbd42;
+            background-color: #55d03d;
+            transform: translateY(-2px);
         }
         
-        #related-apps-section {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #333;
-        }
-        
-        .related-section-header {
-             font-size: 1.2em;
-             margin-bottom: 15px;
-             color: var(--highlight-color);
-        }
-
-
-        /* --- Modal de Lista Completa (Full List Modal) --- */
-        .full-list-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 15px;
-            padding: 10px 0;
-            max-height: 70vh;
-            overflow-y: auto;
-        }
-        
-        .full-list-grid .content-card {
-            /* Estilos de card já definidos */
-        }
-        
-        
-        /* --- NOVOS ESTILOS PARA O MODAL DE AUTENTICAÇÃO --- */
-        .auth-content {
-            max-width: 400px;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .auth-content h2 {
-            margin-bottom: 25px;
-            color: var(--highlight-color);
-            font-weight: 600;
-        }
-
-        .input-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 0.9em;
-            color: var(--text-color-muted);
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 10px 15px;
-            border: 1px solid #444; /* Borda mais suave para tema escuro */
-            border-radius: var(--border-radius-base);
-            background-color: #333; /* Fundo do campo mais escuro */
-            color: var(--text-color-dark); /* Cor do texto dentro do campo */
-            font-size: 1em;
-            outline: none;
-        }
-
-        .google-btn {
-            width: 100%;
-            padding: 10px;
-            background-color: #fff;
-            color: #000;
-            border: none;
-            border-radius: var(--border-radius-base);
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            transition: background-color 0.2s;
-        }
-
-        .google-btn:hover {
-            background-color: #eee;
-        }
-
-        .google-icon {
-            width: 24px;
-            height: 24px;
-            margin-right: 10px;
-        }
-
-        .divider {
-            text-align: center;
-            margin: 20px 0;
-            font-size: 0.8em;
-            color: var(--text-color-muted);
-            position: relative;
-        }
-
-        .divider::before, .divider::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 40%;
-            height: 1px;
-            background-color: #444;
-        }
-
-        .divider::before { left: 0; }
-        .divider::after { right: 0; }
-
-        .submit-btn {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--highlight-color);
-            color: var(--primary-bg-white);
-            border: none;
-            border-radius: var(--border-radius-base);
-            font-size: 1.1em;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: background-color 0.2s;
-        }
-
-        .submit-btn:hover {
-            background-color: #5bbd42;
-        }
-
-        .toggle-mode-btn {
-            background: none;
-            border: none;
-            color: var(--secondary-highlight-color);
-            margin-top: 15px;
-            cursor: pointer;
-            font-size: 0.9em;
-            text-decoration: underline;
-        }
-        
+        /* Oculta o prompt de login/erro, pois o download é livre */
         .login-prompt {
-            margin-top: 15px;
-            padding: 10px;
-            text-align: center;
-            color: var(--error-color); 
-            font-weight: 500;
-            border: 1px dashed var(--error-color);
-            border-radius: 8px;
-            background-color: rgba(220, 53, 69, 0.1);
+            display: none !important; 
         }
-        
-        /* Media Queries para Responsividade */
-        @media (min-width: 600px) {
+
+        /* --- Media Queries (Responsividade) --- */
+        @media (min-width: 768px) {
+            .hamburger-btn {
+                display: none;
+            }
+
+            .nav-menu {
+                display: block;
+                position: static;
+                width: auto;
+                background: none;
+                box-shadow: none;
+                transform: translateY(0);
+                padding: 0;
+            }
+
+            .nav-menu ul {
+                display: flex;
+                gap: 20px;
+            }
+
+            .nav-menu ul li a {
+                color: var(--text-color-light);
+                font-weight: 400;
+            }
+            
+            .header.search-active .search-bar {
+                width: 300px;
+                right: 5%; /* Ajusta a posição da barra de pesquisa no desktop */
+            }
+            
+            .search-bar {
+                right: 140px; 
+            }
+            
+            .profile-btn-content span {
+                display: inline; /* Mostrar nome no desktop */
+            }
+
             .content-grid {
-                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            }
+            
+            .app-card {
+                padding: 20px;
+            }
+            
+            .app-icon {
+                width: 90px;
+                height: 90px;
+            }
+            
+            .app-title {
+                font-size: 1.1rem;
             }
         }
-        
     </style>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
-    <div id="forced-update-notification" onclick="window.location.reload();" style="display: none;">
-        <span id="update-notification-text">Nova atualização disponível! Clique para recarregar.</span>
-    </div>
+    <header class="header" id="main-header">
+        <div class="logo">
+            <a href="#">VICTOR<span>STORE</span></a>
+        </div>
+        
+        <nav class="nav-menu" id="hamburger-menu">
+            <ul>
+                <li><a href="#games-section">Jogos</a></li>
+                <li><a href="#apps-section">Apps</a></li>
+                <li><a href="#music-section">Músicas</a></li>
+                <li><a href="#movies-series-section">Filmes/Séries</a></li>
+                <li><a href="#frp-section">FRP</a></li>
+                <li><a href="#software-section">Software</a></li>
+                </ul>
+        </nav>
 
-    <header id="header">
-        <div id="logo">VICTOR STORE</div>
-        <div id="hamburger-menu">
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
+        <div class="user-actions">
+            <div class="search-container">
+                <div class="search-bar" id="search-bar">
+                    <input type="text" id="search-input" class="search-input" placeholder="Pesquisar Apps, Músicas...">
+                </div>
+                <button class="search-btn" id="search-btn" aria-label="Pesquisar">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </button>
+            </div>
+            
+            <button class="profile-btn" id="profile-btn" aria-label="Perfil do Usuário">
+                <div class="profile-btn-content">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <span id="profile-status">Acesso Livre</span>
+                </div>
+            </button>
+            
+            <button class="hamburger-btn" id="hamburger-btn" aria-label="Abrir Menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+            </button>
         </div>
     </header>
 
-    <div id="menu-overlay">
-        <div class="menu-content">
-            <div id="logo">VICTOR STORE</div>
-            <ul class="menu-list">
-                <li data-category="all" class="category-link active"><i data-lucide="home"></i> <span>Início</span></li>
-                <li data-category="Apps" class="category-link"><i data-lucide="app-window"></i> <span>Apps</span></li>
-                <li data-category="Jogos" class="category-link"><i data-lucide="gamepad"></i> <span>Jogos</span></li>
-                <li data-category="APKs" class="category-link"><i data-lucide="package-open"></i> <span>APKs Mod</span></li>
-                <li id="menu-login-item" style="display: flex; align-items: center; cursor: pointer;">
-                    <i data-lucide="log-in"></i> <span>Entrar na Conta</span>
-                </li>
-                <li id="menu-profile-item" style="display: none; align-items: center; cursor: pointer;">
-                    </li>
-                <li><a href="https://t.me/seuusername" target="_blank"><i data-lucide="message-square"></i> <span>Falar Conosco</span></a></li>
-            </ul>
-        </div>
-    </div>
+    <main class="container">
+        <section class="hero-banner" style="
+            background: linear-gradient(135deg, var(--secondary-highlight-color), var(--header-blue-transparent)); 
+            color: var(--text-color-light); 
+            padding: 40px; 
+            border-radius: var(--border-radius-base); 
+            margin-bottom: 40px; 
+            text-align: center;
+        ">
+            <h1>Descubra Novidades na VICTOR STORE!</h1>
+            <p style="opacity: 0.9;">Apps inovadores e as melhores músicas, tudo em um só lugar. **Acesso e Download Livres!**</p>
+        </section>
 
-    <main id="main-content">
-        <div id="search-container">
-            <input type="search" id="search-input" placeholder="Pesquisar Apps, Jogos, Software...">
-        </div>
+        <section id="games-section">
+            <div class="section-header">
+                <h2>Novidades em Jogos</h2>
+                <a href="#" class="view-all-link">Ver todos</a>
+            </div>
+            <div class="content-grid" id="games-grid">
+                <div class="loading-message">Carregando Jogos...</div>
+            </div>
+        </section>
 
-        <h2 id="grid-title">Recentes e Destaques</h2>
-        <div class="content-grid" id="content-grid">
-            <p>Carregando conteúdo...</p>
-        </div>
+        <section id="apps-section">
+            <div class="section-header">
+                <h2>Últimos Apps (Geral)</h2>
+                <a href="#" class="view-all-link">Ver todos</a>
+            </div>
+            <div class="content-grid" id="apps-grid">
+                <div class="loading-message">Carregando Apps...</div>
+            </div>
+        </section>
+        
+        <section id="music-section">
+            <div class="section-header">
+                <h2>Lançamentos de Músicas</h2>
+                <a href="#" class="view-all-link">Ver todos</a>
+            </div>
+            <div class="content-grid" id="music-grid">
+                <div class="loading-message">Carregando Músicas...</div>
+            </div>
+        </section>
+        
+        <section id="movies-series-section">
+            <div class="section-header">
+                <h2>Filmes e Séries</h2>
+                <a href="#" class="view-all-link">Ver todos</a>
+            </div>
+            <div class="content-grid" id="movies-series-grid">
+                <div class="loading-message">Carregando Filmes/Séries...</div>
+            </div>
+        </section>
+        
+        <section id="frp-section">
+            <div class="section-header">
+                <h2>Ferramentas FRP/Desbloqueio</h2>
+                <a href="#" class="view-all-link">Ver todos</a>
+            </div>
+            <div class="content-grid" id="frp-grid">
+                <div class="loading-message">Carregando Ferramentas...</div>
+            </div>
+        </section>
+        
+        <section id="software-section">
+            <div class="section-header">
+                <h2>Software e Utilidades (PC/Outros)</h2>
+                <a href="#" class="view-all-link">Ver todos</a>
+            </div>
+            <div class="content-grid" id="software-grid">
+                <div class="loading-message">Carregando Softwares...</div>
+            </div>
+        </section>
+
     </main>
-    
+
+    <footer class="footer">
+        <p>&copy; 2024 VICTOR STORE. Todos os direitos reservados.</p>
+        <p>Desenvolvido com <a href="#">Firebase & Tailwind</a> (Estilos adaptados).</p>
+    </footer>
+
     <div id="details-modal" class="modal">
         <div class="modal-content">
             <span class="modal-close" data-modal="details-modal">&times;</span>
             <div class="details-header">
-                <img id="details-icon" src="" alt="Capa do Item">
+                <img id="details-icon" src="" alt="Ícone do Item">
                 <div class="details-info">
                     <h3 id="details-title"></h3>
                     <p id="details-category-info"></p> 
                 </div>
             </div>
-            <p id="details-full-description" class="details-full-description"></p> 
+            <p id="details-full-description" class="details-full-description"></p>
             <button class="details-download-btn" id="details-download-btn">Baixar Agora</button>
             <p id="details-login-prompt" class="login-prompt" style="display: none;"></p>
-
-            <section id="related-apps-section" style="display: none;">
-                <h3 class="related-section-header">Mais da mesma Categoria</h3>
-                <div class="content-grid" id="related-apps-grid" style="padding-bottom: 0; margin-bottom: 0;">
-                </div>
-            </section>
         </div>
     </div>
     
-    <div id="full-list-modal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close" data-modal="full-list-modal">&times;</span>
-            <h2 id="full-list-title"></h2>
-            <div class="full-list-grid" id="full-list-grid">
-            </div>
-        </div>
-    </div>
-    
-    <div id="auth-modal" class="modal">
-        <div class="modal-content auth-content">
-            <span class="modal-close" data-modal="auth-modal">&times;</span>
-            
-            <h2 id="auth-title">Entrar na Conta</h2>
-            
-            <button type="button" id="google-sign-in-btn" class="google-btn">
-                <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google Logo" class="google-icon">
-                Entrar com Google
-            </button>
+    <script type="module">
+        // --- 1. CONFIGURAÇÃO E IMPORTS FIREBASE ---
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+        import { 
+            getFirestore, 
+            collection, 
+            query, 
+            where, 
+            orderBy, 
+            limit, 
+            getDocs 
+        } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-            <div class="divider">ou</div>
-            
-            <form id="auth-form">
-                <div id="auth-name-group" class="input-group" style="display: none;">
-                    <label for="auth-name">Nome de Usuário</label>
-                    <input type="text" id="auth-name" autocomplete="name">
-                </div>
-                
-                <div class="input-group">
-                    <label for="auth-email">E-mail</label>
-                    <input type="email" id="auth-email" required autocomplete="username">
-                </div>
-                
-                <div class="input-group">
-                    <label for="auth-password">Senha</label>
-                    <input type="password" id="auth-password" required autocomplete="current-password">
-                </div>
-                
-                <button type="submit" id="auth-submit-btn" class="submit-btn">Entrar</button>
-                
-                <button type="button" id="toggle-auth-mode" class="toggle-mode-btn">Não tem conta? Crie uma!</button>
-            </form>
-            
-        </div>
-    </div>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <script type="module" src="./main.js?v=2025101901"></script>
 
+        const firebaseConfig = {
+            apiKey: "AIzaSyAqUbFJRI1CplOQptliKmVZH90LB2AlZus",
+            authDomain: "victor-store-42568.firebaseapp.com",
+            projectId: "victor-store-42568",
+            storageBucket: "victor-store-42568.firebasestorage.app",
+            messagingSenderId: "977015403689",
+            appId: "1:977015403689:web:724a68bf4f7ff27f3065b8"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        let selectedItem = null; 
+        
+        // Mapeamento dos tipos de conteúdo para nomes amigáveis
+        const typeMap = {
+            'jogo': 'Jogo',
+            'app_geral': 'App (Geral)',
+            'musica': 'Música',
+            'filme_serie': 'Filme/Série',
+            'frp': 'FRP',
+            'software': 'Software'
+        };
+
+        // --- 2. REFERÊNCIAS DOM (ATUALIZADAS) ---
+        const mainHeader = document.getElementById('main-header');
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const hamburgerMenu = document.getElementById('hamburger-menu');
+        const searchBtn = document.getElementById('search-btn');
+        const searchInput = document.getElementById('search-input');
+        const profileBtn = document.getElementById('profile-btn');
+        const profileStatus = document.getElementById('profile-status'); 
+        const detailsModal = document.getElementById('details-modal');
+        const detailsDownloadBtn = document.getElementById('details-download-btn');
+        // Novo elemento para o modal de detalhes
+        const detailsCategoryInfo = document.getElementById('details-category-info'); 
+        
+        // Grids de Conteúdo (TODOS OS NOVOS)
+        const contentGrids = {
+            'jogo': document.getElementById('games-grid'),
+            'app_geral': document.getElementById('apps-grid'),
+            'musica': document.getElementById('music-grid'),
+            'filme_serie': document.getElementById('movies-series-grid'),
+            'frp': document.getElementById('frp-grid'),
+            'software': document.getElementById('software-grid')
+        };
+        
+        // Estrutura para os tipos de conteúdo e suas respectivas seções
+        const contentSections = [
+            { id: 'jogo', grid: contentGrids['jogo'], title: 'Jogos' },
+            { id: 'app_geral', grid: contentGrids['app_geral'], title: 'Apps (Geral)' },
+            { id: 'musica', grid: contentGrids['musica'], title: 'Músicas' },
+            { id: 'filme_serie', grid: contentGrids['filme_serie'], title: 'Filmes/Séries' },
+            { id: 'frp', grid: contentGrids['frp'], title: 'FRP' },
+            { id: 'software', grid: contentGrids['software'], title: 'Software' }
+        ];
+
+        // --- 3. FUNÇÕES UTILITÁRIAS ---
+
+        function toggleSearchBar() {
+            mainHeader.classList.toggle('search-active');
+            if (mainHeader.classList.contains('search-active')) {
+                searchInput.focus();
+            } else {
+                searchInput.value = '';
+            }
+        }
+        
+        // Função para renderizar um card de App/Música
+        function renderAppCard(data, gridElement) {
+            const card = document.createElement('div');
+            card.className = 'app-card';
+            // Certifique-se de que todos os dados necessários estão no dataset
+            card.dataset.name = data.name;
+            card.dataset.description = data.description;
+            card.dataset.fullDescription = data.fullDescription || data.description;
+            card.dataset.image = data.image;
+            card.dataset.type = data.type; // Tipo Principal
+            card.dataset.category = data.category; // Categoria Específica
+            card.dataset.downloadLink = data.downloadLink;
+
+            card.innerHTML = `
+                <img src="${data.image}" class="app-icon" alt="Ícone de ${data.name}" onerror="this.onerror=null; this.src='https://placehold.co/80x80/212B36/F8F9FA?text=${data.type.toUpperCase().substring(0,3)}';">
+                <div class="app-title">${data.name}</div>
+                <div class="app-description">${data.category || data.description}</div> `;
+            
+            card.addEventListener('click', () => showDetailsModal(data));
+
+            gridElement.appendChild(card);
+        }
+        
+        // --- 4. FUNÇÃO DE CARREGAMENTO DE CONTEÚDO (FIRESTORE) ---
+        
+        async function loadContentFromFirestore() {
+            const contentCollection = collection(db, 'content');
+            
+            // 1. Prepara todas as grids com a mensagem de loading
+            contentSections.forEach(section => {
+                section.grid.innerHTML = `<div class="loading-message">Carregando ${section.title}...</div>`;
+            });
+            
+            try {
+                // 2. Cria um array de promessas de consulta (query promises)
+                const queryPromises = contentSections.map(section => {
+                    const q = query(
+                        contentCollection,
+                        where('type', '==', section.id),
+                        orderBy('createdAt', 'desc'), 
+                        limit(8)
+                    );
+                    // Retorna a promessa junto com a referência da seção
+                    return { id: section.id, promise: getDocs(q) };
+                });
+
+                // 3. Executa todas as consultas em paralelo
+                const results = await Promise.all(queryPromises.map(item => item.promise));
+
+                // 4. Processa os resultados
+                results.forEach((snapshot, index) => {
+                    const section = contentSections[index];
+                    
+                    section.grid.innerHTML = ''; // Limpa o loading
+
+                    if (snapshot.empty) {
+                        const emptyMessage = document.createElement('div');
+                        emptyMessage.className = 'empty-grid-message';
+                        emptyMessage.textContent = `Nenhum item encontrado na seção de ${section.title}.`;
+                        section.grid.appendChild(emptyMessage);
+                    } else {
+                        snapshot.forEach(doc => {
+                            renderAppCard(doc.data(), section.grid);
+                        });
+                    }
+                });
+
+                console.log("Conteúdo do Firestore carregado com sucesso para todas as seções.");
+                
+            } catch (error) {
+                console.error("Erro ao carregar o conteúdo do Firestore:", error);
+                // Exibe erro em todas as seções
+                contentSections.forEach(section => {
+                    section.grid.innerHTML = `<div class="empty-grid-message" style="color: var(--error-color);">Erro ao carregar ${section.title}: ${error.message}</div>`;
+                });
+            }
+        }
+        
+        // --- 5. FUNÇÕES DOS MODAIS ---
+
+        // Exibe o modal de detalhes preenchido
+        function showDetailsModal(itemData) {
+            selectedItem = itemData; 
+            
+            document.getElementById('details-title').textContent = itemData.name;
+            document.getElementById('details-icon').src = itemData.image;
+            document.getElementById('details-icon').alt = `Ícone de ${itemData.name}`;
+            document.getElementById('details-full-description').textContent = itemData.fullDescription || itemData.description;
+            
+            // NOVO: Exibe Tipo Principal e Categoria Específica
+            const typeDisplay = typeMap[itemData.type] || 'Conteúdo';
+            const categoryDisplay = itemData.category || 'Geral';
+            detailsCategoryInfo.textContent = `${typeDisplay} / ${categoryDisplay}`;
+
+            detailsDownloadBtn.disabled = false;
+            detailsDownloadBtn.textContent = 'Baixar Agora';
+
+            detailsModal.style.display = 'block';
+        }
+        
+        // Ação de Download (DELEGANDO AO DOWNLOAD LISTENER NATIVO DO ANDROID)
+        detailsDownloadBtn.addEventListener('click', () => {
+            
+            const downloadUrl = selectedItem.downloadLink; 
+
+            if (downloadUrl && downloadUrl.startsWith('http')) {
+                // Ação chave: define a URL do navegador. Isso ACIONA o DownloadListener do MainActivity.java.
+                window.location.href = downloadUrl;
+                
+                console.log("Download iniciado via DownloadListener nativo:", downloadUrl);
+            } else {
+                alert("Erro: Link de download inválido ou não configurado no Firebase.");
+                console.error("Erro: Link de download inválido:", downloadUrl);
+            }
+            
+            detailsModal.style.display = 'none';
+        });
+
+
+        // --- 6. HANDLERS DE EVENTOS GERAIS ---
+        
+        // Menu Hamburguer
+        hamburgerBtn.addEventListener('click', () => {
+            hamburgerMenu.classList.toggle('open');
+        });
+
+        // Botão de Pesquisa
+        searchBtn.addEventListener('click', toggleSearchBar);
+        
+        // Botão de Perfil/Login (AGORA INATIVO)
+        profileBtn.addEventListener('click', () => {
+            console.log('Botão de Perfil clicado. Acesso Livre.');
+        });
+
+        // Fechar Modais ao clicar no 'x' ou no fundo
+        document.addEventListener('click', (event) => {
+            if (event.target.classList.contains('modal-close')) {
+                if (event.target.dataset.modal === 'details-modal') {
+                    document.getElementById(event.target.dataset.modal).style.display = 'none';
+                }
+            }
+
+            if (event.target === detailsModal) {
+                detailsModal.style.display = 'none';
+            }
+        });
+
+
+        // --- 7. INICIALIZAÇÃO ---
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadContentFromFirestore(); // Carrega o conteúdo nas novas seções
+            profileStatus.textContent = 'Acesso Livre';
+        });
+
+    </script>
 </body>
 </html>
