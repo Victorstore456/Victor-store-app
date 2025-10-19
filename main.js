@@ -30,7 +30,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // ------------------------------------------------------------------
-// LÓGICA DE CHECAGEM DE ATUALIZAÇÃO E NOTIFICAÇÃO (Mantida)
+// LÓGICA DE CHECAGEM DE ATUALIZAÇÃO E NOTIFICAÇÃO
 // ------------------------------------------------------------------
 
 let latestUpdate = null; 
@@ -118,7 +118,7 @@ function handleNotificationClick(event) {
 let selectedItem = null; 
 let allContent = []; 
 
-// CATEGORIAS PRINCIPAIS: Usado para mapear IDs para nomes de exibição (Consistência 1)
+// CATEGORIAS PRINCIPAIS: Usado para mapear IDs para nomes de exibição
 const typeMap = {
     'jogo': 'Jogos',
     'app_geral': 'Apps (Geral)',
@@ -126,7 +126,7 @@ const typeMap = {
     'software': 'Software'
 };
 
-// ORDEM DE INJEÇÃO: Define a ordem das seções horizontais (Consistência 2)
+// ORDEM DE INJEÇÃO: Define a ordem das seções horizontais
 const contentSectionsOrder = ['jogo', 'app_geral', 'frp', 'software']; 
 
 const filterIcons = {
@@ -141,7 +141,7 @@ const INJECTION_INTERVAL = 15;
 let injectionIndex = 0; 
 
 
-// --- 2. REFERÊNCIAS DOM (Mantidas) ---
+// --- 2. REFERÊNCIAS DOM ---
 const hamburgerBtn = document.getElementById('hamburger-btn');
 const hamburgerMenu = document.getElementById('hamburger-menu');
 const searchInput = document.getElementById('search-input');
@@ -169,16 +169,17 @@ function renderAppCard(data, gridElement) {
     card.dataset.search = `${data.name.toLowerCase()} ${data.category ? data.category.toLowerCase() : ''} ${data.type.toLowerCase()}`;
     card.dataset.type = data.type; 
 
-    // CORREÇÃO DE IMAGEM (Garante um placeholder se a URL for inválida ou vazia)
+    // CORREÇÃO DE IMAGEM
+    const typeCode = data.type ? data.type.toUpperCase().substring(0,3) : 'APP';
     const imageUrl = data.image && data.image.startsWith('http') 
         ? data.image 
-        : `https://placehold.co/90x90/212B36/F8F9FA?text=${data.type ? data.type.toUpperCase().substring(0,3) : 'APP'}`;
+        : `https://placehold.co/90x90/212B36/F8F9FA?text=${typeCode}`;
         
     const descriptionText = data.category || data.description || 'Geral'; 
     
     card.innerHTML = `
         <img src="${imageUrl}" class="app-icon" alt="Ícone de ${data.name}" 
-             onerror="this.onerror=null; this.src='https://placehold.co/90x90/212B36/F8F9FA?text=${data.type ? data.type.toUpperCase().substring(0,3) : 'APP'}';"
+             onerror="this.onerror=null; this.src='https://placehold.co/90x90/212B36/F8F9FA?text=${typeCode}';"
         >
         <div class="app-title">${data.name}</div>
         <div class="app-description">${descriptionText}</div> `;
@@ -226,7 +227,6 @@ function renderDynamicFeedLayout(content) {
     content.forEach((item, index) => {
         renderAppCard(item, feedContainer); 
 
-        // Lógica para injetar seções horizontais baseada na ordem definida
         if ((index + 1) % INJECTION_INTERVAL === 0) {
             
             let typeToInject = null;
@@ -234,7 +234,6 @@ function renderDynamicFeedLayout(content) {
             
             do {
                 let currentType = contentSectionsOrder[injectionIndex];
-                // Verifica se o tipo existe no conteúdo GERAL antes de tentar injetar
                 if (!injectedTypes.has(currentType) && allContent.some(app => app.type === currentType)) {
                     typeToInject = currentType;
                     break;
@@ -243,7 +242,6 @@ function renderDynamicFeedLayout(content) {
             } while (injectionIndex !== initialIndex);
 
             if (typeToInject) {
-                // Pega até 8 itens dessa categoria para a seção horizontal
                 const sectionContent = allContent.filter(app => app.type === typeToInject).slice(0, 8);
                 
                 if (sectionContent.length > 0) {
@@ -274,10 +272,13 @@ function renderVerticalGrid(content, targetElement) {
     targetElement.appendChild(grid);
 }
 
-// --- 5. LÓGICA DE CARREGAMENTO E FILTROS ---
+// --- 5. LÓGICA DE CARREGAMENTO E FILTROS (Com tratamento de erro) ---
 
 async function loadContentFromFirestore() {
     const contentCollection = collection(db, 'content');
+    
+    // Referência ao elemento de mensagem de loading para removê-lo
+    const loadingMessageElement = mainContentContainer.querySelector('.loading-message');
     
     try {
         const qAll = query(contentCollection, orderBy('createdAt', 'desc'));
@@ -292,6 +293,18 @@ async function loadContentFromFirestore() {
             }
         });
 
+        // 1. Remove a mensagem de carregamento inicial
+        if (loadingMessageElement) {
+             loadingMessageElement.remove();
+        }
+
+        if (allContent.length === 0) {
+            // Caso de Sucesso, mas sem dados
+            mainContentContainer.innerHTML = `<div class="no-search-results">Nenhum aplicativo ou software encontrado no momento. Verifique mais tarde!</div>`;
+            renderCategoryFilters();
+            return;
+        }
+
         renderDynamicFeedLayout(allContent);
         renderCategoryFilters();
         
@@ -299,8 +312,24 @@ async function loadContentFromFirestore() {
         console.log(`Conteúdo do Firestore carregado. ${allContent.length} itens.`);
         
     } catch (error) {
-        console.error("Erro ao carregar o conteúdo do Firestore:", error);
-        mainContentContainer.innerHTML = `<div class="loading-message" style="width: 100%; text-align: center; color: red;">Erro ao carregar o conteúdo: ${error.message}</div>`;
+        // --- TRATAMENTO DE ERRO ROBUSTO (DEBUG) ---
+        console.error("ERRO CRÍTICO ao carregar o conteúdo do Firestore:", error);
+        
+        // 1. Remove a mensagem de carregamento inicial (se ainda existir)
+        if (loadingMessageElement) {
+             loadingMessageElement.remove();
+        }
+        
+        // 2. Exibe uma mensagem de erro clara para o usuário
+        mainContentContainer.innerHTML = `
+            <div class="no-search-results" style="color: var(--error-color); margin-top: 40px; font-size: 1.2rem;">
+                Erro ao conectar ao banco de dados.<br>
+                Verifique sua conexão ou contate o suporte.
+            </div>
+            <div class="no-search-results" style="color: var(--text-color-muted); font-size: 0.9rem; margin-top: 10px;">
+                Detalhe do erro (Apenas para debug): ${error.message}
+            </div>
+        `;
     }
 }
 
@@ -315,7 +344,7 @@ function renderCategoryFilters() {
     allButton.addEventListener('click', () => filterByCategory('all'));
     categoryFilterBar.appendChild(allButton);
     
-    // Botões de Categorias (Consistência 3: Apenas renderiza se houver conteúdo)
+    // Botões de Categorias (Apenas renderiza se houver conteúdo do tipo)
     contentSectionsOrder.forEach(typeId => {
         if (allContent.some(item => item.type === typeId)) {
             const button = document.createElement('button');
@@ -345,17 +374,15 @@ function filterByCategory(typeId) {
     }
 
     if (typeId === 'all') {
-        // Exibe o layout dinâmico para 'Tudo'
         renderDynamicFeedLayout(allContent);
     } else {
-        // Exibe a grade vertical simples para categorias específicas
         const filteredContent = allContent.filter(item => item.type === typeId);
         mainContentContainer.innerHTML = '';
         renderVerticalGrid(filteredContent, mainContentContainer);
     }
 }
 
-// --- 6. LÓGICA DE PESQUISA EM TEMPO REAL (Mantida) ---
+// --- 6. LÓGICA DE PESQUISA EM TEMPO REAL ---
 
 function filterContent(searchTerm) {
     searchTerm = searchTerm.toLowerCase().trim();
@@ -395,15 +422,15 @@ function showDetailsModal(itemData) {
     
     document.getElementById('details-title').textContent = itemData.name;
     
-    // CORREÇÃO DE IMAGEM NA MODAL (Garante um placeholder se a URL for inválida)
+    const typeCode = itemData.type ? itemData.type.toUpperCase().substring(0,3) : 'APP';
     const modalImageUrl = itemData.image && itemData.image.startsWith('http') 
         ? itemData.image 
-        : `https://placehold.co/90x90/212B36/F8F9FA?text=${itemData.type ? itemData.type.toUpperCase().substring(0,3) : 'APP'}`;
+        : `https://placehold.co/90x90/212B36/F8F9FA?text=${typeCode}`;
         
     document.getElementById('details-icon').src = modalImageUrl;
     document.getElementById('details-icon').alt = `Capa de ${itemData.name}`;
     document.getElementById('details-icon').onerror = function() {
-        this.src = `https://placehold.co/90x90/212B36/F8F9FA?text=${itemData.type ? itemData.type.toUpperCase().substring(0,3) : 'APP'}`;
+        this.src = `https://placehold.co/90x90/212B36/F8F9FA?text=${typeCode}`;
         this.onerror = null; 
     };
     
@@ -416,7 +443,7 @@ function showDetailsModal(itemData) {
     detailsDownloadBtn.disabled = false;
     detailsDownloadBtn.textContent = 'Baixar Agora';
     
-    // CORREÇÃO: Desabilita download se não houver link válido
+    // Desabilita download se não houver link válido
     if (!itemData.downloadLink || !itemData.downloadLink.startsWith('http')) {
         detailsDownloadBtn.disabled = true;
         detailsDownloadBtn.textContent = 'Link de Download Indisponível';
@@ -481,7 +508,7 @@ document.querySelectorAll('.nav-menu a').forEach(link => {
 updateNotificationLink.addEventListener('click', handleNotificationClick);
 
 
-// CORREÇÃO: Listener do botão de download (Usa window.open para evitar interrupção)
+// Listener do botão de download (Usa window.open para evitar interrupção)
 detailsDownloadBtn.addEventListener('click', () => {
     if (!selectedItem || !selectedItem.downloadLink) {
         alert("Erro: O link de download não foi encontrado. Contate o suporte.");
@@ -505,7 +532,7 @@ detailsDownloadBtn.addEventListener('click', () => {
     }
 });
 
-// --- 8. INICIALIZAÇÃO E EVENTOS GERAIS (Mantidos) ---
+// --- 8. INICIALIZAÇÃO E EVENTOS GERAIS ---
 
 // Toggle do Menu Hamburguer
 hamburgerBtn.addEventListener('click', () => {
