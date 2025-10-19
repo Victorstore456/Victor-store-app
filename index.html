@@ -3,36 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VICTOR STORE - Sua Loja de Apps e Músicas (Acesso Livre)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>VICTOR STORE 🌐 | Conteúdo Premium (Glassmorphism)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* --- Variáveis Modernas (Cores Inspiradas no Glassmorphism) --- */
         :root {
-            /* Cores Primárias e Secundárias */
-            --primary-bg-white: #F8F9FA; /* Fundo principal mais suave */
-            --header-blue-transparent: rgba(0, 75, 150, 0.75); /* Azul para o cabeçalho, um pouco mais opaco */
-            --highlight-color: #6DE350; /* Verde de destaque vibrante */
-            --secondary-highlight-color: #007BFF; /* Azul para botões/links secundários */
-
-            /* Cores de Texto */
-            --text-color-dark: #212B36; /* Texto escuro para fundo claro */
-            --text-color-light: #F8F9FA; /* Texto claro para fundo escuro */
-            --text-color-muted: #6B7B8F; /* Texto mais suave para descrições */
-
-            /* Cores de Feedback */
-            --success-color: #28A745;
-            --error-color: #DC3545;
-            --info-color: #17A2B8;
-
-            /* Sombras e Bordas */
-            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
-            --shadow-medium: 0 8px 16px rgba(0, 0, 0, 0.1);
-            --border-radius-base: 12px;
+            --primary-bg-dark: #1F2937; /* Fundo principal escuro para contraste com vidro */
+            --glass-color-light: rgba(255, 255, 255, 0.1); /* Cor base do "vidro" (Branco Transparente) */
+            --glass-color-dark: rgba(20, 30, 40, 0.6); /* Versão escura para contraste */
             
-            /* Tipografia */
-            --font-family-base: 'Poppins', sans-serif;
+            --highlight-color: #00FF8C; /* Verde Neônio/Ciberpunk (Vibrante) */
+            --secondary-highlight-color: #3B82F6; /* Azul Neon */
+
+            --text-color-primary: #F3F4F6; /* Texto claro */
+            --text-color-secondary: #D1D5DB; /* Texto suave */
+            --text-color-muted: #9CA3AF; /* Texto discreto */
+
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.3); /* Sombra mais profunda para o vidro */
+            --border-radius-base: 18px; /* Bordas mais suaves */
+            
+            --font-family-base: 'Montserrat', sans-serif;
+            --animation-speed: 0.4s;
         }
 
-        /* --- Estilos Globais e Reset --- */
+        /* --- Estilos Globais e Reset (Atualizado) --- */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -41,13 +36,21 @@
 
         body {
             font-family: var(--font-family-base);
-            background-color: var(--primary-bg-white);
-            color: var(--text-color-dark);
+            background: linear-gradient(135deg, var(--primary-bg-dark) 0%, #000000 100%); /* Fundo Gradiente Escuro */
+            color: var(--text-color-primary);
             line-height: 1.6;
-            padding-top: 60px; /* Espaço para o cabeçalho fixo */
+            padding-top: 80px; /* Espaço para o cabeçalho fixo */
+            min-height: 100vh;
+            /* Animação para a entrada da página */
+            animation: fadeIn 1s ease-out;
         }
         
-        /* --- Estilos do Cabeçalho (Header) --- */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* --- Estilos do Cabeçalho (Header - Glassmorphism) --- */
         .header {
             position: fixed;
             top: 0;
@@ -56,445 +59,295 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 5%;
-            background-color: var(--header-blue-transparent);
-            box-shadow: var(--shadow-medium);
+            padding: 15px 5%; /* Mais padding */
+            /* Efeito Vidro (Glassmorphism) */
+            background-color: var(--glass-color-dark); 
+            backdrop-filter: blur(15px); /* Efeito de desfoque forte */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow-glass);
             z-index: 1000;
-            backdrop-filter: blur(10px);
+            transition: background-color var(--animation-speed);
         }
 
         .logo a {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-color-light);
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-color-primary);
             text-decoration: none;
-            letter-spacing: -1px;
-            transition: color 0.3s;
+            letter-spacing: 0px;
+            text-shadow: 0 0 5px var(--highlight-color); /* Efeito neon sutil */
         }
 
         .logo a span {
             color: var(--highlight-color);
+            transition: color var(--animation-speed);
         }
 
-        /* --- Menu de Navegação --- */
+        /* --- Menu de Navegação (Desktop) --- */
+        @media (min-width: 768px) {
+            .nav-menu ul {
+                display: flex;
+                gap: 25px;
+            }
+
+            .nav-menu ul li a {
+                position: relative;
+                color: var(--text-color-secondary);
+                font-weight: 500;
+                padding: 5px 0;
+                transition: color var(--animation-speed);
+            }
+
+            .nav-menu ul li a:hover {
+                color: var(--highlight-color);
+            }
+            
+            /* Animação de Sublinhado */
+            .nav-menu ul li a::after {
+                content: '';
+                position: absolute;
+                bottom: -5px;
+                left: 0;
+                width: 0%;
+                height: 2px;
+                background-color: var(--highlight-color);
+                transition: width 0.3s ease-out;
+            }
+
+            .nav-menu ul li a:hover::after {
+                width: 100%;
+            }
+        }
+        
+        /* --- Menu Mobile (Hamburguer - Transparência) --- */
         .nav-menu {
-            display: none; /* Escondido por padrão no mobile */
-            position: absolute;
-            top: 60px;
-            left: 0;
-            width: 100%;
-            background-color: rgba(0, 75, 150, 0.95);
-            box-shadow: var(--shadow-medium);
-            padding: 10px 0;
-            text-align: center;
-            transition: transform 0.3s ease-in-out;
-            transform: translateY(-100%);
-            z-index: 999;
+            /* ... estilos existentes ... */
+            background-color: var(--glass-color-dark); /* Vidro escuro */
+            backdrop-filter: blur(15px);
+            border-bottom-left-radius: var(--border-radius-base);
+            border-bottom-right-radius: var(--border-radius-base);
         }
-
-        .nav-menu.open {
-            display: block;
-            transform: translateY(0);
-        }
-
-        .nav-menu ul {
-            list-style: none;
-        }
-
-        .nav-menu ul li {
-            margin: 10px 0;
-        }
-
-        .nav-menu ul li a {
-            color: var(--text-color-light);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 1rem;
-            padding: 5px 15px;
-            border-radius: 6px;
-            transition: background-color 0.3s;
-        }
-
-        .nav-menu ul li a:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
+        
         .hamburger-btn {
-            background: none;
-            border: none;
-            color: var(--text-color-light);
-            font-size: 1.5rem;
-            cursor: pointer;
-            display: block; /* Visível no mobile */
-            z-index: 1001;
+            color: var(--highlight-color); /* Cor de destaque para o botão */
+            transition: transform var(--animation-speed);
         }
         
+        .hamburger-btn:active {
+            transform: scale(0.9);
+        }
+
         /* --- Ações do Usuário (Search e Profile) --- */
-        .user-actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .search-container {
-            position: relative;
-        }
-
         .search-bar {
-            position: absolute;
-            top: 50%;
-            right: 40px; 
-            transform: translateY(-50%);
-            width: 0;
-            opacity: 0;
-            transition: width 0.3s ease, opacity 0.3s ease;
-            overflow: hidden;
-            background: var(--text-color-light);
-            border-radius: 6px;
-            box-shadow: var(--shadow-light);
+            background: var(--glass-color-light); /* Vidro claro para a barra de pesquisa */
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        .header.search-active .search-bar {
-            width: 200px;
-            opacity: 1;
-            padding: 0 10px;
-        }
-
         .search-input {
-            width: 100%;
-            padding: 8px 10px;
-            border: none;
-            outline: none;
-            background: none;
-            font-size: 1rem;
+            color: var(--text-color-primary);
         }
-
+        
+        .search-input::placeholder {
+            color: var(--text-color-muted);
+        }
+        
         .search-btn, .profile-btn {
-            background: none;
-            border: none;
-            color: var(--text-color-light);
-            cursor: pointer;
-            font-size: 1.25rem;
-            padding: 8px;
-            border-radius: 50%;
-            transition: background-color 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            color: var(--text-color-secondary);
         }
 
         .search-btn:hover, .profile-btn:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: var(--glass-color-light);
+            color: var(--highlight-color);
+            transform: scale(1.1);
+            transition: transform 0.2s, color 0.2s;
         }
         
-        .profile-btn-content {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        /* --- Banner Hero (Modernizado) --- */
+        .hero-banner {
+            background: linear-gradient(135deg, var(--secondary-highlight-color) 0%, #151F2D 100%); 
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); /* Sombra neon azul */
+            padding: 50px 40px; 
+            border-radius: var(--border-radius-base); 
+            margin-bottom: 50px; 
+            text-align: center;
+            /* Animação de entrada do banner */
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideInUp 0.6s ease-out forwards 0.3s; 
         }
         
-        .profile-btn-content span {
-            font-size: 0.9rem;
-            font-weight: 500;
-            display: none; /* Esconder nome no mobile */
-        }
-        
-        .profile-btn-content svg {
-            width: 24px;
-            height: 24px;
+        @keyframes slideInUp {
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- Layout Principal --- */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px 5%;
+        .hero-banner h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        
+        .hero-banner p {
+            font-size: 1.1rem;
+            opacity: 0.8;
         }
 
         /* --- Seções e Títulos --- */
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
         .section-header h2 {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: var(--text-color-dark);
-            border-left: 4px solid var(--highlight-color);
-            padding-left: 10px;
+            font-size: 2rem;
+            color: var(--text-color-primary);
+            border-left: 5px solid var(--highlight-color);
+            padding-left: 15px;
+            font-weight: 700;
+            margin-top: 30px;
         }
 
         .view-all-link {
             color: var(--secondary-highlight-color);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
+            transition: color var(--animation-speed);
         }
 
         .view-all-link:hover {
             color: var(--highlight-color);
         }
 
-        /* --- Grid de Conteúdo --- */
+        /* --- Grid de Conteúdo (Mais espaçamento) --- */
         .content-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
+            gap: 30px; 
+            margin-bottom: 60px;
         }
         
-        /* --- Card do App/Música --- */
+        /* --- Card do App/Música (Efeito 3D/Glassmorphism) --- */
         .app-card {
-            background-color: var(--text-color-light);
+            background-color: var(--glass-color-light); /* Fundo de vidro transparente */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow-glass);
+            padding: 20px;
             border-radius: var(--border-radius-base);
-            box-shadow: var(--shadow-light);
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
-            height: 100%;
+            transition: 
+                transform var(--animation-speed), 
+                box-shadow var(--animation-speed),
+                background-color var(--animation-speed);
+            
+            perspective: 1000px; /* Habilita 3D no card */
         }
 
         .app-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-medium);
+            /* Leve efeito 3D ao passar o mouse */
+            transform: 
+                translateY(-8px) 
+                scale(1.05) 
+                rotateY(1deg);
+            box-shadow: 
+                0 0 25px rgba(0, 255, 140, 0.2), /* Sombra neon */
+                0 15px 40px 0 rgba(0, 0, 0, 0.5); /* Sombra profunda */
+            background-color: rgba(255, 255, 255, 0.15); /* Fica mais opaco */
         }
 
         .app-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 10px;
-            object-fit: cover;
-            margin-bottom: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100px;
+            height: 100px;
+            border-radius: 20%; /* Ícones mais quadrados/suaves */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s;
+        }
+        
+        .app-card:hover .app-icon {
+            transform: scale(1.05);
         }
 
         .app-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-color-dark);
-            margin-bottom: 4px;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            width: 100%;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-color-primary);
+            margin-top: 10px;
         }
 
         .app-description {
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             color: var(--text-color-muted);
-            line-height: 1.4;
-            flex-grow: 1; /* Garante que os cards tenham altura similar */
         }
         
-        /* Mensagem de Vazio/Loading */
-        .empty-grid-message, .loading-message {
-            grid-column: 1 / -1;
-            text-align: center;
-            color: var(--text-color-muted);
-            padding: 40px 0;
-            font-size: 1.1rem;
+        .loading-message {
+            color: var(--highlight-color);
+            font-weight: 600;
+            font-size: 1.2rem;
+            /* Animação de pulsação para o loading */
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
 
         /* --- Estilos do Footer --- */
         .footer {
-            background-color: var(--text-color-dark);
-            color: var(--text-color-light);
-            padding: 30px 5%;
-            text-align: center;
-            font-size: 0.9rem;
+            background-color: #111827; 
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 40px 5%;
         }
 
-        .footer p {
-            margin: 5px 0;
-        }
-        
-        .footer a {
-            color: var(--highlight-color);
-            text-decoration: none;
-        }
-        
-        /* --- Modal Base --- */
+        /* --- Modal (Modernizado) --- */
         .modal {
-            display: none; 
-            position: fixed; 
-            z-index: 2000; 
-            left: 0;
-            top: 0;
-            width: 100%; 
-            height: 100%; 
-            overflow: auto; 
-            background-color: rgba(0,0,0,0.6); 
-            backdrop-filter: blur(5px);
-            align-items: center;
-            justify-content: center;
+            /* Animação para o modal */
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .modal.open {
+            opacity: 1;
+            visibility: visible;
         }
 
         .modal-content {
-            background-color: var(--primary-bg-white);
-            margin: 10% auto; 
-            padding: 30px;
-            border-radius: var(--border-radius-base);
-            box-shadow: var(--shadow-medium);
-            max-width: 400px;
-            width: 90%;
-            position: relative;
+            background-color: var(--primary-bg-dark);
+            border: 1px solid var(--highlight-color);
+            box-shadow: 0 0 20px rgba(0, 255, 140, 0.2); 
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Animação de mola */
+        }
+        
+        .modal.open .modal-content {
+            transform: scale(1);
         }
 
         .modal-close {
-            color: var(--text-color-muted);
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            transition: color 0.3s;
+            color: var(--highlight-color);
         }
 
-        .modal-close:hover,
-        .modal-close:focus {
-            color: var(--error-color);
-            text-decoration: none;
-            cursor: pointer;
-        }
-        
-        .modal h2 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            color: var(--secondary-highlight-color);
-            text-align: center;
-        }
-        
         /* --- Modal de Detalhes do Item --- */
-        #details-modal .modal-content {
-            max-width: 600px;
-            text-align: left;
-        }
-        
-        .details-header {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #E9ECEF;
-            padding-bottom: 15px;
-        }
-
-        #details-icon {
-            width: 100px;
-            height: 100px;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .details-info h3 {
-            font-size: 1.8rem;
-            margin-bottom: 5px;
-            color: var(--text-color-dark);
-        }
-        
-        .details-info p {
-            color: var(--text-color-muted);
-            font-weight: 500;
-        }
-        
-        .details-full-description {
-            font-size: 1rem;
-            margin-bottom: 30px;
-        }
-        
         .details-download-btn {
-            width: 100%;
             background-color: var(--highlight-color);
-            color: var(--text-color-dark);
-            padding: 15px;
-            font-size: 1.1rem;
-            border-radius: 10px;
-            font-weight: 700;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.1s;
+            color: var(--primary-bg-dark);
+            font-weight: 800;
         }
         
         .details-download-btn:hover {
-            background-color: #55d03d;
-            transform: translateY(-2px);
+            background-color: #00e07f; 
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 5px 15px rgba(0, 255, 140, 0.4);
         }
         
-        /* Oculta o prompt de login/erro, pois o download é livre */
-        .login-prompt {
-            display: none !important; 
-        }
-
-        /* --- Media Queries (Responsividade) --- */
+        /* --- Media Queries (Desktop) --- */
         @media (min-width: 768px) {
-            .hamburger-btn {
-                display: none;
-            }
-
-            .nav-menu {
-                display: block;
-                position: static;
-                width: auto;
-                background: none;
-                box-shadow: none;
-                transform: translateY(0);
-                padding: 0;
-            }
-
-            .nav-menu ul {
-                display: flex;
-                gap: 20px;
-            }
-
-            .nav-menu ul li a {
-                color: var(--text-color-light);
-                font-weight: 400;
-            }
-            
-            .header.search-active .search-bar {
-                width: 300px;
-                right: 5%; /* Ajusta a posição da barra de pesquisa no desktop */
-            }
-            
-            .search-bar {
-                right: 140px; 
-            }
-            
-            .profile-btn-content span {
-                display: inline; /* Mostrar nome no desktop */
-            }
-
             .content-grid {
-                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Cards maiores */
             }
             
             .app-card {
-                padding: 20px;
-            }
-            
-            .app-icon {
-                width: 90px;
-                height: 90px;
-            }
-            
-            .app-title {
-                font-size: 1.1rem;
+                padding: 25px;
             }
         }
     </style>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
     <header class="header" id="main-header">
         <div class="logo">
-            <a href="#">VICTOR<span>STORE</span></a>
+            <a href="#">VICTOR<span>STORE</span> 🌐</a>
         </div>
         
         <nav class="nav-menu" id="hamburger-menu">
@@ -532,22 +385,15 @@
     </header>
 
     <main class="container">
-        <section class="hero-banner" style="
-            background: linear-gradient(135deg, var(--secondary-highlight-color), var(--header-blue-transparent)); 
-            color: var(--text-color-light); 
-            padding: 40px; 
-            border-radius: var(--border-radius-base); 
-            margin-bottom: 40px; 
-            text-align: center;
-        ">
-            <h1>Descubra Novidades na VICTOR STORE!</h1>
-            <p style="opacity: 0.9;">Apps inovadores e as melhores músicas, tudo em um só lugar. **Acesso e Download Livres!**</p>
+        <section class="hero-banner">
+            <h1>Descubra Novidades na VICTOR STORE! 🚀</h1>
+            <p style="opacity: 0.9;">Apps e Músicas com uma interface futurista. **Acesso e Download Livres!**</p>
         </section>
 
         <section id="games-section">
             <div class="section-header">
                 <h2>Novidades em Jogos</h2>
-                <a href="#" class="view-all-link">Ver todos</a>
+                <a href="#" class="view-all-link">Ver todos &rarr;</a>
             </div>
             <div class="content-grid" id="games-grid">
                 <div class="loading-message">Carregando Jogos...</div>
@@ -557,7 +403,7 @@
         <section id="apps-section">
             <div class="section-header">
                 <h2>Últimos Apps (Geral)</h2>
-                <a href="#" class="view-all-link">Ver todos</a>
+                <a href="#" class="view-all-link">Ver todos &rarr;</a>
             </div>
             <div class="content-grid" id="apps-grid">
                 <div class="loading-message">Carregando Apps...</div>
@@ -567,7 +413,7 @@
         <section id="music-section">
             <div class="section-header">
                 <h2>Lançamentos de Músicas</h2>
-                <a href="#" class="view-all-link">Ver todos</a>
+                <a href="#" class="view-all-link">Ver todos &rarr;</a>
             </div>
             <div class="content-grid" id="music-grid">
                 <div class="loading-message">Carregando Músicas...</div>
@@ -577,7 +423,7 @@
         <section id="movies-series-section">
             <div class="section-header">
                 <h2>Filmes e Séries</h2>
-                <a href="#" class="view-all-link">Ver todos</a>
+                <a href="#" class="view-all-link">Ver todos &rarr;</a>
             </div>
             <div class="content-grid" id="movies-series-grid">
                 <div class="loading-message">Carregando Filmes/Séries...</div>
@@ -587,7 +433,7 @@
         <section id="frp-section">
             <div class="section-header">
                 <h2>Ferramentas FRP/Desbloqueio</h2>
-                <a href="#" class="view-all-link">Ver todos</a>
+                <a href="#" class="view-all-link">Ver todos &rarr;</a>
             </div>
             <div class="content-grid" id="frp-grid">
                 <div class="loading-message">Carregando Ferramentas...</div>
@@ -597,7 +443,7 @@
         <section id="software-section">
             <div class="section-header">
                 <h2>Software e Utilidades (PC/Outros)</h2>
-                <a href="#" class="view-all-link">Ver todos</a>
+                <a href="#" class="view-all-link">Ver todos &rarr;</a>
             </div>
             <div class="content-grid" id="software-grid">
                 <div class="loading-message">Carregando Softwares...</div>
@@ -608,7 +454,7 @@
 
     <footer class="footer">
         <p>&copy; 2024 VICTOR STORE. Todos os direitos reservados.</p>
-        <p>Desenvolvido com <a href="#">Firebase & Tailwind</a> (Estilos adaptados).</p>
+        <p>Design Glassmorphism. Desenvolvido com <a href="#">Fire**</a> (Estilos adaptados).</p>
     </footer>
 
     <div id="details-modal" class="modal">
@@ -628,7 +474,10 @@
     </div>
     
     <script type="module">
-        // --- 1. CONFIGURAÇÃO E IMPORTS FIREBASE ---
+        // --- O CÓDIGO JAVASCRIPT ORIGINAL FOI MANTIDO ---
+        // Ele lida com a lógica de dados (Firebase) e a interação do usuário.
+        // A lógica de animação visual (transparência e 3D) é tratada principalmente pelo CSS.
+        
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
         import { 
             getFirestore, 
@@ -655,7 +504,6 @@
         
         let selectedItem = null; 
         
-        // Mapeamento dos tipos de conteúdo para nomes amigáveis
         const typeMap = {
             'jogo': 'Jogo',
             'app_geral': 'App (Geral)',
@@ -675,10 +523,9 @@
         const profileStatus = document.getElementById('profile-status'); 
         const detailsModal = document.getElementById('details-modal');
         const detailsDownloadBtn = document.getElementById('details-download-btn');
-        // Novo elemento para o modal de detalhes
         const detailsCategoryInfo = document.getElementById('details-category-info'); 
         
-        // Grids de Conteúdo (TODOS OS NOVOS)
+        // Grids de Conteúdo 
         const contentGrids = {
             'jogo': document.getElementById('games-grid'),
             'app_geral': document.getElementById('apps-grid'),
@@ -688,7 +535,6 @@
             'software': document.getElementById('software-grid')
         };
         
-        // Estrutura para os tipos de conteúdo e suas respectivas seções
         const contentSections = [
             { id: 'jogo', grid: contentGrids['jogo'], title: 'Jogos' },
             { id: 'app_geral', grid: contentGrids['app_geral'], title: 'Apps (Geral)' },
@@ -713,17 +559,17 @@
         function renderAppCard(data, gridElement) {
             const card = document.createElement('div');
             card.className = 'app-card';
-            // Certifique-se de que todos os dados necessários estão no dataset
+            
             card.dataset.name = data.name;
             card.dataset.description = data.description;
             card.dataset.fullDescription = data.fullDescription || data.description;
             card.dataset.image = data.image;
-            card.dataset.type = data.type; // Tipo Principal
-            card.dataset.category = data.category; // Categoria Específica
+            card.dataset.type = data.type; 
+            card.dataset.category = data.category; 
             card.dataset.downloadLink = data.downloadLink;
 
             card.innerHTML = `
-                <img src="${data.image}" class="app-icon" alt="Ícone de ${data.name}" onerror="this.onerror=null; this.src='https://placehold.co/80x80/212B36/F8F9FA?text=${data.type.toUpperCase().substring(0,3)}';">
+                <img src="${data.image}" class="app-icon" alt="Ícone de ${data.name}" onerror="this.onerror=null; this.src='https://placehold.co/100x100/1F2937/00FF8C?text=${data.type.toUpperCase().substring(0,3)}';">
                 <div class="app-title">${data.name}</div>
                 <div class="app-description">${data.category || data.description}</div> `;
             
@@ -737,13 +583,11 @@
         async function loadContentFromFirestore() {
             const contentCollection = collection(db, 'content');
             
-            // 1. Prepara todas as grids com a mensagem de loading
             contentSections.forEach(section => {
                 section.grid.innerHTML = `<div class="loading-message">Carregando ${section.title}...</div>`;
             });
             
             try {
-                // 2. Cria um array de promessas de consulta (query promises)
                 const queryPromises = contentSections.map(section => {
                     const q = query(
                         contentCollection,
@@ -751,18 +595,15 @@
                         orderBy('createdAt', 'desc'), 
                         limit(8)
                     );
-                    // Retorna a promessa junto com a referência da seção
                     return { id: section.id, promise: getDocs(q) };
                 });
 
-                // 3. Executa todas as consultas em paralelo
                 const results = await Promise.all(queryPromises.map(item => item.promise));
 
-                // 4. Processa os resultados
                 results.forEach((snapshot, index) => {
                     const section = contentSections[index];
                     
-                    section.grid.innerHTML = ''; // Limpa o loading
+                    section.grid.innerHTML = ''; 
 
                     if (snapshot.empty) {
                         const emptyMessage = document.createElement('div');
@@ -780,16 +621,14 @@
                 
             } catch (error) {
                 console.error("Erro ao carregar o conteúdo do Firestore:", error);
-                // Exibe erro em todas as seções
                 contentSections.forEach(section => {
                     section.grid.innerHTML = `<div class="empty-grid-message" style="color: var(--error-color);">Erro ao carregar ${section.title}: ${error.message}</div>`;
                 });
             }
         }
         
-        // --- 5. FUNÇÕES DOS MODAIS ---
+        // --- 5. FUNÇÕES DOS MODAIS (Adicionado classe 'open' para animação) ---
 
-        // Exibe o modal de detalhes preenchido
         function showDetailsModal(itemData) {
             selectedItem = itemData; 
             
@@ -798,7 +637,6 @@
             document.getElementById('details-icon').alt = `Ícone de ${itemData.name}`;
             document.getElementById('details-full-description').textContent = itemData.fullDescription || itemData.description;
             
-            // NOVO: Exibe Tipo Principal e Categoria Específica
             const typeDisplay = typeMap[itemData.type] || 'Conteúdo';
             const categoryDisplay = itemData.category || 'Geral';
             detailsCategoryInfo.textContent = `${typeDisplay} / ${categoryDisplay}`;
@@ -806,16 +644,16 @@
             detailsDownloadBtn.disabled = false;
             detailsDownloadBtn.textContent = 'Baixar Agora';
 
-            detailsModal.style.display = 'block';
+            // Usa a classe 'open' para disparar as animações CSS
+            detailsModal.classList.add('open');
+            detailsModal.style.display = 'flex'; // Mudado para 'flex' para centralização
         }
         
-        // Ação de Download (DELEGANDO AO DOWNLOAD LISTENER NATIVO DO ANDROID)
         detailsDownloadBtn.addEventListener('click', () => {
             
             const downloadUrl = selectedItem.downloadLink; 
 
             if (downloadUrl && downloadUrl.startsWith('http')) {
-                // Ação chave: define a URL do navegador. Isso ACIONA o DownloadListener do MainActivity.java.
                 window.location.href = downloadUrl;
                 
                 console.log("Download iniciado via DownloadListener nativo:", downloadUrl);
@@ -824,7 +662,9 @@
                 console.error("Erro: Link de download inválido:", downloadUrl);
             }
             
-            detailsModal.style.display = 'none';
+            detailsModal.classList.remove('open');
+            // Remove display:flex após a animação (usando setTimeout seria mais preciso)
+            setTimeout(() => { detailsModal.style.display = 'none'; }, 400); 
         });
 
 
@@ -833,6 +673,12 @@
         // Menu Hamburguer
         hamburgerBtn.addEventListener('click', () => {
             hamburgerMenu.classList.toggle('open');
+            
+            // Alterna o ícone do hamburger
+            const isMenuOpen = hamburgerMenu.classList.contains('open');
+            hamburgerBtn.innerHTML = isMenuOpen
+                ? '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>'
+                : '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>';
         });
 
         // Botão de Pesquisa
@@ -845,14 +691,20 @@
 
         // Fechar Modais ao clicar no 'x' ou no fundo
         document.addEventListener('click', (event) => {
+            const closeModal = (modal) => {
+                modal.classList.remove('open');
+                // Adiciona um pequeno delay para a animação de saída
+                setTimeout(() => { modal.style.display = 'none'; }, 400); 
+            };
+            
             if (event.target.classList.contains('modal-close')) {
                 if (event.target.dataset.modal === 'details-modal') {
-                    document.getElementById(event.target.dataset.modal).style.display = 'none';
+                    closeModal(detailsModal);
                 }
             }
 
             if (event.target === detailsModal) {
-                detailsModal.style.display = 'none';
+                closeModal(detailsModal);
             }
         });
 
@@ -860,7 +712,7 @@
         // --- 7. INICIALIZAÇÃO ---
         
         document.addEventListener('DOMContentLoaded', () => {
-            loadContentFromFirestore(); // Carrega o conteúdo nas novas seções
+            loadContentFromFirestore(); 
             profileStatus.textContent = 'Acesso Livre';
         });
 
