@@ -2,7 +2,7 @@
 
 // Versão atual do CÓDIGO web. Apenas mude este número quando fizer uma GRANDE atualização.
 // A versão do SERVIDOR (Firestore) deve ser MAIOR que esta para forçar o reload.
-const CURRENT_UI_VERSION = 1.4; // <--- ATUALIZADO PARA VERSÃO 1.4
+const CURRENT_UI_VERSION = 1.4; // <--- ATUALIZADO PARA VERSÃO 1.4 (Design Transparente/3D)
 
 // --- 1. CONFIGURAÇÃO E IMPORTS FIREBASE ---
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
@@ -118,7 +118,7 @@ const relatedAppsGrid = document.getElementById('related-apps-grid');
 const relatedAppsSection = document.getElementById('related-apps-section');
 const categoryFilterBar = document.getElementById('category-filter-bar');
 const mainContentContainer = document.getElementById('main-content-container'); 
-const detailsLoginPrompt = document.getElementById('details-login-prompt'); 
+const detailsLoginPrompt = document.getElementById('details-login-prompt'); // NOVO
 
 // --- REFERÊNCIAS DOM DO NOVO MODAL DE AUTENTICAÇÃO ---
 const authModal = document.getElementById('auth-modal');
@@ -131,26 +131,7 @@ const authNameInput = document.getElementById('auth-name');
 const authEmailInput = document.getElementById('auth-email');
 const authPasswordInput = document.getElementById('auth-password');
 const authMessage = document.getElementById('auth-message');
-const mainNavUl = document.getElementById('main-nav-ul'); 
-
-// --- FUNÇÕES DE ANIMAÇÃO DE MODAL (NOVO) ---
-const animateModalIn = (modalElement) => {
-    modalElement.classList.remove('animate-out');
-    modalElement.classList.add('animate-in');
-    modalElement.style.display = 'flex';
-}
-
-const animateModalOut = (modalElement, callback = () => {}) => {
-    modalElement.classList.remove('animate-in');
-    modalElement.classList.add('animate-out');
-    
-    // Espera a animação terminar antes de esconder (0.3s definido no CSS)
-    setTimeout(() => {
-        modalElement.style.display = 'none';
-        modalElement.classList.remove('animate-out');
-        callback();
-    }, 300); 
-}
+const mainNavUl = document.getElementById('main-nav-ul'); // Para adicionar o botão Sair/Login
 
 
 // --- 3. FUNÇÕES DE AUTENTICAÇÃO ---
@@ -194,7 +175,7 @@ const setupAuthListeners = () => {
                 await signInWithEmailAndPassword(auth, email, password);
                 showAuthMessage("Login realizado com sucesso!");
             }
-            animateModalOut(authModal); // Usa a nova animação
+            authModal.style.display = 'none';
             // Fechar o menu hamburguer, caso esteja aberto
             hamburgerMenu.classList.remove('open');
             menuOverlay.style.display = 'none';
@@ -218,7 +199,7 @@ const setupAuthListeners = () => {
         try {
             await signInWithPopup(auth, provider);
             showAuthMessage("Login com Google realizado com sucesso!");
-            animateModalOut(authModal); // Usa a nova animação
+            authModal.style.display = 'none';
             // Fechar o menu hamburguer, caso esteja aberto
             hamburgerMenu.classList.remove('open');
             menuOverlay.style.display = 'none';
@@ -276,7 +257,7 @@ const updateAuthMenuButton = (user) => {
             authNameInput.style.display = 'none';
             toggleAuthBtn.textContent = "Criar Nova Conta";
             authForm.reset();
-            animateModalIn(authModal); // Usa a nova animação
+            authModal.style.display = 'flex';
         });
     }
     lucide.createIcons();
@@ -301,7 +282,10 @@ onAuthStateChanged(auth, (user) => {
 // Função para renderizar um card de App (USADO EM TODOS OS GRIDS)
 function renderAppCard(data, gridElement) {
     const card = document.createElement('div');
-    card.className = 'app-card glass-effect'; // Adiciona o glass-effect ao card
+    card.className = 'app-card';
+    
+    // ATUALIZADO: Usando o atributo 'onerror' no HTML para placeholders
+    // Os tamanhos são controlados pelo CSS
     
     card.dataset.search = `${data.name.toLowerCase()} ${data.category ? data.category.toLowerCase() : ''} ${data.type.toLowerCase()}`;
     card.dataset.type = data.type; 
@@ -309,7 +293,7 @@ function renderAppCard(data, gridElement) {
     const descriptionText = data.category || data.description || 'Geral'; 
     
     card.innerHTML = `
-        <img src="${data.image}" class="app-icon" alt="Ícone de ${data.name}" onerror="this.onerror=null; this.src='https://placehold.co/90x90/212B36/F8F9FA?text=${data.type.toUpperCase().substring(0,3)}';">
+        <img src="${data.image}" class="app-icon" alt="Ícone de ${data.name}" onerror="this.onerror=null; this.src='https://placehold.co/75x75/101c3d/FFFFFF?text=${data.type.toUpperCase().substring(0,3)}';">
         <div class="app-title">${data.name}</div>
         <div class="app-description">${descriptionText}</div> `;
     
@@ -403,7 +387,7 @@ function renderVerticalGrid(content, targetElement) {
     grid.className = 'full-list-grid';
     
     if (content.length === 0) {
-         targetElement.innerHTML = `<div class="loading-message" style="width: 100%; text-align: center; padding: 30px; color: var(--text-color-light);">Nenhum item encontrado nesta visualização.</div>`;
+         targetElement.innerHTML = `<div class="loading-message" style="width: 100%; text-align: center; padding: 30px; color: var(--text-color-muted);">Nenhum item encontrado nesta visualização.</div>`;
          return;
     }
     
@@ -550,7 +534,7 @@ function showDetailsModal(itemData) {
         detailsLoginPrompt.textContent = "Faça login para poder baixar este item.";
         detailsLoginPrompt.style.display = 'block';
         detailsDownloadBtn.textContent = "Fazer Login para Baixar";
-        detailsDownloadBtn.disabled = false; 
+        detailsDownloadBtn.disabled = false; // Permite o clique para abrir o modal de login
     } else {
         detailsLoginPrompt.style.display = 'none';
         detailsDownloadBtn.textContent = "Baixar Agora";
@@ -575,7 +559,7 @@ function showDetailsModal(itemData) {
         relatedAppsSection.style.display = 'none';
     }
 
-    animateModalIn(detailsModal); // Usa a nova função de animação
+    detailsModal.style.display = 'flex'; 
 }
 
 // Função para mostrar Modal de Lista Completa ("Ver Todos")
@@ -589,7 +573,7 @@ function showFullListModal(typeId) {
     // Usa a função de renderização de grid vertical
     renderVerticalGrid(fullContent, fullListGrid);
     
-    animateModalIn(fullListModal); // Usa a nova função de animação
+    fullListModal.style.display = 'flex';
 }
 
 // Atribui o evento de clique aos links "Ver todos"
@@ -620,17 +604,17 @@ document.querySelectorAll('.nav-menu a').forEach(link => {
 detailsDownloadBtn.addEventListener('click', () => {
     // SEÇÃO CRÍTICA: EXIGE LOGIN
     if (!currentUser) { 
-        animateModalOut(detailsModal, () => { // Fecha com animação, depois abre o Auth
-            // Configura o modal de Auth para começar em Login por conveniência
-            isRegisterMode = false;
-            authTitle.textContent = "Faça Login";
-            authSubmitBtn.textContent = "Entrar";
-            authNameInput.style.display = 'none';
-            toggleAuthBtn.textContent = "Criar Nova Conta";
-            authForm.reset();
+        detailsModal.style.display = 'none'; // Fecha o modal de detalhes
+        
+        // Configura o modal de Auth para começar em Login por conveniência
+        isRegisterMode = false;
+        authTitle.textContent = "Faça Login";
+        authSubmitBtn.textContent = "Entrar";
+        authNameInput.style.display = 'none';
+        toggleAuthBtn.textContent = "Criar Nova Conta";
+        authForm.reset();
 
-            animateModalIn(authModal);   // Abre o modal de login com animação
-        });
+        authModal.style.display = 'flex';   // Abre o modal de login
         return; 
     }
 
@@ -641,7 +625,7 @@ detailsDownloadBtn.addEventListener('click', () => {
     } else {
         alert("Erro: Link de download inválido ou não configurado no Firebase.");
     }
-    animateModalOut(detailsModal); // Fecha com animação
+    detailsModal.style.display = 'none';
 });
 
 // --- 9. INICIALIZAÇÃO E EVENTOS GERAIS ---
@@ -666,14 +650,13 @@ document.addEventListener('click', (event) => {
         menuOverlay.style.display = 'none';
     }
 
-    // Fechar Modais (clicando no 'x' ou no overlay do modal)
+    // Fechar Modais 
     if (target.classList.contains('modal-close')) {
-         const modal = target.closest('.modal');
-         animateModalOut(modal); // Usa a nova animação
+         target.closest('.modal').style.display = 'none';
     }
-    // Adicionado para fechar clicando no fundo (overlay) do modal
+    // Adicionado authModal para fechamento genérico
     if (target === detailsModal || target === fullListModal || target === authModal) { 
-        animateModalOut(target); // Usa a nova animação
+        target.style.display = 'none';
     }
 });
 
