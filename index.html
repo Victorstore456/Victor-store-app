@@ -6,28 +6,28 @@
     <title>VICTOR STORE 🌐 | Conteúdo Premium (Glassmorphism)</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* --- Variáveis Modernas (Cores Inspiradas no Glassmorphism) --- */
+        /* --- Variáveis Modernas (Cores e Temas) --- */
         :root {
-            --primary-bg-dark: #1F2937; /* Fundo principal escuro para contraste com vidro */
-            --glass-color-light: rgba(255, 255, 255, 0.1); /* Cor base do "vidro" (Branco Transparente) */
-            --glass-color-dark: rgba(20, 30, 40, 0.6); /* Versão escura para contraste */
+            --primary-bg-dark: #101620; /* Fundo principal mais escuro (Quase preto) */
+            --glass-color-light: rgba(255, 255, 255, 0.08); /* Vidro mais sutil e escuro */
+            --glass-color-dark: rgba(20, 30, 40, 0.9); /* Vidro mais opaco para Header/Menu */
             
-            --highlight-color: #00FF8C; /* Verde Neônio/Ciberpunk (Vibrante) */
+            --highlight-color: #00FF8C; /* Verde Neônio (Vibrante) */
             --secondary-highlight-color: #3B82F6; /* Azul Neon */
 
-            --text-color-primary: #F3F4F6; /* Texto claro */
-            --text-color-secondary: #D1D5DB; /* Texto suave */
-            --text-color-muted: #9CA3AF; /* Texto discreto */
+            --text-color-primary: #F3F4F6; 
+            --text-color-secondary: #D1D5DB; 
+            --text-color-muted: #9CA3AF; 
 
             --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.15);
-            --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.3); /* Sombra mais profunda para o vidro */
-            --border-radius-base: 18px; /* Bordas mais suaves */
+            --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.4); /* Sombra mais forte */
+            --border-radius-base: 18px; 
             
             --font-family-base: 'Montserrat', sans-serif;
             --animation-speed: 0.4s;
         }
 
-        /* --- Estilos Globais e Reset (Atualizado) --- */
+        /* --- Estilos Globais e Reset --- */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -36,12 +36,12 @@
 
         body {
             font-family: var(--font-family-base);
-            background: linear-gradient(135deg, var(--primary-bg-dark) 0%, #000000 100%); /* Fundo Gradiente Escuro */
+            /* Fundo Gradiente Escuro Aprimorado */
+            background: linear-gradient(135deg, var(--primary-bg-dark) 0%, #000000 100%); 
             color: var(--text-color-primary);
             line-height: 1.6;
-            padding-top: 80px; /* Espaço para o cabeçalho fixo */
+            padding-top: 80px; 
             min-height: 100vh;
-            /* Animação para a entrada da página */
             animation: fadeIn 1s ease-out;
         }
         
@@ -59,13 +59,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 5%; /* Mais padding */
+            padding: 15px 5%; 
             /* Efeito Vidro (Glassmorphism) */
-            background-color: var(--glass-color-dark); 
-            backdrop-filter: blur(15px); /* Efeito de desfoque forte */
+            background-color: var(--glass-color-dark); /* Mais opaco para não sumir */
+            backdrop-filter: blur(15px); 
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: var(--shadow-glass);
-            z-index: 1000;
+            z-index: 10000; /* Z-INDEX MUITO ALTO PARA NÃO BUCAR */
             transition: background-color var(--animation-speed);
         }
 
@@ -74,121 +74,71 @@
             font-weight: 800;
             color: var(--text-color-primary);
             text-decoration: none;
-            letter-spacing: 0px;
-            text-shadow: 0 0 5px var(--highlight-color); /* Efeito neon sutil */
+            text-shadow: 0 0 5px var(--highlight-color); 
         }
 
         .logo a span {
             color: var(--highlight-color);
-            transition: color var(--animation-speed);
-        }
-
-        /* --- Menu de Navegação (Desktop) --- */
-        @media (min-width: 768px) {
-            .nav-menu ul {
-                display: flex;
-                gap: 25px;
-            }
-
-            .nav-menu ul li a {
-                position: relative;
-                color: var(--text-color-secondary);
-                font-weight: 500;
-                padding: 5px 0;
-                transition: color var(--animation-speed);
-            }
-
-            .nav-menu ul li a:hover {
-                color: var(--highlight-color);
-            }
-            
-            /* Animação de Sublinhado */
-            .nav-menu ul li a::after {
-                content: '';
-                position: absolute;
-                bottom: -5px;
-                left: 0;
-                width: 0%;
-                height: 2px;
-                background-color: var(--highlight-color);
-                transition: width 0.3s ease-out;
-            }
-
-            .nav-menu ul li a:hover::after {
-                width: 100%;
-            }
         }
         
-        /* --- Menu Mobile (Hamburguer - Transparência) --- */
+        /* --- Menu de Navegação (Mobile - Correção de Bug) --- */
         .nav-menu {
-            /* ... estilos existentes ... */
-            background-color: var(--glass-color-dark); /* Vidro escuro */
+            /* IMPORTANTE: Configuração para esconder/animar corretamente */
+            display: block; /* Deve ser bloco para transição de transform funcionar */
+            position: absolute;
+            top: 100%; /* Começa logo abaixo do header */
+            left: 0;
+            width: 100%;
+            background-color: var(--glass-color-dark); 
             backdrop-filter: blur(15px);
-            border-bottom-left-radius: var(--border-radius-base);
-            border-bottom-right-radius: var(--border-radius-base);
+            box-shadow: var(--shadow-medium);
+            padding: 10px 0;
+            text-align: center;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Animação de mola */
+            transform: translateY(-150%); /* Força a subir e sair da tela */
+            z-index: 9999;
+            pointer-events: none; /* Não interage quando escondido */
+        }
+
+        .nav-menu.open {
+            transform: translateY(0);
+            pointer-events: all; /* Interage quando aberto */
+        }
+
+        .nav-menu ul {
+            list-style: none;
+        }
+
+        .nav-menu ul li {
+            margin: 15px 0;
+        }
+
+        .nav-menu ul li a {
+            color: var(--text-color-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            padding: 10px 20px;
+            border-radius: 6px;
+            display: block;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .nav-menu ul li a:hover {
+            background-color: rgba(0, 255, 140, 0.1);
+            color: var(--highlight-color);
         }
         
         .hamburger-btn {
-            color: var(--highlight-color); /* Cor de destaque para o botão */
-            transition: transform var(--animation-speed);
+            color: var(--highlight-color); 
+            z-index: 10001; /* Garante que o botão hamburger esteja acima do menu */
         }
         
-        .hamburger-btn:active {
-            transform: scale(0.9);
-        }
-
-        /* --- Ações do Usuário (Search e Profile) --- */
-        .search-bar {
-            background: var(--glass-color-light); /* Vidro claro para a barra de pesquisa */
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .search-input {
-            color: var(--text-color-primary);
-        }
-        
-        .search-input::placeholder {
-            color: var(--text-color-muted);
-        }
-        
-        .search-btn, .profile-btn {
-            color: var(--text-color-secondary);
-        }
-
-        .search-btn:hover, .profile-btn:hover {
-            background-color: var(--glass-color-light);
-            color: var(--highlight-color);
-            transform: scale(1.1);
-            transition: transform 0.2s, color 0.2s;
-        }
-        
-        /* --- Banner Hero (Modernizado) --- */
-        .hero-banner {
-            background: linear-gradient(135deg, var(--secondary-highlight-color) 0%, #151F2D 100%); 
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); /* Sombra neon azul */
-            padding: 50px 40px; 
-            border-radius: var(--border-radius-base); 
-            margin-bottom: 50px; 
-            text-align: center;
-            /* Animação de entrada do banner */
-            opacity: 0;
-            transform: translateY(20px);
-            animation: slideInUp 0.6s ease-out forwards 0.3s; 
-        }
-        
-        @keyframes slideInUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hero-banner h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 10px;
-        }
-        
-        .hero-banner p {
-            font-size: 1.1rem;
-            opacity: 0.8;
+        /* --- Layout Principal --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 5%;
         }
 
         /* --- Seções e Títulos --- */
@@ -203,63 +153,56 @@
 
         .view-all-link {
             color: var(--secondary-highlight-color);
-            transition: color var(--animation-speed);
         }
 
-        .view-all-link:hover {
-            color: var(--highlight-color);
-        }
-
-        /* --- Grid de Conteúdo (Mais espaçamento) --- */
+        /* --- Grid de Conteúdo (Adaptado para lista no mobile) --- */
         .content-grid {
-            gap: 30px; 
+            display: grid;
+            grid-template-columns: 1fr; /* Padrão Mobile: 1 coluna */
+            gap: 25px; /* Mais espaçamento */
             margin-bottom: 60px;
         }
         
-        /* --- Card do App/Música (Efeito 3D/Glassmorphism) --- */
+        /* --- Card do App/Música (Visual de Lista Aprimorado) --- */
         .app-card {
-            background-color: var(--glass-color-light); /* Fundo de vidro transparente */
+            background-color: var(--glass-color-light); 
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: var(--shadow-glass);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             padding: 20px;
             border-radius: var(--border-radius-base);
             transition: 
                 transform var(--animation-speed), 
-                box-shadow var(--animation-speed),
-                background-color var(--animation-speed);
+                box-shadow var(--animation-speed);
             
-            perspective: 1000px; /* Habilita 3D no card */
+            perspective: 1000px; 
+            
+            /* Novo: Layout de linha para lista no mobile */
+            display: flex;
+            align-items: center;
+            text-align: left;
+            gap: 20px;
         }
 
         .app-card:hover {
-            /* Leve efeito 3D ao passar o mouse */
-            transform: 
-                translateY(-8px) 
-                scale(1.05) 
-                rotateY(1deg);
+            transform: translateY(-5px) scale(1.01) rotateY(0deg); /* Menos 3D, mais profissional */
             box-shadow: 
-                0 0 25px rgba(0, 255, 140, 0.2), /* Sombra neon */
-                0 15px 40px 0 rgba(0, 0, 0, 0.5); /* Sombra profunda */
-            background-color: rgba(255, 255, 255, 0.15); /* Fica mais opaco */
+                0 0 15px rgba(0, 255, 140, 0.2), 
+                0 10px 20px 0 rgba(0, 0, 0, 0.5); 
+            background-color: rgba(255, 255, 255, 0.12);
         }
 
         .app-icon {
-            width: 100px;
-            height: 100px;
-            border-radius: 20%; /* Ícones mais quadrados/suaves */
+            /* Tamanho do ícone para o layout de lista */
+            min-width: 80px;
+            height: 80px;
+            border-radius: 20%; 
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-            transition: transform 0.3s;
         }
         
-        .app-card:hover .app-icon {
-            transform: scale(1.05);
-        }
-
         .app-title {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 700;
-            color: var(--text-color-primary);
-            margin-top: 10px;
+            margin-top: 0;
         }
 
         .app-description {
@@ -267,77 +210,69 @@
             color: var(--text-color-muted);
         }
         
-        .loading-message {
-            color: var(--highlight-color);
-            font-weight: 600;
-            font-size: 1.2rem;
-            /* Animação de pulsação para o loading */
-            animation: pulse 1.5s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
+        /* Novo: Div para texto dentro do card de lista */
+        .app-text-content {
+            flex-grow: 1;
         }
 
-        /* --- Estilos do Footer --- */
-        .footer {
-            background-color: #111827; 
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 40px 5%;
-        }
-
-        /* --- Modal (Modernizado) --- */
+        /* --- Modal (Garantir que ele fecha corretamente) --- */
         .modal {
-            /* Animação para o modal */
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-            opacity: 0;
-            visibility: hidden;
+            display: none; /* Padrão escondido */
         }
-        
         .modal.open {
-            opacity: 1;
-            visibility: visible;
+            display: flex; 
         }
 
-        .modal-content {
-            background-color: var(--primary-bg-dark);
-            border: 1px solid var(--highlight-color);
-            box-shadow: 0 0 20px rgba(0, 255, 140, 0.2); 
-            transform: scale(0.9);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Animação de mola */
-        }
-        
-        .modal.open .modal-content {
-            transform: scale(1);
-        }
-
-        .modal-close {
-            color: var(--highlight-color);
-        }
-
-        /* --- Modal de Detalhes do Item --- */
-        .details-download-btn {
-            background-color: var(--highlight-color);
-            color: var(--primary-bg-dark);
-            font-weight: 800;
-        }
-        
-        .details-download-btn:hover {
-            background-color: #00e07f; 
-            transform: translateY(-4px) scale(1.01);
-            box-shadow: 0 5px 15px rgba(0, 255, 140, 0.4);
-        }
-        
-        /* --- Media Queries (Desktop) --- */
+        /* --- Media Queries (Desktop - Volta para Grid de Cards) --- */
         @media (min-width: 768px) {
-            .content-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Cards maiores */
+            .hamburger-btn {
+                display: none;
             }
             
+            .nav-menu {
+                display: block;
+                position: static;
+                width: auto;
+                background: none;
+                box-shadow: none;
+                transform: translateY(0);
+                padding: 0;
+                pointer-events: all;
+            }
+            
+            .nav-menu ul {
+                display: flex;
+                gap: 25px;
+            }
+
+            .nav-menu ul li a {
+                color: var(--text-color-secondary);
+                font-size: 1rem;
+                padding: 5px 0;
+            }
+
+            .content-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+            }
+            
+            /* Volta o layout do card para coluna (visual de Grid) */
             .app-card {
-                padding: 25px;
+                flex-direction: column;
+                text-align: center;
+                height: 250px; /* Altura fixa para cards em grid */
+            }
+            
+            .app-text-content {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                margin-top: 10px;
+            }
+
+            .app-icon {
+                width: 100px;
+                height: 100px;
             }
         }
     </style>
@@ -385,7 +320,16 @@
     </header>
 
     <main class="container">
-        <section class="hero-banner">
+        <section class="hero-banner" style="
+            background: linear-gradient(135deg, var(--secondary-highlight-color) 0%, #151F2D 100%); 
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); 
+            padding: 50px 40px; 
+            border-radius: var(--border-radius-base); 
+            margin-bottom: 50px; 
+            text-align: center;
+            opacity: 1; /* Removido animação de entrada para simplicidade */
+            transform: none;
+        ">
             <h1>Descubra Novidades na VICTOR STORE! 🚀</h1>
             <p style="opacity: 0.9;">Apps e Músicas com uma interface futurista. **Acesso e Download Livres!**</p>
         </section>
@@ -474,10 +418,7 @@
     </div>
     
     <script type="module">
-        // --- O CÓDIGO JAVASCRIPT ORIGINAL FOI MANTIDO ---
-        // Ele lida com a lógica de dados (Firebase) e a interação do usuário.
-        // A lógica de animação visual (transparência e 3D) é tratada principalmente pelo CSS.
-        
+        // IMPORTAÇÕES FIREBASE (MANTIDAS)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
         import { 
             getFirestore, 
@@ -513,7 +454,7 @@
             'software': 'Software'
         };
 
-        // --- 2. REFERÊNCIAS DOM (ATUALIZADAS) ---
+        // REFERÊNCIAS DOM 
         const mainHeader = document.getElementById('main-header');
         const hamburgerBtn = document.getElementById('hamburger-btn');
         const hamburgerMenu = document.getElementById('hamburger-menu');
@@ -525,7 +466,6 @@
         const detailsDownloadBtn = document.getElementById('details-download-btn');
         const detailsCategoryInfo = document.getElementById('details-category-info'); 
         
-        // Grids de Conteúdo 
         const contentGrids = {
             'jogo': document.getElementById('games-grid'),
             'app_geral': document.getElementById('apps-grid'),
@@ -539,13 +479,12 @@
             { id: 'jogo', grid: contentGrids['jogo'], title: 'Jogos' },
             { id: 'app_geral', grid: contentGrids['app_geral'], title: 'Apps (Geral)' },
             { id: 'musica', grid: contentGrids['musica'], title: 'Músicas' },
-            { id: 'filme_serie', grid: contentGrids['filme_serie'], title: 'Filmes/Séries' },
+            { id: 'filme_serie': 'Filmes/Séries' },
             { id: 'frp', grid: contentGrids['frp'], title: 'FRP' },
             { id: 'software', grid: contentGrids['software'], title: 'Software' }
         ];
 
-        // --- 3. FUNÇÕES UTILITÁRIAS ---
-
+        // FUNÇÕES UTILITÁRIAS (MANTIDAS)
         function toggleSearchBar() {
             mainHeader.classList.toggle('search-active');
             if (mainHeader.classList.contains('search-active')) {
@@ -555,7 +494,7 @@
             }
         }
         
-        // Função para renderizar um card de App/Música
+        // Função para renderizar um card de App/Música (Atualizada para novo layout)
         function renderAppCard(data, gridElement) {
             const card = document.createElement('div');
             card.className = 'app-card';
@@ -569,22 +508,25 @@
             card.dataset.downloadLink = data.downloadLink;
 
             card.innerHTML = `
-                <img src="${data.image}" class="app-icon" alt="Ícone de ${data.name}" onerror="this.onerror=null; this.src='https://placehold.co/100x100/1F2937/00FF8C?text=${data.type.toUpperCase().substring(0,3)}';">
-                <div class="app-title">${data.name}</div>
-                <div class="app-description">${data.category || data.description}</div> `;
+                <img src="${data.image}" class="app-icon" alt="Ícone de ${data.name}" onerror="this.onerror=null; this.src='https://placehold.co/80x80/1F2937/00FF8C?text=${data.type.toUpperCase().substring(0,3)}';">
+                <div class="app-text-content">
+                    <div class="app-title">${data.name}</div>
+                    <div class="app-description">${data.category || data.description}</div> 
+                </div>`;
             
             card.addEventListener('click', () => showDetailsModal(data));
 
             gridElement.appendChild(card);
         }
         
-        // --- 4. FUNÇÃO DE CARREGAMENTO DE CONTEÚDO (FIRESTORE) ---
-        
+        // FUNÇÃO DE CARREGAMENTO DE CONTEÚDO (MANTIDA)
         async function loadContentFromFirestore() {
             const contentCollection = collection(db, 'content');
             
             contentSections.forEach(section => {
-                section.grid.innerHTML = `<div class="loading-message">Carregando ${section.title}...</div>`;
+                if (section.grid) {
+                    section.grid.innerHTML = `<div class="loading-message">Carregando ${section.title}...</div>`;
+                }
             });
             
             try {
@@ -595,13 +537,14 @@
                         orderBy('createdAt', 'desc'), 
                         limit(8)
                     );
-                    return { id: section.id, promise: getDocs(q) };
+                    return { id: section.id, promise: getDocs(q), grid: section.grid };
                 });
 
                 const results = await Promise.all(queryPromises.map(item => item.promise));
 
                 results.forEach((snapshot, index) => {
                     const section = contentSections[index];
+                    if (!section.grid) return;
                     
                     section.grid.innerHTML = ''; 
 
@@ -616,19 +559,18 @@
                         });
                     }
                 });
-
-                console.log("Conteúdo do Firestore carregado com sucesso para todas as seções.");
                 
             } catch (error) {
                 console.error("Erro ao carregar o conteúdo do Firestore:", error);
                 contentSections.forEach(section => {
-                    section.grid.innerHTML = `<div class="empty-grid-message" style="color: var(--error-color);">Erro ao carregar ${section.title}: ${error.message}</div>`;
+                    if (section.grid) {
+                        section.grid.innerHTML = `<div class="empty-grid-message" style="color: red;">Erro ao carregar ${section.title}: ${error.message}</div>`;
+                    }
                 });
             }
         }
         
-        // --- 5. FUNÇÕES DOS MODAIS (Adicionado classe 'open' para animação) ---
-
+        // FUNÇÕES DOS MODAIS (MANTIDAS)
         function showDetailsModal(itemData) {
             selectedItem = itemData; 
             
@@ -644,9 +586,8 @@
             detailsDownloadBtn.disabled = false;
             detailsDownloadBtn.textContent = 'Baixar Agora';
 
-            // Usa a classe 'open' para disparar as animações CSS
             detailsModal.classList.add('open');
-            detailsModal.style.display = 'flex'; // Mudado para 'flex' para centralização
+            detailsModal.style.display = 'flex'; 
         }
         
         detailsDownloadBtn.addEventListener('click', () => {
@@ -663,37 +604,30 @@
             }
             
             detailsModal.classList.remove('open');
-            // Remove display:flex após a animação (usando setTimeout seria mais preciso)
             setTimeout(() => { detailsModal.style.display = 'none'; }, 400); 
         });
 
-
-        // --- 6. HANDLERS DE EVENTOS GERAIS ---
+        // HANDLERS DE EVENTOS GERAIS
         
-        // Menu Hamburguer
+        // Menu Hamburguer (Adicionada lógica de fechamento/ícone)
         hamburgerBtn.addEventListener('click', () => {
             hamburgerMenu.classList.toggle('open');
             
-            // Alterna o ícone do hamburger
             const isMenuOpen = hamburgerMenu.classList.contains('open');
             hamburgerBtn.innerHTML = isMenuOpen
                 ? '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>'
                 : '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>';
         });
 
-        // Botão de Pesquisa
         searchBtn.addEventListener('click', toggleSearchBar);
         
-        // Botão de Perfil/Login (AGORA INATIVO)
         profileBtn.addEventListener('click', () => {
             console.log('Botão de Perfil clicado. Acesso Livre.');
         });
 
-        // Fechar Modais ao clicar no 'x' ou no fundo
         document.addEventListener('click', (event) => {
             const closeModal = (modal) => {
                 modal.classList.remove('open');
-                // Adiciona um pequeno delay para a animação de saída
                 setTimeout(() => { modal.style.display = 'none'; }, 400); 
             };
             
@@ -709,8 +643,7 @@
         });
 
 
-        // --- 7. INICIALIZAÇÃO ---
-        
+        // INICIALIZAÇÃO
         document.addEventListener('DOMContentLoaded', () => {
             loadContentFromFirestore(); 
             profileStatus.textContent = 'Acesso Livre';
