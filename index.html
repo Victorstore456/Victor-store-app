@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<body>
+    <div id="admin-container">
+
+        <div id="auth-screen" class="screen active">
+            </div>
+
+        <div id="admin-form-screen" class="screen">
+            
+            <section class="admin-section">
+                <h2>Adicionar Novo Conteúdo</h2>
+                <p id="form-status-message" class="status-message" style="display:none;"></p>
+                
+                <form id="content-form">
+                    <label for="content-type">Tipo de Conteúdo</label>
+                    <select id="content-type" required>
+                        <option value="">Selecione um Tipo</option>
+                        <option value="app">App</option>
+                        <option value="game">Jogo</option>
+                        <option value="software">Software</option>
+                    </select>
+                    
+                    <label for="category">Categoria</label>
+                    <select id="category" required>
+                        <option value="">Selecione uma Categoria</option>
+                    </select>
+
+                    <input type="text" id="name" placeholder="Nome do Item (Ex: GTA V)" required>
+                    <textarea id="description" placeholder="Descrição Detalhada" required></textarea>
+                    <input type="url" id="image-url" placeholder="URL da Imagem de Capa" required>
+                    <input type="url" id="download-url" placeholder="URL para Download (Link Direto)" required>
+                    <input type="text" id="tags" placeholder="Tags (separadas por vírgula, Ex: ação, aventura)">
+
+                    <button type="submit" id="submit-content-btn" class="submit-btn">Adicionar Conteúdo</button>
+                </form>
+            </section>
+            
+            <section class="admin-section" id="push-notification-section">
+                <h2>Lançar Atualização (Notificação Push)</h2>
+                <p>Envie uma notificação push para todos os usuários inscritos.</p>
+                <form id="push-notification-form">
+                    <input type="text" id="notification-title" placeholder="Título da Notificação (Ex: Novidade na Victor Store!)" required>
+                    <textarea id="notification-body" placeholder="Mensagem principal (Ex: Acabamos de adicionar o GTA V!)" required></textarea>
+                    <input type="url" id="notification-url" placeholder="URL de destino (Opcional, Ex: /detalhes?id=gtav)">
+                    <button type="submit" id="send-notification-btn" class="submit-btn" style="background-color: var(--secondary-highlight-color);">Enviar Notificação a Todos</button>
+                    <p id="notification-status-message" class="status-message"></p>
+                </form>
+            </section>
+
+        </div>
+
+        <div id="removal-screen" class="screen">
+            </div>
+
+    </div>
+    
+    <script type="module">
+        // --- IMPORTS FIREBASE ---
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+        import { 
+            getFirestore, 
+            collection, 
+            addDoc, 
+            serverTimestamp, 
+            query, 
+            getDocs,
+            deleteDoc, 
+            doc 
+        } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+        import { 
+            getAuth, 
+            signInWithEmailAndPassword, 
+            signOut,
+            onAuthStateChanged 
+        } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js"; 
+
+        // --- CONFIGURAÇÃO (COM SENDER ID EMBUTIDO) ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyAqUbFJRI1CplOQptliKmVZH90LB2AlZus",
+            authDomain: "victor-store-42568.firebaseapp.com",
+            projectId: "victor-store-42568",
+            storageBucket: "victor-store-42568.appspot.com",
+            messagingSenderId: "772922119777", // <-- SUBSTITUÍDO
+            appId: "1:772922119777:web:865d1d604b39e6a88b52f9",
+            measurementId: "G-G6J8N6H9W"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // --- VARIÁVEIS DOM (MANTIDAS) ---
+        const authScreen = document.getElementById('auth-screen');
+        const adminFormScreen = document.getElementById('admin-form-screen');
+        const removalScreen = document.getElementById('removal-screen');
+        const loginForm = document.getElementById('password-login-form');
+        const loginEmail = document.getElementById('login-email');
+        const loginPassword = document.getElementById('login-password');
+        const loginSubmitBtn = document.getElementById('login-submit-btn');
+        const authMessage = document.getElementById('auth-message');
+        const logoutBtn = document.getElementById('logout-btn');
+        const adminFormBtn = document.getElementById('admin-form-btn');
+        const openRemovalBtn = document.getElementById('open-removal-btn');
+        const closeRemovalBtn = document.getElementById('close-removal-btn');
+        const deleteSelectedBtn = document.getElementById('delete-selected-btn');
+        const removalList = document.getElementById('removal-list');
+        const removalStatusMessage = document.getElementById('removal-status-message');
+        
+        // Form Content
+        const contentForm = document.getElementById('content-form');
+        const contentType = document.getElementById('content-type');
+        const categorySelect = document.getElementById('category');
+        const formStatusMessage = document.getElementById('form-status-message');
+        
+        // NOVO: Variáveis do Formulário de Notificação Push
+        const pushNotificationForm = document.getElementById('push-notification-form');
+        const notificationStatusMessage = document.getElementById('notification-status-message');
+
+        let isAuthenticated = false;
+        let currentUser = null;
+
+        const categories = {
+            app: ["Produtividade", "Redes Sociais", "Ferramentas"],
+            game: ["Ação", "Aventura", "Estratégia", "Simulação"],
+            software: ["Utilitários", "Segurança", "Desenvolvimento"]
+        };
+
+
+        // --- FUNÇÕES DE UI (MANTIDAS) ---
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function setStatus(message, type, element) {
+            element.textContent = message;
+            element.className = `status-message ${type}`;
+            element.style.display = 'block';
+            setTimeout(() => {
+                element.style.display = 'none';
+            }, 5000);
+        }
+
+        function updateCategories() {
+            const selectedType = contentType.value;
+            categorySelect.innerHTML = '<option value="">Selecione uma Categoria</option>';
+            
+            if (selectedType && categories[selectedType]) {
+                categories[selectedType].forEach(cat => {
+                    const option = document.createElement('option');
+                    option.value = cat;
+                    option.textContent = cat;
+                    categorySelect.appendChild(option);
+                });
+            }
+        }
+
+
+        // --- FUNÇÕES DE AUTENTICAÇÃO (MANTIDAS) ---
+
+        function updateAdminUI(user) {
+            isAuthenticated = !!user;
+            currentUser = user;
+            
+            const display = isAuthenticated ? 'block' : 'none';
+            
+            adminFormBtn.style.display = display;
+            openRemovalBtn.style.display = display;
+            logoutBtn.style.display = display;
+            
+            if (isAuthenticated) {
+                showScreen('admin-form-screen');
+                adminFormBtn.classList.add('active');
+                openRemovalBtn.classList.remove('active');
+            } else {
+                showScreen('auth-screen');
+            }
+        }
+
+        function handleAuthError(error, messageElement, submitButton) {
+            let message = 'Ocorreu um erro desconhecido.';
+            if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                message = 'Email ou senha inválidos.';
+            } else if (error.code === 'auth/invalid-email') {
+                message = 'O formato do e-mail é inválido.';
+            } else {
+                 message = `Erro: ${error.message}`;
+            }
+            setStatus(message, 'error', messageElement);
+            submitButton.disabled = false;
+            submitButton.textContent = 'Fazer Login';
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            const email = loginEmail.value;
+            const password = loginPassword.value;
+            
+            loginSubmitBtn.disabled = true;
+            loginSubmitBtn.textContent = 'Verificando...';
+            authMessage.style.display = 'none';
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                setStatus('Login realizado com sucesso!', 'success', authMessage);
+            } catch (error) {
+                handleAuthError(error, authMessage, loginSubmitBtn);
+            }
+        }
+
+        function handleLogout() {
+            signOut(auth).then(() => {
+                setStatus('Deslogado com sucesso.', 'success', authMessage);
+            }).catch((error) => {
+                setStatus('Erro ao deslogar: ' + error.message, 'error', authMessage);
+            });
+        }
+
+        onAuthStateChanged(auth, updateAdminUI);
+
+
+        // --- FUNÇÕES DE DADOS (Content, MANTIDAS) ---
+
+        async function handleContentSubmit(event) {
+            event.preventDefault();
+
+            if (!isAuthenticated) {
+                setStatus('Erro de autenticação. Por favor, faça login.', 'error', formStatusMessage);
+                return;
+            }
+            
+            const submitBtn = document.getElementById('submit-content-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Salvando...';
+            formStatusMessage.style.display = 'none';
+
+            const itemData = {
+                type: contentType.value,
+                category: categorySelect.value,
+                name: document.getElementById('name').value,
+                description: document.getElementById('description').value,
+                imageURL: document.getElementById('image-url').value,
+                downloadURL: document.getElementById('download-url').value,
+                tags: document.getElementById('tags').value.split(',').map(tag => tag.trim()),
+                timestamp: serverTimestamp() 
+            };
+            
+            try {
+                const docRef = await addDoc(collection(db, "content"), itemData);
+                setStatus(`Conteúdo "${itemData.name}" adicionado com sucesso! ID: ${docRef.id}`, 'success', formStatusMessage);
+                contentForm.reset();
+                updateCategories(); 
+            } catch (e) {
+                setStatus("Erro ao adicionar conteúdo: " + e.message, 'error', formStatusMessage);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Adicionar Conteúdo';
+            }
+        }
+
+        // --- FUNÇÕES DE DADOS (Remoção, MANTIDAS) ---
+        // (fetchContentList, setupRemovalListeners, updateDeleteButton, deleteSelectedContent)
+        
+        let contentToRemove = [];
+
+        async function fetchContentList() {
+            removalList.innerHTML = '<p>Carregando...</p>';
+            contentToRemove = [];
+            
+            try {
+                const q = query(collection(db, "content"));
+                const querySnapshot = await getDocs(q);
+                
+                let html = '';
+                querySnapshot.forEach((doc) => {
+                    const item = doc.data();
+                    html += `
+                        <div class="removal-item">
+                            <input type="checkbox" data-id="${doc.id}" data-name="${item.name}">
+                            <span>${item.name} (${item.type})<br><p>${item.category}</p></span>
+                        </div>
+                    `;
+                });
+                
+                removalList.innerHTML = html;
+                if (querySnapshot.empty) {
+                     removalList.innerHTML = '<p>Nenhum conteúdo encontrado.</p>';
+                }
+                
+                setupRemovalListeners();
+                updateDeleteButton();
+
+            } catch (e) {
+                removalList.innerHTML = '<p class="error-content">Erro ao carregar a lista: ' + e.message + '</p>';
+            }
+        }
+
+        function setupRemovalListeners() {
+            removalList.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', (e) => {
+                    const id = e.target.getAttribute('data-id');
+                    const name = e.target.getAttribute('data-name');
+                    
+                    if (e.target.checked) {
+                        contentToRemove.push({ id, name });
+                    } else {
+                        contentToRemove = contentToRemove.filter(item => item.id !== id);
+                    }
+                    updateDeleteButton();
+                });
+            });
+        }
+
+        function updateDeleteButton() {
+            deleteSelectedBtn.textContent = `Excluir Itens Selecionados (${contentToRemove.length})`;
+            deleteSelectedBtn.disabled = contentToRemove.length === 0;
+        }
+
+        async function deleteSelectedContent() {
+            if (contentToRemove.length === 0 || !confirm(`Tem certeza que deseja excluir ${contentToRemove.length} itens? Esta ação é irreversível!`)) {
+                return;
+            }
+
+            deleteSelectedBtn.disabled = true;
+            deleteSelectedBtn.textContent = 'Excluindo...';
+            setStatus('Iniciando exclusão...', 'loading', removalStatusMessage);
+
+            let successCount = 0;
+            let errorCount = 0;
+            const deletePromises = contentToRemove.map(item => {
+                return deleteDoc(doc(db, "content", item.id))
+                    .then(() => {
+                        successCount++;
+                    })
+                    .catch((error) => {
+                        console.error("Erro ao excluir " + item.name + ":", error);
+                        errorCount++;
+                    });
+            });
+
+            await Promise.all(deletePromises);
+
+            if (errorCount === 0) {
+                setStatus(`Sucesso! ${successCount} itens excluídos.`, 'success', removalStatusMessage);
+            } else if (successCount > 0) {
+                 setStatus(`Exclusão parcial: ${successCount} itens excluídos, ${errorCount} erro(s). Verifique as permissões de exclusão.`, 'error', removalStatusMessage);
+            } else {
+                 setStatus(`Falha total: ${errorCount} erros. Verifique as regras de exclusão do Firestore.`, 'error', removalStatusMessage);
+            }
+
+            deleteSelectedBtn.disabled = false;
+            deleteSelectedBtn.textContent = 'Excluir Itens Selecionados';
+            fetchContentList(); 
+        }
+        
+        // --- FUNÇÃO DE ENVIO DE NOTIFICAÇÃO PUSH (NOVO) ---
+        
+        async function handleSendNotification(event) {
+            event.preventDefault();
+            
+            if (!isAuthenticated || !currentUser) {
+                setStatus('Erro de autenticação. Por favor, faça login novamente.', 'error', notificationStatusMessage);
+                return;
+            }
+
+            const title = document.getElementById('notification-title').value;
+            const body = document.getElementById('notification-body').value;
+            const url = document.getElementById('notification-url').value;
+            const sendBtn = document.getElementById('send-notification-btn');
+
+            if (!title || !body) {
+                setStatus('Título e corpo da mensagem são obrigatórios.', 'error', notificationStatusMessage);
+                return;
+            }
+
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Enviando...';
+            setStatus('Preparando envio...', 'loading', notificationStatusMessage);
+            
+            try {
+                // A Cloud Function está ouvindo a coleção 'updates'
+                const docRef = await addDoc(collection(db, "updates"), {
+                    title: title,
+                    body: body,
+                    url: url,
+                    timestamp: serverTimestamp(),
+                    senderUid: currentUser.uid,
+                    status: 'pending' // O servidor irá processar este status
+                });
+
+                setStatus(`Mensagem salva (ID: ${docRef.id}). O envio em massa será iniciado em breve pelo servidor.`, 'success', notificationStatusMessage);
+                pushNotificationForm.reset();
+
+            } catch (e) {
+                setStatus("Erro ao salvar a mensagem para envio: " + e.message, 'error', notificationStatusMessage);
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.textContent = 'Enviar Notificação a Todos';
+            }
+        }
+
+
+        // --- INICIALIZAÇÃO E HANDLERS DE EVENTO ---
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Handlers de Login/Logout
+            loginForm.addEventListener('submit', handleLogin);
+            logoutBtn.addEventListener('click', handleLogout);
+            
+            // Handler do formulário principal de conteúdo
+            contentForm.addEventListener('submit', handleContentSubmit);
+            
+            // Handler do formulário de envio de notificação (NOVO)
+            pushNotificationForm.addEventListener('submit', handleSendNotification);
+            
+            // Atualizar categorias
+            contentType.addEventListener('change', updateCategories);
+            
+            // Handlers de Navegação
+            adminFormBtn.addEventListener('click', () => {
+                 showScreen('admin-form-screen');
+                 adminFormBtn.classList.add('active');
+                 openRemovalBtn.classList.remove('active');
+            });
+            openRemovalBtn.addEventListener('click', () => {
+                if(isAuthenticated) {
+                    showScreen('removal-screen');
+                    fetchContentList(); 
+                    adminFormBtn.classList.remove('active');
+                    openRemovalBtn.classList.add('active');
+                }
+            });
+            closeRemovalBtn.addEventListener('click', () => {
+                showScreen('admin-form-screen');
+                adminFormBtn.classList.add('active');
+                openRemovalBtn.classList.remove('active');
+            });
+            
+            // Handler de Exclusão
+            deleteSelectedBtn.addEventListener('click', deleteSelectedContent);
+            
+            // Exibe a tela de login por padrão
+            showScreen('auth-screen');
+            updateCategories(); 
+        });
+
+    </script>
+</body>
+</html>
