@@ -126,11 +126,20 @@ function handleNotificationClick(event) {
 let selectedItem = null; 
 let allContent = []; 
 
+// CATEGORIAS PRINCIPAIS: Usado para mapear IDs para nomes de exibição
 const typeMap = {
     'jogo': 'Jogos',
     'app_geral': 'Apps (Geral)',
     'frp': 'FRP/Desbloqueio',
     'software': 'Software'
+};
+
+// SUBCATEGORIAS: Adicionado para uniformidade (Espelho do Admin Panel)
+const categoriesMap = {
+    'jogo': ['Ação', 'Aventura', 'Puzzle', 'Estratégia', 'Simulação'],
+    'app_geral': ['Produtividade', 'Redes Sociais', 'Ferramentas', 'Entretenimento'],
+    'frp': ['Samsung', 'Motorola', 'Xiaomi', 'Geral'],
+    'software': ['Sistema Operacional', 'Utilitários', 'Segurança', 'Design']
 };
 
 const filterIcons = {
