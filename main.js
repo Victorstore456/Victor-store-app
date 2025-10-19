@@ -133,6 +133,25 @@ const authPasswordInput = document.getElementById('auth-password');
 const authMessage = document.getElementById('auth-message');
 const mainNavUl = document.getElementById('main-nav-ul'); // Para adicionar o botão Sair/Login
 
+// --- FUNÇÕES DE ANIMAÇÃO DE MODAL (NOVO) ---
+const animateModalIn = (modalElement) => {
+    modalElement.classList.remove('animate-out');
+    modalElement.classList.add('animate-in');
+    modalElement.style.display = 'flex';
+}
+
+const animateModalOut = (modalElement, callback = () => {}) => {
+    modalElement.classList.remove('animate-in');
+    modalElement.classList.add('animate-out');
+    
+    // Espera a animação terminar antes de esconder (0.3s definido no CSS)
+    setTimeout(() => {
+        modalElement.style.display = 'none';
+        modalElement.classList.remove('animate-out');
+        callback();
+    }, 300); 
+}
+
 
 // --- 3. FUNÇÕES DE AUTENTICAÇÃO ---
 
@@ -175,7 +194,7 @@ const setupAuthListeners = () => {
                 await signInWithEmailAndPassword(auth, email, password);
                 showAuthMessage("Login realizado com sucesso!");
             }
-            authModal.style.display = 'none';
+            animateModalOut(authModal);
             // Fechar o menu hamburguer, caso esteja aberto
             hamburgerMenu.classList.remove('open');
             menuOverlay.style.display = 'none';
@@ -199,7 +218,7 @@ const setupAuthListeners = () => {
         try {
             await signInWithPopup(auth, provider);
             showAuthMessage("Login com Google realizado com sucesso!");
-            authModal.style.display = 'none';
+            animateModalOut(authModal);
             // Fechar o menu hamburguer, caso esteja aberto
             hamburgerMenu.classList.remove('open');
             menuOverlay.style.display = 'none';
@@ -257,7 +276,7 @@ const updateAuthMenuButton = (user) => {
             authNameInput.style.display = 'none';
             toggleAuthBtn.textContent = "Criar Nova Conta";
             authForm.reset();
-            authModal.style.display = 'flex';
+            animateModalIn(authModal);
         });
     }
     lucide.createIcons();
@@ -282,7 +301,7 @@ onAuthStateChanged(auth, (user) => {
 // Função para renderizar um card de App (USADO EM TODOS OS GRIDS)
 function renderAppCard(data, gridElement) {
     const card = document.createElement('div');
-    card.className = 'app-card';
+    card.className = 'app-card glass-effect'; // Adiciona o glass-effect ao card
     
     card.dataset.search = `${data.name.toLowerCase()} ${data.category ? data.category.toLowerCase() : ''} ${data.type.toLowerCase()}`;
     card.dataset.type = data.type; 
@@ -556,7 +575,7 @@ function showDetailsModal(itemData) {
         relatedAppsSection.style.display = 'none';
     }
 
-    detailsModal.style.display = 'flex'; 
+    animateModalIn(detailsModal); // Usa a nova função de animação
 }
 
 // Função para mostrar Modal de Lista Completa ("Ver Todos")
@@ -570,7 +589,7 @@ function showFullListModal(typeId) {
     // Usa a função de renderização de grid vertical
     renderVerticalGrid(fullContent, fullListGrid);
     
-    fullListModal.style.display = 'flex';
+    animateModalIn(fullListModal); // Usa a nova função de animação
 }
 
 // Atribui o evento de clique aos links "Ver todos"
@@ -601,17 +620,17 @@ document.querySelectorAll('.nav-menu a').forEach(link => {
 detailsDownloadBtn.addEventListener('click', () => {
     // SEÇÃO CRÍTICA: EXIGE LOGIN
     if (!currentUser) { 
-        detailsModal.style.display = 'none'; // Fecha o modal de detalhes
-        
-        // Configura o modal de Auth para começar em Login por conveniência
-        isRegisterMode = false;
-        authTitle.textContent = "Faça Login";
-        authSubmitBtn.textContent = "Entrar";
-        authNameInput.style.display = 'none';
-        toggleAuthBtn.textContent = "Criar Nova Conta";
-        authForm.reset();
+        animateModalOut(detailsModal, () => { // Fecha com animação, depois abre o Auth
+            // Configura o modal de Auth para começar em Login por conveniência
+            isRegisterMode = false;
+            authTitle.textContent = "Faça Login";
+            authSubmitBtn.textContent = "Entrar";
+            authNameInput.style.display = 'none';
+            toggleAuthBtn.textContent = "Criar Nova Conta";
+            authForm.reset();
 
-        authModal.style.display = 'flex';   // Abre o modal de login
+            animateModalIn(authModal);   // Abre o modal de login
+        });
         return; 
     }
 
@@ -622,7 +641,7 @@ detailsDownloadBtn.addEventListener('click', () => {
     } else {
         alert("Erro: Link de download inválido ou não configurado no Firebase.");
     }
-    detailsModal.style.display = 'none';
+    animateModalOut(detailsModal);
 });
 
 // --- 9. INICIALIZAÇÃO E EVENTOS GERAIS ---
@@ -647,13 +666,19 @@ document.addEventListener('click', (event) => {
         menuOverlay.style.display = 'none';
     }
 
-    // Fechar Modais 
+    // Fechar Modais (clicando no 'x' ou no overlay do modal)
     if (target.classList.contains('modal-close')) {
-         target.closest('.modal').style.display = 'none';
+         const modal = target.closest('.modal');
+         animateModalOut(modal);
     }
-    // Adicionado authModal para fechamento genérico
-    if (target === detailsModal || target === fullListModal || target === authModal) { 
-        target.style.display = 'none';
+    if (target === detailsModal) { 
+        animateModalOut(detailsModal);
+    }
+    if (target === fullListModal) {
+        animateModalOut(fullListModal);
+    }
+    if (target === authModal) {
+        animateModalOut(authModal);
     }
 });
 
