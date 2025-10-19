@@ -8,10 +8,12 @@
     <style>
         :root {
             /* Cores Primárias e Secundárias */
-            --primary-bg-white: #1A1A1A; /* Fundo principal muito escuro */
-            --glass-bg: rgba(45, 45, 45, 0.5); /* Fundo do Glassmorphism */
+            --primary-bg-dark: #1A237E; /* NOVO: Fundo principal Azul Escuro */
+            --glass-bg: rgba(26, 35, 126, 0.7); /* Fundo do Glassmorphism (70% Opaco, Cor Base) */
             --highlight-color: #6DE350; /* Verde de destaque */
-            --secondary-highlight-color: #007BFF; /* Azul de destaque */
+            --secondary-highlight-color: #007BFF; /* Azul de destaque (usado em links/botões) */
+            
+            /* Cores de Texto */
             --text-color-dark: #F8F9FA; /* Texto principal CLARO */
             --text-color-light: #F8F9FA; 
             --text-color-muted: #ADB5BD; 
@@ -36,7 +38,7 @@
 
         body {
             font-family: var(--font-family-base);
-            background-color: var(--primary-bg-white); 
+            background-color: var(--primary-bg-dark); 
             color: var(--text-color-dark); 
             line-height: 1.6;
             overflow-x: hidden;
@@ -51,7 +53,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        /* --- Animações Profissionais --- */
+        /* --- Animações Profissionais (Keyframes) --- */
         
         /* Keyframes para Entrada/Saída de Cards */
         @keyframes card-fade-in {
@@ -60,6 +62,14 @@
         }
         
         /* Animação para o clique/hover 3D no Card */
+        .app-card {
+            /* Transição para o efeito 3D no hover */
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            animation: card-fade-in 0.5s ease-out forwards;
+        }
+
         .app-card:hover {
             transform: scale(1.05) translateY(-5px) rotateY(2deg);
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 10px var(--highlight-color);
@@ -77,14 +87,13 @@
             to { opacity: 0; transform: scale(0.95); }
         }
         
-        /* Classes para o JS controlar */
+        /* Classes para o JS controlar as transições de tela */
         .modal.animate-in .modal-content {
             animation: modal-3d-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
         .modal.animate-out .modal-content {
             animation: modal-fade-out 0.3s ease-out forwards;
         }
-
 
         /* --- Barra Superior e Pesquisa (sticky e glass) --- */
         .top-bar {
@@ -109,7 +118,7 @@
             letter-spacing: -1px;
             transition: color 0.3s;
         }
-        .logo a span { color: var(--highlight-color); }
+        .logo a span { color: var(--highlight-color); } /* Logo VictorStore mantido */
 
         .search-full-bar { flex-grow: 1; margin: 0 15px; }
         .search-input-wrapper {
@@ -176,7 +185,7 @@
         /* Ajuste para links SEM SVG */
         .nav-menu a.no-icon {
             background-color: var(--highlight-color); 
-            color: #1A1A1A; font-weight: 700;
+            color: var(--primary-bg-dark); font-weight: 700; /* Texto escuro no botão verde */
         }
         .nav-menu a.no-icon:hover {
             background-color: #5ac743;
@@ -238,7 +247,8 @@
         }
         
         .app-card { 
-            background-color: rgba(255, 255, 255, 0.05); /* Card mais transparente */
+            /* Aplica o glass-effect diretamente no card */
+            background-color: rgba(255, 255, 255, 0.05); 
             border-radius: var(--border-radius-base); 
             padding: 0; 
             display: flex; 
@@ -250,11 +260,6 @@
             flex-shrink: 0; 
             height: auto; 
             padding-bottom: 10px;
-            /* Efeitos 3D */
-            transform-style: preserve-3d;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            animation: card-fade-in 0.5s ease-out forwards;
         }
         /* Ajuste para o grid vertical ter o mesmo estilo 3D */
         .dynamic-feed-container .app-card, .full-list-grid .app-card { width: 100%; flex-shrink: 1; }
@@ -281,12 +286,29 @@
             position: relative; max-height: 90vh; overflow-y: auto; 
             transform-style: preserve-3d; /* Permite animação 3D */
         }
+        
+        /* NOVO: Estilo para inputs no modal de Auth para ficarem transparentes */
+        .auth-input {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.1); /* Fundo transparente */
+            color: var(--text-color-dark);
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
         .details-download-btn {
             background-color: var(--highlight-color);
-            color: #1A1A1A; /* Texto escuro no botão de destaque */
+            color: var(--primary-bg-dark); /* Texto escuro no botão de destaque */
         }
         .login-prompt {
             color: var(--highlight-color);
+        }
+        .modal-close {
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.8); /* Torna o 'x' mais visível */
         }
         
         @media (min-width: 768px) {
@@ -310,7 +332,7 @@
         </div>
         
         <div class="search-full-bar">
-            <div class="search-input-wrapper">
+            <div class="search-input-wrapper glass-effect">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search search-icon"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
                 <input type="text" id="search-input" class="search-input" placeholder="Pesquisar Apps, Jogos, Software...">
             </div>
@@ -321,7 +343,7 @@
         </button>
     </div>
 
-    <nav class="nav-menu" id="hamburger-menu">
+    <nav class="nav-menu glass-effect" id="hamburger-menu">
         <ul id="main-nav-ul">
              <li><a href="#" data-filter-type="jogo">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gamepad-2"><path d="M6 10a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2Z"/><path d="M12 15h1"/><path d="M11 14v1"/></svg>
@@ -349,7 +371,7 @@
     </nav>
     <div class="menu-overlay"></div> 
     
-    <nav class="category-filter-bar" id="category-filter-bar">
+    <nav class="category-filter-bar glass-effect" id="category-filter-bar">
         </nav>
 
 
@@ -401,9 +423,9 @@
             <p class="auth-message" id="auth-message" style="display: none;"></p>
 
             <form id="auth-form">
-                <input type="text" id="auth-name" placeholder="Seu Nome de Usuário (Opcional)" class="auth-input glass-effect">
-                <input type="email" id="auth-email" placeholder="Email" class="auth-input glass-effect" required>
-                <input type="password" id="auth-password" placeholder="Senha (Mínimo 6 caracteres)" class="auth-input glass-effect" required>
+                <input type="text" id="auth-name" placeholder="Seu Nome de Usuário (Opcional)" class="auth-input">
+                <input type="email" id="auth-email" placeholder="Email" class="auth-input" required>
+                <input type="password" id="auth-password" placeholder="Senha (Mínimo 6 caracteres)" class="auth-input" required>
                 
                 <button type="submit" id="auth-submit-btn" class="auth-btn auth-submit-btn">Criar Conta</button>
             </form>
@@ -420,7 +442,7 @@
     </div>
 
 
-    <script type="module" src="./main.js?v=13"></script> 
+    <script type="module" src="./main.js?v=14"></script> 
     
     <script src="https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js"></script>
 </body>
