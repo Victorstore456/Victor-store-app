@@ -2,7 +2,7 @@
 
 // Versão atual do CÓDIGO web. Apenas mude este número quando fizer uma GRANDE atualização.
 // A versão do SERVIDOR (Firestore) deve ser MAIOR que esta para forçar o reload.
-const CURRENT_UI_VERSION = 2.2; 
+const CURRENT_UI_VERSION = 2.3; 
 
 // --- 1. CONFIGURAÇÃO E IMPORTS FIREBASE ---
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
@@ -47,10 +47,8 @@ const auth = getAuth(app);
 
 // --- FUNÇÕES UTilitÁRIAS E CONSTANTES DE ADMIN ---
 
-// Seu e-mail de Administrador para notificação
 const ADMIN_EMAIL = "Victorstore456@gmail.com"; 
 
-// Funções para calcular idade (Requisito: Mínimo 18 anos)
 function getAge(dateString) {
     const today = new Date();
     const birthDate = new Date(dateString);
@@ -66,16 +64,11 @@ function validateAge(dateString) {
     return getAge(dateString) >= 18;
 }
 
-// Função (Nível 2) para notificar o Administrador
 async function notifyAdminForReset(email, whatsapp) {
-    // **NOTA:** O envio do e-mail/link de redefinição único DEVE ser feito por um SERVIDOR (Cloud Function).
+    // ESTA FUNÇÃO REQUER BACKEND. USANDO SIMULAÇÃO
     try {
-        // Simulação: Enviar dados para o seu servidor (Cloud Function)
-        // Você precisará desenvolver esta função no seu backend.
-        
         const successMessage = `Serás notificado no WhatsApp no numero ${whatsapp} para confirmar a identidade e redefinir a senha, por favor aguarde, geralmente demora no maximo 24h.`;
         alert(successMessage);
-        
         resetModal.style.display = 'none';
 
     } catch (error) {
@@ -92,7 +85,7 @@ let allContent = []; // Conteúdo do Firestore
 let currentUser = null; 
 let currentCustomUserData = {}; // Dados personalizados do Firestore
 
-// Mapeamento dos tipos de conteúdo (DO SEU CÓDIGO ORIGINAL)
+// Mapeamento dos tipos de conteúdo
 const typeMap = {
     'jogo': 'Jogos',
     'app_geral': 'Apps (Geral)',
@@ -100,7 +93,7 @@ const typeMap = {
     'software': 'Software'
 };
 
-// Mapeamento de ícones para filtros (Lucide) (DO SEU CÓDIGO ORIGINAL)
+// Mapeamento de ícones para filtros (Lucide)
 const filterIcons = {
     'all': 'list',
     'jogo': 'gamepad-2',
@@ -115,10 +108,9 @@ let injectionIndex = 0;
 
 // Referências DOM - Content
 const hamburgerBtn = document.getElementById('hamburger-btn');
-const navMenu = document.getElementById('hamburger-menu'); // ID no HTML
+const navMenu = document.getElementById('hamburger-menu'); 
 const menuOverlay = document.querySelector('.menu-overlay');
 const searchInput = document.getElementById('search-input');
-const contentGrid = document.getElementById('content-grid'); // Não usado diretamente, mas nomeado
 const detailsModal = document.getElementById('details-modal');
 const fullListModal = document.getElementById('full-list-modal');
 const detailsDownloadBtn = document.getElementById('details-download-btn');
@@ -155,7 +147,7 @@ const forgotPasswordForm = document.getElementById('forgot-password-form');
 const notRememberForm = document.getElementById('not-remember-form');
 
 
-// --- 3. LÓGICA DE FIREBASE E AUTENTICAÇÃO (MANTIDA) ---
+// --- 3. LÓGICA DE FIREBASE E AUTENTICAÇÃO ---
 
 // A. Gerenciamento do Estado do Usuário
 onAuthStateChanged(auth, (user) => {
@@ -168,7 +160,7 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-// B. Atualização da Interface (UI) - Adicionada lógica de Download Gate
+// B. Atualização da Interface (UI)
 function updateUIAfterAuth(user) {
     if (user) {
         // Usuário Logado
@@ -238,7 +230,7 @@ toggleAuthLink.addEventListener('click', (e) => {
         authSubmitBtn.textContent = 'Criar Conta';
         toggleAuthLink.textContent = 'Já tenho conta, Iniciar Sessão'; 
         forgotPasswordLink.style.display = 'none'; 
-        registerFields.style.display = 'flex'; // Usar 'flex' para exibir
+        registerFields.style.display = 'flex'; // **Corrigido para flex**
         authPasswordConfirm.style.display = 'block';
     }
 });
@@ -253,7 +245,7 @@ authForm.addEventListener('submit', async (e) => {
     const password = document.getElementById('auth-password').value;
 
     if (isRegistering) {
-        // --- LÓGICA DE REGISTRO COM VALIDAÇÃO DE IDADE E CAMPOS EXTRAS ---
+        // --- LÓGICA DE REGISTRO ---
         const name = document.getElementById('register-name').value;
         const confirmPassword = document.getElementById('auth-password-confirm').value;
         const bday = document.getElementById('register-bday').value;
@@ -458,7 +450,6 @@ document.getElementById('nao-lembro-de-nada-link').addEventListener('click', (e)
 forgotPasswordForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('reset-email').value;
-    // Campos bday e partner são coletados, mas a checagem é feita idealmente no Cloud Function.
     
     try {
         await sendPasswordResetEmail(auth, email);
@@ -481,7 +472,7 @@ notRememberForm.addEventListener('submit', async (e) => {
 });
 
 
-// --- 4. FUNÇÕES DE CONTEÚDO E RENDERIZAÇÃO (DO SEU CÓDIGO ORIGINAL) ---
+// --- 4. FUNÇÕES DE CONTEÚDO E RENDERIZAÇÃO ---
 
 // Checagem de Versão
 async function checkForForcedUpdate() {
@@ -513,7 +504,7 @@ function renderAppCard(data, gridElement) {
     const card = document.createElement('div');
     card.className = 'app-card';
     
-    card.dataset.id = data.id; // Adiciona ID para facilitar a busca (se o dado tiver ID)
+    card.dataset.id = data.id; 
     card.dataset.search = `${data.name.toLowerCase()} ${data.category ? data.category.toLowerCase() : ''} ${data.type.toLowerCase()}`;
     card.dataset.type = data.type; 
 
@@ -554,7 +545,12 @@ function injectHorizontalSection(typeId, sectionContent) {
 
 // Renderiza o layout principal dinâmico (Feed misturado + Seções Injetadas)
 function renderDynamicFeedLayout(content) {
-    mainContentContainer.innerHTML = '';
+    mainContentContainer.innerHTML = ''; // **CORRIGIDO: Limpa TUDO, incluindo a mensagem "Carregando..."**
+    
+    if (content.length === 0) {
+        mainContentContainer.innerHTML = `<div class="no-search-results">Nenhum conteúdo encontrado para exibir. Verifique suas regras do Firestore.</div>`;
+        return;
+    }
     
     const feedContainer = document.createElement('div');
     feedContainer.className = 'dynamic-feed-container'; 
@@ -626,7 +622,6 @@ async function loadContentFromFirestore() {
         allContent = [];
         snapshotAll.forEach(doc => {
             const data = doc.data();
-            // Adiciona o ID do documento ao objeto de dados
             allContent.push({...data, id: doc.id}); 
         });
 
@@ -636,8 +631,9 @@ async function loadContentFromFirestore() {
         console.log(`Conteúdo do Firestore carregado. ${allContent.length} itens.`);
         
     } catch (error) {
-        console.error("Erro ao carregar o conteúdo do Firestore:", error);
-        mainContentContainer.innerHTML = `<div class="loading-message" style="width: 100%; text-align: center; color: red;">Erro ao carregar o conteúdo: ${error.message}</div>`;
+        console.error("ERRO CRÍTICO AO CARREGAR CONTEÚDO:", error);
+        // Garante que a mensagem de erro substitua o 'Carregando...'
+        mainContentContainer.innerHTML = `<div class="no-search-results" style="color: red;">ERRO AO CARREGAR: Verifique sua conexão ou as Regras de Segurança do Firebase.</div>`;
     }
 }
 
@@ -660,7 +656,6 @@ function renderCategoryFilters() {
             button.className = 'filter-button';
             button.dataset.filterType = typeId;
             const iconName = filterIcons[typeId] || 'layout-list';
-            // Certifique-se de que lucide está disponível
             const iconContent = (typeof lucide !== 'undefined' && lucide.icons[iconName]) ? lucide.icons[iconName].contents : '';
             button.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-${iconName}">${iconContent}</svg>${typeMap[typeId]}`;
             button.addEventListener('click', () => filterByCategory(typeId));
@@ -736,7 +731,6 @@ function showDetailsModal(itemData) {
     const categoryDisplay = itemData.category || 'Geral';
     document.getElementById('details-category-info').textContent = `${typeDisplay} / ${categoryDisplay}`;
 
-    // A lógica de Auth já faz a checagem e esconde/mostra o botão/prompt.
     updateUIAfterAuth(currentUser); 
     
     // Lógica para Conteúdo Relacionado 
@@ -745,7 +739,7 @@ function showDetailsModal(itemData) {
     const relatedItems = allContent.filter(item => 
         item.type === itemData.type &&
         item.category === itemData.category && 
-        item.id !== itemData.id // Usando o novo ID para comparação
+        item.id !== itemData.id 
     ).slice(0, 5); 
 
     if (relatedItems.length > 0) {
@@ -783,7 +777,7 @@ function bindViewAllEvents() {
     });
 }
 
-// --- 5. EVENTOS GERAIS E INICIALIZAÇÃO (COMBINADOS) ---
+// --- 5. EVENTOS GERAIS E INICIALIZAÇÃO ---
 
 // Toggle do Menu Hamburguer
 hamburgerBtn.addEventListener('click', () => {
