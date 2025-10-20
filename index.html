@@ -353,6 +353,8 @@
         #related-apps-section { padding: 0 20px; margin-top: 20px; border-top: 1px solid #eee; }
         .related-section-header { font-size: 1rem; margin-top: 15px; margin-bottom: 10px; padding: 0; }
         #related-apps-grid { padding-bottom: 10px; margin-bottom: 0; }
+        
+        .loading-message { width: 100%; text-align: center; padding: 50px 0; font-size: 1.1rem; color: var(--secondary-highlight-color); }
 
 
         @media (min-width: 768px) {
@@ -443,7 +445,7 @@
         <div id="search-results-message" class="no-search-results" style="display:none;"></div>
         
         <div id="main-content-container">
-            <div class="loading-message" style="width: 100%; text-align: center; padding: 50px 0;">Carregando conteúdo...</div>
+            <div class="loading-message">Carregando conteúdo...</div>
             </div>
 
     </main>
@@ -487,7 +489,7 @@
                 <input type="email" id="auth-email" placeholder="Seu E-mail" required>
                 <input type="password" id="auth-password" placeholder="Sua Palavra-passe" required>
 
-                <div id="register-fields" style="display: none; display: flex; flex-direction: column; gap: 15px;">
+                <div id="register-fields" style="display: none; flex-direction: column; gap: 15px;">
                     <input type="text" id="register-name" placeholder="Seu Nome Completo">
                     <input type="date" id="register-bday" placeholder="Data de Nascimento (dd/mm/aaaa)">
                     <div class="profile-field-group">
@@ -579,6 +581,6 @@
         </div>
     </div>
     
-    <script type="module" src="./main.js?v=2025101801"></script>
+    <script type="module" src="./main.js?v=2025102001"></script>
 </body>
 </html>
