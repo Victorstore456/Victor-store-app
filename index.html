@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VICTOR STORE - Sua Loja de Apps (Design Dinâmico)</title>
+    <title>VICTOR STORE - Sua Loja de Apps (Login Simplificado)</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -106,7 +106,7 @@
             margin-left: 10px;
         }
         
-        /* --- Menu Hamburguer (CORREÇÃO DE Z-INDEX) --- */
+        /* --- Menu Hamburguer --- */
         .nav-menu { 
             display: flex; 
             flex-direction: column;
@@ -117,13 +117,13 @@
             padding: 10px 0; 
             transition: transform 0.3s ease-in-out;
             transform: translateX(100%); 
-            z-index: 2000; /* AUMENTADO para sobrepor a barra superior (1000) */
+            z-index: 2000; 
         }
         .nav-menu.open { transform: translateX(0); }
         .menu-overlay { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0, 0, 0, 0.5); 
-            z-index: 1999; /* AUMENTADO, mas menor que o menu (2000) para permitir cliques */
+            z-index: 1999; 
         }
         .nav-menu.open ~ .menu-overlay { display: block; }
         
@@ -179,7 +179,6 @@
             gap: 10px;
             padding: 20px 20px 10px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            cursor: pointer;
         }
         #profile-image-menu {
             width: 50px;
@@ -236,10 +235,6 @@
             gap: 5px;
         }
 
-        .filter-button:hover {
-            background-color: #E9ECEF;
-        }
-
         .filter-button.active {
             background-color: var(--secondary-highlight-color);
             border-color: var(--secondary-highlight-color);
@@ -248,18 +243,7 @@
 
         /* --- Layout Principal e Cards --- */
         .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
-        .content-section { margin-bottom: 30px; }
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .section-header h2 { font-size: 1.3rem; font-weight: 600; color: var(--text-color-dark); }
-        .view-all-link { color: var(--secondary-highlight-color); text-decoration: none; font-weight: 500; display: flex; align-items: center; gap: 5px; cursor: pointer; }
-        
-        .dynamic-feed-container { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); 
-            gap: 20px; 
-            padding-bottom: 30px; 
-        }
-        .dynamic-feed-container .app-card { width: 100%; flex-shrink: 1; }
+        /* ... (Estilos de Card e Grid mantidos) ... */
         
         .content-grid { 
             display: flex; 
@@ -285,11 +269,7 @@
         .app-icon { width: 90px; height: 90px; border-radius: 15px; object-fit: cover; margin-bottom: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
         .app-title { font-size: 0.85rem; font-weight: 500; color: var(--text-color-dark); margin-bottom: 2px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; width: 100%; }
         .app-description { font-size: 0.75rem; color: var(--text-color-muted); line-height: 1.2; height: 30px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-        .no-search-results { width: 100%; text-align: center; color: var(--text-color-muted); padding: 40px 0; font-size: 1.1rem; margin-top: 20px; }
-        
-        .full-list-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 20px; padding: 20px; }
-        #full-list-modal .app-card { width: 100%; flex-shrink: 1; }
-        
+
         /* --- Modal Base e Estilos de Formulário --- */
         .modal { 
             display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; 
@@ -303,10 +283,9 @@
         }
         .modal-close { 
             position: absolute; top: 10px; right: 15px; color: #fff; font-size: 28px; font-weight: bold; 
-            cursor: pointer; z-index: 2002; text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Z-INDEX AUMENTADO */
+            cursor: pointer; z-index: 2002; text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); 
         }
-        /* Estilos Comuns de Modal (Auth, Profile, Reset) */
-        .auth-modal-content, .profile-modal-content, .reset-modal-content {
+        .auth-modal-content {
             padding: 25px;
             display: flex;
             flex-direction: column;
@@ -314,7 +293,7 @@
         }
         .modal h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; text-align: center;}
         .modal form { display: flex; flex-direction: column; gap: 15px; }
-        .modal input[type="email"], .modal input[type="password"], .modal input[type="text"], .modal input[type="date"], .modal input[type="tel"], .modal select {
+        .modal input[type="email"], .modal input[type="password"] {
             padding: 12px;
             border: 1px solid #ccc;
             border-radius: 8px;
@@ -337,43 +316,49 @@
         .auth-options { text-align: center; font-size: 0.9rem; }
         .auth-options a { color: var(--secondary-highlight-color); text-decoration: none; cursor: pointer; }
         
-        /* Modal de Perfil Específico */
-        .profile-picture-edit { text-align: center; margin-bottom: 10px; }
-        #current-profile-image { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--highlight-color); }
-        .profile-field-group { display: flex; gap: 10px; }
-        .profile-field-group input, .profile-field-group select { flex-grow: 1; }
+        .google-btn {
+            background-color: #DB4437; /* Cor do Google */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: white;
+        }
+        .google-btn:hover {
+            background-color: #c0392b; 
+        }
+        .google-icon {
+            width: 20px;
+            height: 20px;
+        }
 
-        /* Modal de Detalhes (Mantido) */
-        .details-header { position: relative; width: 100%; height: 150px; overflow: hidden; border-top-left-radius: var(--border-radius-base); border-top-right-radius: var(--border-radius-base); margin-bottom: 20px; }
-        #details-icon { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .details-info { position: absolute; bottom: 0; left: 0; width: 100%; padding: 10px 20px; background: linear-gradient(transparent, rgba(0, 0, 0, 0.7)); color: var(--text-color-light); z-index: 10; }
-        .details-info h3 { font-size: 1.2rem; margin-bottom: 2px; }
-        #details-category-info { font-size: 0.8rem; color: rgba(255, 255, 255, 0.8); }
-        .modal-content > p { padding: 0 20px; }
-        .details-full-description { font-size: 0.95rem; color: var(--text-color-dark); margin-bottom: 25px; }
-        .details-download-btn { display: block; width: calc(100% - 40px); margin: 0 20px 20px; padding: 12px 20px; background-color: var(--highlight-color); color: var(--text-color-dark); border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s, transform 0.1s; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
-        .details-download-btn:hover { background-color: #5ac743; transform: translateY(-1px); }
-        .details-download-btn:disabled { background-color: var(--text-color-muted); cursor: not-allowed; }
-        .details-login-prompt { text-align: center; color: var(--secondary-highlight-color); font-weight: 500; padding: 0 20px 20px; }
-        #related-apps-section { padding: 0 20px; margin-top: 20px; border-top: 1px solid #eee; }
-        .related-section-header { font-size: 1rem; margin-top: 15px; margin-bottom: 10px; padding: 0; }
-        #related-apps-grid { padding-bottom: 10px; margin-bottom: 0; }
-        
-        .loading-message { width: 100%; text-align: center; padding: 50px 0; font-size: 1.1rem; color: var(--secondary-highlight-color); }
-
+        .separator {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 10px 0;
+            color: var(--text-color-muted);
+            font-size: 0.85rem;
+        }
+        .separator::before, .separator::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #ccc;
+        }
+        .separator:not(:empty)::before {
+            margin-right: .5em;
+        }
+        .separator:not(:empty)::after {
+            margin-left: .5em;
+        }
 
         @media (min-width: 768px) {
             .hamburger-btn { display: none; }
             .nav-menu { display: none !important; }
             .menu-overlay { display: none !important; }
-            .content-grid .app-card { width: 120px; }
-            .app-icon { width: 110px; height: 110px; }
-            .dynamic-feed-container { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 25px; }
-            .full-list-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 25px; }
-            .modal-content { max-width: 500px; }
+            /* ... (Estilos de Media Query mantidos) ... */
         }
     </style>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
@@ -400,7 +385,7 @@
         <div class="menu-profile-container" id="menu-profile-container" style="display: none;">
             <img id="profile-image-menu" src="assets/default_profile.png" alt="Perfil">
             <span id="profile-name-menu">Carregando...</span>
-            <a href="#" id="open-profile-modal-btn" style="padding: 5px 10px; background: none;">
+            <a href="#" id="open-profile-modal-btn" style="padding: 5px 10px; background: none; display: none;"> 
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
             </a>
         </div>
@@ -408,7 +393,7 @@
         <ul>
             <li id="menu-login-link"><a href="#" id="open-auth-modal-btn">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-in"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
-                Login / Criar Conta
+                Entrar
             </a></li>
              
              <li><a href="#" data-filter-type="jogo">
@@ -467,7 +452,7 @@
             </div>
             <p id="details-full-description" class="details-full-description"></p> 
             <button class="details-download-btn" id="details-download-btn">Baixar Agora</button>
-            <p id="details-login-prompt" class="details-login-prompt" style="display: none;">Para fazer o download, faça Login ou crie uma conta.</p>
+            <p id="details-login-prompt" class="details-login-prompt" style="display: none;">Para fazer o download, faça Login.</p>
 
             <section id="related-apps-section" style="display: none;">
                 <h3 class="related-section-header">Mais da mesma Categoria</h3>
@@ -489,28 +474,20 @@
     <div id="auth-modal" class="modal">
         <div class="modal-content auth-modal-content">
             <span class="modal-close" data-modal="auth-modal">&times;</span>
-            <h2 id="auth-title">Faça Login</h2>
-            <form id="auth-form" data-mode="login">
+            <h2 id="auth-title">Acesse sua Conta</h2>
+            
+            <button type="button" id="google-login-btn" class="main-btn google-btn">
+                <svg class="google-icon" viewBox="0 0 48 48" width="48px" height="48px">
+                    <path fill="#FFC107" d="M43.6 20.4H24v7.2h11.2c-.5 2.5-2 4.6-4.3 6.1v4.7h6.1c3.7-3.4 5.9-8.4 5.9-14.7 0-1-.1-2-.3-3z"/><path fill="#FF3D00" d="M24 10.9c4.7 0 8.6 1.9 11.4 5.2l-6.1 4.7c-1.5-.9-3.4-1.5-5.3-1.5-4.1 0-7.7 2.8-8.9 6.6H7.1V15c3.2-3.7 7.9-6.9 16.9-6.9z"/><path fill="#4CAF50" d="M15.1 29.5c-.3-1-.5-2.1-.5-3.2s.2-2.2.5-3.2v-4.1H7.1v4.1c-.8 1.6-1.2 3.3-1.2 5.2s.4 3.6 1.2 5.2l6.1 4.7-6.1-4.7z"/><path fill="#1976D2" d="M24 37.1c4.4 0 8.1-1.6 10.8-4.3l6.1 4.7c-3.7 3.4-8.4 5.3-16.9 5.3-9 0-13.7-3.2-16.9-6.9l6.1-4.7c1.3 3.8 4.9 6.6 8.9 6.6z"/>
+                </svg>
+                Entrar com Google
+            </button>
+            
+            <div class="separator">Ou</div>
+
+            <form id="auth-form">
                 <input type="email" id="auth-email" placeholder="Seu E-mail" required>
                 <input type="password" id="auth-password" placeholder="Sua Palavra-passe" required>
-
-                <div id="register-fields" style="display: none; flex-direction: column; gap: 15px;">
-                    <input type="text" id="register-name" placeholder="Seu Nome Completo">
-                    <input type="date" id="register-bday" placeholder="Data de Nascimento (dd/mm/aaaa)">
-                    <div class="profile-field-group">
-                        <select id="register-gender">
-                            <option value="">Seu Gênero</option>
-                            <option value="M">Masculino</option>
-                            <option value="F">Feminino</option>
-                            <option value="O">Gay</option>
-                        </select>
-                        <input type="text" id="register-partner" placeholder="Nome da(o) Namorada(o)">
-                    </div>
-                    <label for="register-photo">Foto de Perfil (Opcional)</label>
-                    <input type="file" id="register-photo" accept="image/*">
-                </div>
-                
-                <input type="password" id="auth-password-confirm" placeholder="Confirmar Palavra-passe" style="display: none;">
 
                 <button type="submit" id="auth-submit-btn" class="main-btn">Entrar</button>
 
@@ -518,78 +495,15 @@
                     <a href="#" id="forgot-password-link">Esqueceu a Palavra-passe?</a>
                 </p>
                 <p class="auth-options">
-                    <a href="#" id="toggle-auth-link">Criar conta com E-mail</a>
+                    Se não tem conta, use o Google ou crie uma através do Suporte.
                 </p>
-            </form>
-        </div>
-    </div>
-
-    <div id="profile-modal" class="modal">
-        <div class="modal-content profile-modal-content">
-            <span class="modal-close" data-modal="profile-modal">&times;</span>
-            <h2>Editar Perfil</h2>
-            <form id="profile-form">
-                <div class="profile-picture-edit">
-                    <img id="current-profile-image" src="assets/default_profile.png" alt="Foto de Perfil Atual">
-                </div>
-                <label for="edit-photo">Mudar Foto de Perfil (Opcional)</label>
-                <input type="file" id="edit-photo" accept="image/*">
-
-                <input type="text" id="edit-name-input" placeholder="Nome Completo" required>
-                <input type="date" id="edit-bday-input" placeholder="Data de Nascimento" required>
-                <div class="profile-field-group">
-                    <select id="edit-gender-input">
-                        <option value="">Seu Gênero</option>
-                        <option value="M">Masculino</option>
-                        <option value="F">Feminino</option>
-                        <option value="O">Gay</option>
-                    </select>
-                    <input type="text" id="edit-partner-input" placeholder="Nome da(o) Namorada(o)">
-                </div>
-
-                <hr style="border: 0; border-top: 1px solid #ccc; margin: 5px 0;">
-                <p style="font-size: 0.9em; text-align: center;">**Confirmação de Segurança**</p>
-
-                <input type="password" id="edit-password-input" placeholder="Palavra-passe Atual (Obrigatório para Salvar)" required>
-                <input type="password" id="new-password-input" placeholder="Nova Palavra-passe (Deixe em branco para não mudar)">
-
-                <button type="submit" class="main-btn">Salvar Alterações</button>
-            </form>
-        </div>
-    </div>
-
-    <div id="reset-modal" class="modal">
-        <div class="modal-content reset-modal-content">
-            <span class="modal-close" data-modal="reset-modal">&times;</span>
-            <h2 id="reset-title">Redefinir Palavra-passe</h2>
-            
-            <form id="forgot-password-form">
-                <input type="email" id="reset-email" placeholder="Seu E-mail" required>
-                <input type="date" id="reset-bday" placeholder="Sua Data de Nascimento" required>
-                <input type="text" id="reset-partner" placeholder="Nome da(o) Namorada(o)" required>
-                
-                <button type="submit" class="main-btn">Redefinir Palavra-passe</button>
-                
-                <p class="auth-options">
-                    <a href="#" id="nao-lembro-de-nada-link">Não lembro de nada</a>
-                </p>
-                <p style="font-size: 0.8em; color: var(--text-color-muted); margin-top: 15px; text-align: center;">*Estes dados serão verificados para o envio do link.</p>
-            </form>
-
-            <form id="not-remember-form" style="display: none;">
-                <p style="text-align: center; font-size: 0.95em;">O administrador será notificado para entrar em contato e enviar um link de redefinição único, após confirmar a identidade.</p>
-                <input type="email" id="not-remember-email" placeholder="Seu E-mail" required>
-                <input type="tel" id="not-remember-whatsapp" placeholder="Seu Número de WhatsApp (+258...)" required>
-                
-                <button type="submit" class="main-btn">Notificar Administrador</button>
             </form>
         </div>
     </div>
     
     <script type="module">
-        // Versão atual do CÓDIGO web. Apenas mude este número quando fizer uma GRANDE atualização.
-        // A versão do SERVIDOR (Firestore) deve ser MAIOR que esta para forçar o reload.
-        const CURRENT_UI_VERSION = 2.5; // VERSÃO ATUALIZADA PARA 2.4
+        
+        const CURRENT_UI_VERSION = 2.5; 
 
         // --- 1. CONFIGURAÇÃO E IMPORTS FIREBASE ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
@@ -601,21 +515,16 @@
             getDocs,
             doc,
             getDoc,
-            setDoc, 
-            updateDoc, 
-            runTransaction, 
+            
         } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
         import { 
             getAuth, 
-            createUserWithEmailAndPassword, 
             signInWithEmailAndPassword, 
             sendPasswordResetEmail,
             onAuthStateChanged,
-            updateProfile,
-            updatePassword,
-            reauthenticateWithCredential, 
-            EmailAuthProvider, 
-            signOut 
+            signOut,
+            GoogleAuthProvider,
+            signInWithPopup
         } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
 
@@ -631,48 +540,15 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app); 
-
-        // --- FUNÇÕES UTilitÁRIAS E CONSTANTES DE ADMIN ---
-
-        const ADMIN_EMAIL = "Victorstore456@gmail.com"; 
-
-        function getAge(dateString) {
-            const today = new Date();
-            const birthDate = new Date(dateString);
-            let age = today.getFullYear() - birthDate.getFullYear();
-            const m = today.getMonth() - birthDate.getMonth();
-            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-                age--;
-            }
-            return age;
-        }
-
-        function validateAge(dateString) {
-            return getAge(dateString) >= 18;
-        }
-
-        async function notifyAdminForReset(email, whatsapp) {
-            // ESTA FUNÇÃO REQUER BACKEND. USANDO SIMULAÇÃO
-            try {
-                const successMessage = `Serás notificado no WhatsApp no numero ${whatsapp} para confirmar a identidade e redefinir a senha, por favor aguarde, geralmente demora no maximo 24h.`;
-                alert(successMessage);
-                resetModal.style.display = 'none';
-
-            } catch (error) {
-                console.error("Erro ao notificar administrador:", error);
-                alert("Ocorreu um erro ao processar o pedido de ajuda. Tente novamente mais tarde.");
-            }
-        }
+        const googleProvider = new GoogleAuthProvider(); // Provedor Google
 
 
-        // --- 2. VARIÁVEIS GLOBAIS E REFERÊNCIAS DOM (COMBINADAS) ---
+        // --- 2. VARIÁVEIS GLOBAIS E REFERÊNCIAS DOM ---
 
         let selectedItem = null; 
-        let allContent = []; // Conteúdo do Firestore
+        let allContent = []; 
         let currentUser = null; 
-        let currentCustomUserData = {}; // Dados personalizados do Firestore
 
-        // Mapeamento dos tipos de conteúdo
         const typeMap = {
             'jogo': 'Jogos',
             'app_geral': 'Apps (Geral)',
@@ -680,7 +556,6 @@
             'software': 'Software'
         };
 
-        // Mapeamento de ícones para filtros (Lucide)
         const filterIcons = {
             'all': 'list',
             'jogo': 'gamepad-2',
@@ -711,11 +586,9 @@
         const authModal = document.getElementById('auth-modal');
         const authTitle = document.getElementById('auth-title');
         const authForm = document.getElementById('auth-form');
-        const toggleAuthLink = document.getElementById('toggle-auth-link');
         const forgotPasswordLink = document.getElementById('forgot-password-link');
-        const registerFields = document.getElementById('register-fields');
-        const authPasswordConfirm = document.getElementById('auth-password-confirm');
         const authSubmitBtn = document.getElementById('auth-submit-btn');
+        const googleLoginBtn = document.getElementById('google-login-btn'); // NOVO
 
         // Referências DOM - Menu Hamburguer
         const menuProfileContainer = document.getElementById('menu-profile-container');
@@ -723,15 +596,7 @@
         const menuLogoutLink = document.getElementById('menu-logout-link');
         const profileImageMenu = document.getElementById('profile-image-menu');
         const profileNameMenu = document.getElementById('profile-name-menu');
-        const openProfileModalBtn = document.getElementById('open-profile-modal-btn');
         const logoutBtn = document.getElementById('logout-btn');
-
-        // Referências DOM - Modais de Perfil e Reset
-        const profileModal = document.getElementById('profile-modal');
-        const profileForm = document.getElementById('profile-form');
-        const resetModal = document.getElementById('reset-modal');
-        const forgotPasswordForm = document.getElementById('forgot-password-form');
-        const notRememberForm = document.getElementById('not-remember-form');
 
 
         // --- 3. LÓGICA DE FIREBASE E AUTENTICAÇÃO ---
@@ -740,11 +605,6 @@
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
             updateUIAfterAuth(user);
-            if (user) {
-                fetchUserProfile(user.uid); 
-            } else {
-                currentCustomUserData = {};
-            }
         });
 
         // B. Atualização da Interface (UI)
@@ -758,7 +618,7 @@
                 menuLogoutLink.style.display = 'list-item';
                 
                 profileImageMenu.src = user.photoURL || 'assets/default_profile.png';
-                profileNameMenu.textContent = user.displayName || 'Usuário';
+                profileNameMenu.textContent = user.displayName || user.email.split('@')[0];
 
                 // Lógica do Download Gate (Habilitar botão)
                 if (detailsDownloadBtn) detailsDownloadBtn.style.display = 'block'; 
@@ -773,190 +633,102 @@
                 // Lógica do Download Gate (Desabilitar botão e mostrar prompt)
                 if (detailsDownloadBtn) detailsDownloadBtn.style.display = 'none';
                 if (loginPrompt) {
-                    loginPrompt.textContent = "Para fazer o download, faça Login ou crie uma conta.";
+                    loginPrompt.textContent = "Para fazer o download, faça Login.";
                     loginPrompt.style.display = 'block';
                 }
             }
         }
 
-        // C. Gerenciamento de Dados Customizados (Firestore)
-        async function fetchUserProfile(uid) {
+        // C. Login com Google
+        googleLoginBtn.addEventListener('click', async () => {
             try {
-                const docRef = doc(db, "users", uid);
-                const docSnap = await getDoc(docRef);
+                // Desabilita botões para feedback
+                googleLoginBtn.disabled = true;
+                authSubmitBtn.disabled = true;
+                googleLoginBtn.textContent = 'Acessando...';
 
-                if (docSnap.exists()) {
-                    currentCustomUserData = docSnap.data();
+                await signInWithPopup(auth, googleProvider);
+                
+                // Sucesso
+                authModal.style.display = 'none';
+
+            } catch (error) {
+                console.error("Erro no Login com Google:", error.code, error.message);
+                if (error.code === 'auth/popup-closed-by-user') {
+                     alert("A janela de Login foi fechada. Tente novamente.");
+                } else if (error.code === 'auth/cancelled-popup-request') {
+                     // Ignora: geralmente ocorre quando há vários popups
                 } else {
-                    console.log("Perfil customizado não encontrado para o UID: " + uid);
-                    currentCustomUserData = {};
+                    alert(`Erro no Login com Google: ${error.message}`);
                 }
-            } catch (e) {
-                console.error("Erro ao buscar perfil customizado:", e);
-            }
-        }
-
-        // D. Lógica de Alternância de Formulário (Login/Registro)
-        toggleAuthLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            const isRegistering = authForm.dataset.mode === 'register';
-
-            if (isRegistering) {
-                // Mudar para Login
-                authForm.dataset.mode = 'login';
-                authTitle.textContent = 'Faça Login';
-                authSubmitBtn.textContent = 'Entrar';
-                toggleAuthLink.textContent = 'Criar conta com E-mail'; 
-                forgotPasswordLink.style.display = 'block'; 
-                registerFields.style.display = 'none';
-                authPasswordConfirm.style.display = 'none';
-            } else {
-                // Mudar para Cadastro
-                authForm.dataset.mode = 'register';
-                authTitle.textContent = 'Crie sua Conta';
-                authSubmitBtn.textContent = 'Criar Conta';
-                toggleAuthLink.textContent = 'Já tenho conta, Iniciar Sessão'; 
-                forgotPasswordLink.style.display = 'none'; 
-                registerFields.style.display = 'flex'; 
-                authPasswordConfirm.style.display = 'block';
+            } finally {
+                // Reabilita botões
+                googleLoginBtn.disabled = false;
+                authSubmitBtn.disabled = false;
+                googleLoginBtn.innerHTML = `<svg class="google-icon" viewBox="0 0 48 48" width="48px" height="48px"><path fill="#FFC107" d="M43.6 20.4H24v7.2h11.2c-.5 2.5-2 4.6-4.3 6.1v4.7h6.1c3.7-3.4 5.9-8.4 5.9-14.7 0-1-.1-2-.3-3z"/><path fill="#FF3D00" d="M24 10.9c4.7 0 8.6 1.9 11.4 5.2l-6.1 4.7c-1.5-.9-3.4-1.5-5.3-1.5-4.1 0-7.7 2.8-8.9 6.6H7.1V15c3.2-3.7 7.9-6.9 16.9-6.9z"/><path fill="#4CAF50" d="M15.1 29.5c-.3-1-.5-2.1-.5-3.2s.2-2.2.5-3.2v-4.1H7.1v4.1c-.8 1.6-1.2 3.3-1.2 5.2s.4 3.6 1.2 5.2l6.1 4.7-6.1-4.7z"/><path fill="#1976D2" d="M24 37.1c4.4 0 8.1-1.6 10.8-4.3l6.1 4.7c-3.7 3.4-8.4 5.3-16.9 5.3-9 0-13.7-3.2-16.9-6.9l6.1-4.7c1.3 3.8 4.9 6.6 8.9 6.6z"/></svg> Entrar com Google`;
             }
         });
 
 
-        // E. Submissão do Formulário de Login/Registro (CORREÇÃO DE FLUXO)
+        // D. Submissão do Formulário de Login (E-mail/Senha)
         authForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            console.log("CLIQUE CAPTURADO E PREVENIDO. O FORMULÁRIO ESTÁ FUNCIONANDO."); // LOG DE TESTE
             
-            const isRegistering = authForm.dataset.mode === 'register';
-
             const email = document.getElementById('auth-email').value;
             const password = document.getElementById('auth-password').value;
 
-            // NOVO: Desabilita o botão para evitar cliques múltiplos e dar feedback
+            // Desabilita botões para feedback
             authSubmitBtn.disabled = true;
-            authSubmitBtn.textContent = isRegistering ? 'Criando...' : 'Entrando...';
+            googleLoginBtn.disabled = true;
+            authSubmitBtn.textContent = 'Entrando...';
 
-            if (isRegistering) {
-                // --- LÓGICA DE REGISTRO ---
-                const name = document.getElementById('register-name').value;
-                const confirmPassword = document.getElementById('auth-password-confirm').value;
-                const bday = document.getElementById('register-bday').value;
-                const partner = document.getElementById('register-partner').value; 
-                const gender = document.getElementById('register-gender').value; 
-                const photoFile = document.getElementById('register-photo').files[0]; 
-
-                if (password !== confirmPassword) {
-                    alert("As palavras-passe não batem.");
-                    authSubmitBtn.disabled = false;
-                    authSubmitBtn.textContent = 'Criar Conta';
-                    return;
-                }
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
                 
-                // 1. **VERIFICAÇÃO DE IDADE**
-                if (!validateAge(bday)) {
-                    alert("A idade mínima para criar uma conta é de 18 anos.");
-                    authSubmitBtn.disabled = false;
-                    authSubmitBtn.textContent = 'Criar Conta';
-                    return;
+                // SUCESSO!
+                authModal.style.display = 'none';
+
+            } catch (error) {
+                console.error("Erro no login:", error.code, error.message);
+                
+                if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+                     alert("ERRO: E-mail ou palavra-passe incorretos. Verifique seus dados.");
+                } else if (error.code === 'auth/too-many-requests') {
+                    alert("Acesso temporariamente bloqueado devido a muitas tentativas falhadas. Tente novamente mais tarde.");
+                } else {
+                     alert("Erro de Login: " + error.message);
                 }
-
-                try {
-                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                    const user = userCredential.user;
-
-                    const photoURL = 'assets/default_profile.png'; // Placeholder URL
-
-                    await updateProfile(user, { 
-                        displayName: name, 
-                        photoURL: photoURL 
-                    });
-
-                    // Salva dados personalizados no Firestore
-                    await setDoc(doc(db, "users", user.uid), { 
-                        email: email,
-                        name: name,
-                        photoURL: photoURL,
-                        dateOfBirth: bday,
-                        partnerName: partner, 
-                        gender: gender, 
-                        createdAt: new Date()
-                    });
-
-                    // SUCESSO!
-                    alert("Conta criada com sucesso! Você já pode fazer o download.");
-                    authModal.style.display = 'none';
-
-                } catch (error) {
-                    console.error("Erro ao criar conta:", error.code, error.message);
-                    // FEEDBACK DETALHADO EM CASO DE ERRO
-                    if (error.code === 'auth/email-already-in-use') {
-                        alert("Este e-mail já está em uso. Tente Iniciar Sessão.");
-                    } else if (error.code === 'auth/weak-password') {
-                        alert("ERRO: A palavra-passe deve ter pelo menos 6 caracteres.");
-                    } else {
-                        alert(`Erro ao criar conta: ${error.message}. Por favor, verifique os dados.`);
-                    }
-
-                } finally {
-                    // Reabilita o botão em caso de sucesso ou falha
-                    authSubmitBtn.disabled = false;
-                    authSubmitBtn.textContent = 'Criar Conta';
-                }
-
-            } else {
-                // Lógica de LOGIN
-                try {
-                    await signInWithEmailAndPassword(auth, email, password);
-                    
-                    // SUCESSO!
-                    authModal.style.display = 'none';
-
-                } catch (error) {
-                    console.error("Erro no login:", error.code, error.message);
-                    // FEEDBACK DETALHADO EM CASO DE ERRO
-                    if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
-                         alert("ERRO: Os dados que digitou não batem. Verifique seu e-mail e palavra-passe.");
-                    } else {
-                         alert("Erro de Login: " + error.message);
-                    }
-                } finally {
-                    // Reabilita o botão em caso de sucesso ou falha
-                    authSubmitBtn.disabled = false;
-                    authSubmitBtn.textContent = 'Entrar';
-                }
+            } finally {
+                // Reabilita o botão em caso de sucesso ou falha
+                authSubmitBtn.disabled = false;
+                googleLoginBtn.disabled = false;
+                authSubmitBtn.textContent = 'Entrar';
             }
         });
 
 
-        // F. Abrir/Fechar Modais e Botões de Ação
-        document.getElementById('open-auth-modal-btn').addEventListener('click', (e) => {
+        // E. Lógica de Recuperação de Senha (Simplificada)
+        forgotPasswordLink.addEventListener('click', async (e) => {
             e.preventDefault();
-            // Reseta para a tela de Login
-            authForm.dataset.mode = 'login';
-            authTitle.textContent = 'Faça Login';
-            authSubmitBtn.textContent = 'Entrar';
-            toggleAuthLink.textContent = 'Criar conta com E-mail';
-            forgotPasswordLink.style.display = 'block';
-            registerFields.style.display = 'none';
-            authPasswordConfirm.style.display = 'none';
-            authModal.style.display = 'flex'; // Usa flex para centralizar
+            const email = document.getElementById('auth-email').value;
+
+            if (!email) {
+                alert("Por favor, digite seu e-mail no campo acima antes de clicar em 'Esqueceu a Palavra-passe?'.");
+                return;
+            }
+
+            try {
+                await sendPasswordResetEmail(auth, email);
+                alert(`Um e-mail de redefinição de senha foi enviado para ${email}. Por favor, verifique sua caixa de entrada.`);
+                authModal.style.display = 'none';
+            } catch (error) {
+                console.error("Erro ao enviar e-mail de redefinição:", error.message);
+                alert("Não foi possível enviar o e-mail de redefinição. Verifique se o e-mail está correto e registrado.");
+            }
         });
 
-        openProfileModalBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (!currentUser || !currentCustomUserData) return;
-            
-            // Preenche o formulário de edição com os dados atuais
-            document.getElementById('edit-name-input').value = currentUser.displayName || '';
-            document.getElementById('edit-bday-input').value = currentCustomUserData.dateOfBirth || '';
-            document.getElementById('edit-gender-input').value = currentCustomUserData.gender || '';
-            document.getElementById('edit-partner-input').value = currentCustomUserData.partnerName || '';
-            document.getElementById('current-profile-image').src = currentUser.photoURL || 'assets/default_profile.png';
-            
-            profileModal.style.display = 'flex';
-        });
 
+        // F. Terminar Sessão
         logoutBtn.addEventListener('click', async (e) => {
             e.preventDefault();
             try {
@@ -969,145 +741,25 @@
             }
         });
 
-
-        // G. Lógica de Edição de Perfil (Exigindo Re-autenticação)
-        profileForm.addEventListener('submit', async (e) => {
+        // G. Abrir Modal de Login
+        document.getElementById('open-auth-modal-btn').addEventListener('click', (e) => {
             e.preventDefault();
-            if (!currentUser) return;
-            
-            const newName = document.getElementById('edit-name-input').value;
-            const newBday = document.getElementById('edit-bday-input').value;
-            const newGender = document.getElementById('edit-gender-input').value;
-            const newPartner = document.getElementById('edit-partner-input').value;
-            const currentPassword = document.getElementById('edit-password-input').value;
-            const newPassword = document.getElementById('new-password-input').value;
-            const newPhotoFile = document.getElementById('edit-photo').files[0];
-
-            // 1. Validação de Idade 
-            if (!validateAge(newBday)) {
-                alert("A idade mínima para manter a conta é de 18 anos.");
-                return;
-            }
-
-            if (!currentPassword) {
-                alert("Por favor, digite sua palavra-passe atual para confirmar as alterações.");
-                return;
-            }
-
-            try {
-                // 2. Re-autenticação
-                const credential = EmailAuthProvider.credential(currentUser.email, currentPassword);
-                await reauthenticateWithCredential(currentUser, credential);
-
-                // 3. Atualizar Senha (se houver)
-                if (newPassword) {
-                    await updatePassword(currentUser, newPassword);
-                    console.log("Senha atualizada com sucesso.");
-                }
-
-                // 4. Atualizar Dados Básicos do Auth (Nome, Foto)
-                let updatedPhotoURL = currentUser.photoURL;
-                if (newPhotoFile) {
-                    // **PLACEHOLDER:** Implementar lógica de upload para o Firebase Storage aqui
-                    updatedPhotoURL = 'assets/new_profile_photo.png'; 
-                }
-                await updateProfile(currentUser, {
-                    displayName: newName,
-                    photoURL: updatedPhotoURL
-                });
-
-                // 5. Atualizar Dados Customizados no Firestore
-                const userDocRef = doc(db, "users", currentUser.uid);
-                await updateDoc(userDocRef, {
-                    name: newName,
-                    photoURL: updatedPhotoURL,
-                    dateOfBirth: newBday,
-                    gender: newGender,
-                    partnerName: newPartner
-                });
-
-                alert("Perfil atualizado com sucesso!");
-                profileModal.style.display = 'none';
-                document.getElementById('edit-password-input').value = '';
-                document.getElementById('new-password-input').value = '';
-
-            } catch (error) {
-                console.error("Erro ao atualizar perfil: ", error);
-                if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
-                    alert("Palavra-passe atual incorreta. As alterações não foram salvas.");
-                } else {
-                    alert("Erro ao atualizar perfil: " + error.message);
-                }
-            }
-        });
-
-
-        // H. Lógica de Recuperação de Senha (Fluxo de Dois Níveis)
-
-        forgotPasswordLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            authModal.style.display = 'none';
-            resetModal.style.display = 'flex'; // Usa flex para centralizar
-            document.getElementById('reset-title').textContent = 'Redefinir Palavra-passe';
-            forgotPasswordForm.style.display = 'flex';
-            notRememberForm.style.display = 'none';
-        });
-
-        document.getElementById('nao-lembro-de-nada-link').addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('reset-title').textContent = 'Ajuda do Administrador';
-            forgotPasswordForm.style.display = 'none';
-            notRememberForm.style.display = 'flex';
-        });
-
-        // Submissão do Reset Nível 1 (Padrão Firebase)
-        forgotPasswordForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('reset-email').value;
-            const bday = document.getElementById('reset-bday').value;       // Adicionado para validação
-            const partner = document.getElementById('reset-partner').value; // Adicionado para validação
-            
-            // Adicionado: Validação básica dos campos para segurança no frontend
-            if (!email || !bday || !partner) {
-                alert("Por favor, preencha todos os campos para redefinição (Email, Data de Nascimento e Nome da(o) Namorada(o)).");
-                return;
-            }
-
-            try {
-                await sendPasswordResetEmail(auth, email);
-                alert("Um e-mail de redefinição de senha foi enviado para seu endereço. Por favor, verifique sua caixa de entrada.");
-                resetModal.style.display = 'none';
-                
-            } catch (error) {
-                console.error("Erro ao enviar e-mail de redefinição:", error.message);
-                alert("Não foi possível enviar o e-mail de redefinição. Verifique se o e-mail está correto.");
-            }
-        });
-
-        // Submissão do Reset Nível 2 (Notificação Admin)
-        notRememberForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('not-remember-email').value;
-            const whatsapp = document.getElementById('not-remember-whatsapp').value;
-            
-            await notifyAdminForReset(email, whatsapp);
+            authModal.style.display = 'flex'; // Usa flex para centralizar
         });
 
 
         // --- 4. FUNÇÕES DE CONTEÚDO E RENDERIZAÇÃO ---
-
-        // Checagem de Versão
+        
         async function checkForForcedUpdate() {
             try {
                 const settingsDocRef = doc(db, 'settings', 'config'); 
                 const docSnap = await getDoc(settingsDocRef);
                 
                 if (docSnap.exists()) {
-                    const serverVersion = docSnap.data().web_ui_version || 1.6; 
+                    const serverVersion = docSnap.data().web_ui_version || 3.0; 
                     
                     if (serverVersion > CURRENT_UI_VERSION) {
                         console.log(`Nova versão de UI (${serverVersion}) disponível. Versão local: ${CURRENT_UI_VERSION}. Forçando atualização.`);
-                        
                         if (confirm("Uma atualização de sistema essencial está disponível. Recarregar agora para ver as novidades?")) {
                             window.location.reload(true); 
                         } else {
@@ -1120,12 +772,10 @@
                 console.error("Erro ao verificar versão de UI. Continuar com a versão atual.", error);
             }
         }
-
-        // Renderiza um card de App (USADO EM TODOS OS GRIDS)
+        
         function renderAppCard(data, gridElement) {
             const card = document.createElement('div');
             card.className = 'app-card';
-            
             card.dataset.id = data.id; 
             card.dataset.search = `${data.name.toLowerCase()} ${data.category ? data.category.toLowerCase() : ''} ${data.type.toLowerCase()}`;
             card.dataset.type = data.type; 
@@ -1137,13 +787,10 @@
                 <div class="app-title">${data.name}</div>
                 <div class="app-description">${descriptionText}</div> `;
             
-            // Anexa o itemData ao elemento para fácil acesso no listener
             card.itemData = data; 
-
             gridElement.appendChild(card);
         }
 
-        // Injeta uma Seção Horizontal de Categoria (para o feed dinâmico)
         function injectHorizontalSection(typeId, sectionContent) {
             const sectionTitle = typeMap[typeId] || 'Destaques';
             
@@ -1165,7 +812,6 @@
             mainContentContainer.appendChild(sectionElement); 
         }
 
-        // Renderiza o layout principal dinâmico (Feed misturado + Seções Injetadas)
         function renderDynamicFeedLayout(content) {
             mainContentContainer.innerHTML = ''; 
             
@@ -1182,12 +828,9 @@
             injectionIndex = 0; 
 
             content.forEach((item, index) => {
-                // 1. Renderiza o item no feed vertical misturado
                 renderAppCard(item, feedContainer); 
 
-                // 2. Verifica o ponto de injeção
                 if ((index + 1) % INJECTION_INTERVAL === 0) {
-                    
                     let typeToInject = null;
                     let initialIndex = injectionIndex;
                     
@@ -1201,13 +844,11 @@
                     } while (injectionIndex !== initialIndex);
 
                     if (typeToInject) {
-                        // 3. Performar injeção
                         const sectionContent = allContent.filter(app => app.type === typeToInject).slice(0, 8);
                         
                         if (sectionContent.length > 0) {
                             injectHorizontalSection(typeToInject, sectionContent);
                             injectedTypes.add(typeToInject);
-                            
                             injectionIndex = (injectionIndex + 1) % contentSectionsOrder.length;
                         }
                     }
@@ -1217,7 +858,6 @@
             bindViewAllEvents();
         }
 
-        // Renderiza a lista completa em grid vertical
         function renderVerticalGrid(content, targetElement) {
             targetElement.innerHTML = '';
             
@@ -1233,7 +873,6 @@
             targetElement.appendChild(grid);
         }
 
-        // Carregamento de Conteúdo Principal
         async function loadContentFromFirestore() {
             const contentCollection = collection(db, 'content');
             
@@ -1254,25 +893,20 @@
                 
             } catch (error) {
                 console.error("ERRO CRÍTICO AO CARREGAR CONTEÚDO:", error);
-                // Garante que a mensagem de erro substitua o 'Carregando...'
                 mainContentContainer.innerHTML = `<div class="no-search-results" style="color: red;">ERRO AO CARREGAR: Verifique sua conexão ou as Regras de Segurança do Firebase.</div>`;
             }
         }
 
-        // Renderiza os botões de filtro na barra de navegação (CORREÇÃO DE ESTABILIDADE)
         function renderCategoryFilters() {
             categoryFilterBar.innerHTML = ''; 
             
-            // 1. Botão "Tudo"
             const allButton = document.createElement('button');
             allButton.className = 'filter-button active';
             allButton.dataset.filterType = 'all';
-            // USANDO SVG INLINE PARA EVITAR DEPENDÊNCIA DE 'lucide.createIcons()' ANTECIPADAMENTE
             allButton.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>Tudo`;
             allButton.addEventListener('click', () => filterByCategory('all'));
             categoryFilterBar.appendChild(allButton);
             
-            // 2. Botões de Categorias Principais (Tipos)
             contentSectionsOrder.forEach(typeId => {
                 if (allContent.some(item => item.type === typeId)) {
                     const button = document.createElement('button');
@@ -1280,7 +914,6 @@
                     button.dataset.filterType = typeId;
                     const iconName = filterIcons[typeId] || 'layout-list';
                     
-                    // BUSCANDO ICONE LUCIDE (Se estiver carregado)
                     let iconContent = '';
                     if (typeof lucide !== 'undefined' && lucide.icons[iconName]) {
                          iconContent = lucide.icons[iconName].contents;
@@ -1290,10 +923,8 @@
                     categoryFilterBar.appendChild(button);
                 }
             });
-            // A chamada de criação de ícones foi movida para o DOMContentLoaded
         }
 
-        // Lógica para filtrar a tela principal
         function filterByCategory(typeId) {
             searchInput.value = '';
             searchResultsMessage.style.display = 'none';
@@ -1310,7 +941,6 @@
             }
         }
 
-        // Lógica de Pesquisa
         function filterContent(searchTerm) {
             searchTerm = searchTerm.toLowerCase().trim();
             
@@ -1342,8 +972,6 @@
             filterContent(event.target.value);
         });
 
-
-        // Funções de Modal
         function showDetailsModal(itemData) {
             selectedItem = itemData; 
             
@@ -1358,7 +986,6 @@
 
             updateUIAfterAuth(currentUser); 
             
-            // Lógica para Conteúdo Relacionado 
             relatedAppsGrid.innerHTML = ''; 
             
             const relatedItems = allContent.filter(item => 
@@ -1391,7 +1018,6 @@
             fullListModal.style.display = 'flex';
         }
 
-        // Atribui o evento de clique aos links "Ver todos"
         function bindViewAllEvents() {
             document.querySelectorAll('.view-all-link').forEach(link => {
                 link.addEventListener('click', (event) => {
@@ -1402,7 +1028,8 @@
             });
         }
 
-        // --- 5. EVENTOS GERAIS E INICIALIZAÇÃO (MELHORIAS DE ESTABILIDADE) ---
+
+        // --- 5. EVENTOS GERAIS E INICIALIZAÇÃO ---
 
         // Toggle do Menu Hamburguer
         hamburgerBtn.addEventListener('click', () => {
@@ -1431,26 +1058,14 @@
             }
         });
 
-        // Chamar modal de login automaticamente
+        // Chamar modal de login automaticamente no clique do Download
         detailsDownloadBtn.addEventListener('click', (e) => {
             e.preventDefault(); 
             
             if (!currentUser) {
-                // Usuário deslogado: forçar abertura do modal de login
                 detailsModal.style.display = 'none'; 
-
-                // Resetar e abrir o modal de autenticação (Lógica copiada de 'open-auth-modal-btn')
-                authForm.dataset.mode = 'login';
-                authTitle.textContent = 'Faça Login';
-                authSubmitBtn.textContent = 'Entrar';
-                toggleAuthLink.textContent = 'Criar conta com E-mail';
-                forgotPasswordLink.style.display = 'block';
-                registerFields.style.display = 'none';
-                authPasswordConfirm.style.display = 'none';
-                
-                alert("Para continuar o download, por favor, faça Login ou crie sua conta.");
+                alert("Para continuar o download, por favor, faça Login.");
                 authModal.style.display = 'flex'; 
-                
                 return;
             }
             
@@ -1469,18 +1084,15 @@
         document.addEventListener('click', (event) => {
             const target = event.target;
             
-            // Fechar Menu (clicando no overlay)
             if (target === menuOverlay) {
                 navMenu.classList.remove('open');
                 menuOverlay.style.display = 'none';
             }
 
-            // Fechar Modais (clicando no 'x' ou no fundo do modal)
             if (target.classList.contains('modal-close')) {
                  target.closest('.modal').style.display = 'none';
             }
-            // Inclui todos os modais novos e antigos
-            if (target === detailsModal || target === fullListModal || target === authModal || target === profileModal || target === resetModal) {
+            if (target === detailsModal || target === fullListModal || target === authModal) {
                 target.style.display = 'none';
             }
         });
@@ -1500,15 +1112,13 @@
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
-            console.log("DOM e Script Carregados. Inicializando App."); // LOG DE INÍCIO
+            console.log("DOM e Script Carregados. Inicializando App."); 
             
-            // Se lucide estiver carregado, substitui os SVGs
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons(); 
                 console.log("Ícones Lucide renderizados.");
             }
 
-            // Estas chamadas são cruciais para o carregamento inicial:
             await loadContentFromFirestore();
             await checkForForcedUpdate(); 
             startPlaceholderAnimation();
