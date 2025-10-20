@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VICTOR STORE - Sua Loja de Apps (Login Simplificado)</title>
+    <title>VICTOR STORE - Sua Loja de Apps (Login Simplificado v3.1)</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -243,7 +243,6 @@
 
         /* --- Layout Principal e Cards --- */
         .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
-        /* ... (Estilos de Card e Grid mantidos) ... */
         
         .content-grid { 
             display: flex; 
@@ -356,7 +355,6 @@
             .hamburger-btn { display: none; }
             .nav-menu { display: none !important; }
             .menu-overlay { display: none !important; }
-            /* ... (Estilos de Media Query mantidos) ... */
         }
     </style>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -503,7 +501,7 @@
     
     <script type="module">
         
-        const CURRENT_UI_VERSION = 2.5; 
+        const CURRENT_UI_VERSION = 3.1; // *** VERSÃO ATUALIZADA PARA 3.1 ***
 
         // --- 1. CONFIGURAÇÃO E IMPORTS FIREBASE ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
@@ -588,7 +586,7 @@
         const authForm = document.getElementById('auth-form');
         const forgotPasswordLink = document.getElementById('forgot-password-link');
         const authSubmitBtn = document.getElementById('auth-submit-btn');
-        const googleLoginBtn = document.getElementById('google-login-btn'); // NOVO
+        const googleLoginBtn = document.getElementById('google-login-btn'); 
 
         // Referências DOM - Menu Hamburguer
         const menuProfileContainer = document.getElementById('menu-profile-container');
@@ -756,7 +754,7 @@
                 const docSnap = await getDoc(settingsDocRef);
                 
                 if (docSnap.exists()) {
-                    const serverVersion = docSnap.data().web_ui_version || 3.0; 
+                    const serverVersion = docSnap.data().web_ui_version || 1.6; 
                     
                     if (serverVersion > CURRENT_UI_VERSION) {
                         console.log(`Nova versão de UI (${serverVersion}) disponível. Versão local: ${CURRENT_UI_VERSION}. Forçando atualização.`);
@@ -994,135 +992,4 @@
                 item.id !== itemData.id 
             ).slice(0, 5); 
 
-            if (relatedItems.length > 0) {
-                relatedAppsSection.style.display = 'block';
-                relatedItems.forEach(item => {
-                    renderAppCard(item, relatedAppsGrid); 
-                });
-            } else {
-                relatedAppsSection.style.display = 'none';
-            }
-
-            detailsModal.style.display = 'flex'; 
-        }
-
-        function showFullListModal(typeId) {
-            const typeTitle = typeMap[typeId] || 'Categoria';
-            
-            document.getElementById('full-list-title').textContent = `Todos os Itens em: ${typeTitle}`;
-            
-            const fullContent = allContent.filter(item => item.type === typeId);
-            
-            renderVerticalGrid(fullContent, document.getElementById('full-list-grid'));
-            
-            fullListModal.style.display = 'flex';
-        }
-
-        function bindViewAllEvents() {
-            document.querySelectorAll('.view-all-link').forEach(link => {
-                link.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    const typeId = event.currentTarget.dataset.typeId;
-                    showFullListModal(typeId);
-                });
-            });
-        }
-
-
-        // --- 5. EVENTOS GERAIS E INICIALIZAÇÃO ---
-
-        // Toggle do Menu Hamburguer
-        hamburgerBtn.addEventListener('click', () => {
-            navMenu.classList.toggle('open');
-            menuOverlay.style.display = navMenu.classList.contains('open') ? 'block' : 'none';
-        });
-
-        // Adiciona evento de clique aos links do Menu Hamburguer para usar o filtro
-        document.querySelectorAll('.nav-menu a').forEach(link => {
-            link.addEventListener('click', (event) => {
-                if (link.dataset.filterType) {
-                    event.preventDefault();
-                    const typeId = link.dataset.filterType;
-                    filterByCategory(typeId);
-                    navMenu.classList.remove('open');
-                    menuOverlay.style.display = 'none';
-                }
-            });
-        });
-
-        // Abrir Modal de Detalhes
-        mainContentContainer.addEventListener('click', (event) => {
-            const card = event.target.closest('.app-card');
-            if (card && card.itemData) {
-                showDetailsModal(card.itemData);
-            }
-        });
-
-        // Chamar modal de login automaticamente no clique do Download
-        detailsDownloadBtn.addEventListener('click', (e) => {
-            e.preventDefault(); 
-            
-            if (!currentUser) {
-                detailsModal.style.display = 'none'; 
-                alert("Para continuar o download, por favor, faça Login.");
-                authModal.style.display = 'flex'; 
-                return;
-            }
-            
-            // Usuário logado: prosseguir com o download
-            const downloadUrl = selectedItem.downloadLink; 
-            if (downloadUrl && downloadUrl.startsWith('http')) {
-                window.location.href = downloadUrl;
-            } else {
-                alert("Erro: Link de download inválido ou não configurado no Firebase.");
-            }
-            detailsModal.style.display = 'none';
-        });
-
-
-        // Fechar Menu e Modais 
-        document.addEventListener('click', (event) => {
-            const target = event.target;
-            
-            if (target === menuOverlay) {
-                navMenu.classList.remove('open');
-                menuOverlay.style.display = 'none';
-            }
-
-            if (target.classList.contains('modal-close')) {
-                 target.closest('.modal').style.display = 'none';
-            }
-            if (target === detailsModal || target === fullListModal || target === authModal) {
-                target.style.display = 'none';
-            }
-        });
-
-        // Mantém a animação de placeholder
-        const placeholderTexts = ["Pesquisar Apps, Jogos, Software...", "Experimente: GTA V, Xender, FRP tools..."];
-        let placeholderIndex = 0;
-        function updatePlaceholder() {
-            if (searchInput !== document.activeElement && searchInput.value.length === 0) {
-                searchInput.placeholder = placeholderTexts[placeholderIndex];
-                placeholderIndex = (placeholderIndex + 1) % placeholderTexts.length;
-            }
-        }
-        function startPlaceholderAnimation() {
-            setInterval(updatePlaceholder, 10000); 
-            updatePlaceholder(); 
-        }
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            console.log("DOM e Script Carregados. Inicializando App."); 
-            
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons(); 
-                console.log("Ícones Lucide renderizados.");
-            }
-
-            await loadContentFromFirestore();
-            await checkForForcedUpdate(); 
-            startPlaceholderAnimation();
-        });
-    </script>
-</body>
-</html>
+            if (relatedItems
