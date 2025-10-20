@@ -26,180 +26,428 @@
             --font-family-base: 'Poppins', sans-serif;
         }
 
-        /* --- Estilos Gerais --- */
-        body {
-            font-family: var(--font-family-base);
+        /* --- Estilos Globais e Reset --- */
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family-base);
             background-color: var(--primary-bg-white);
             color: var(--text-color-dark);
+            line-height: 1.6;
         }
         
-        /* ... (Mantenha ou adicione seus estilos CSS aqui. Ajuste-os conforme necessário para os novos elementos.) ... */
-        
-        /* Estilos adicionais para Modais e Botões de Auth/Perfil */
-        .modal {
-            /* ... (Seu estilo de modal existente) ... */
-        }
-        .modal-content {
-            /* ... (Seu estilo de modal-content existente) ... */
-        }
-        .auth-content button, .profile-content button {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: var(--border-radius-base);
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        .auth-content input, .auth-content select {
-            width: calc(100% - 24px);
-            padding: 12px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-sizing: border-box;
-        }
-        .google-login-btn {
-            background-color: #4285F4;
-            color: white;
+        /* --- Barra Superior e Pesquisa (sticky) --- */
+        .top-bar {
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
+            padding: 10px 5%;
+            background-color: var(--primary-bg-white); 
+            box-shadow: var(--shadow-light);
+            z-index: 1000;
+            position: sticky; 
+            top: 0;
         }
-        .google-login-btn img {
+        
+        .logo a {
+            font-size: 1.2rem; 
+            font-weight: 700;
+            color: var(--text-color-dark); 
+            text-decoration: none;
+            letter-spacing: -1px;
+            transition: color 0.3s;
+        }
+        .logo a span {
+            color: var(--highlight-color);
+        }
+
+        .search-full-bar {
+            flex-grow: 1; 
+            margin: 0 15px;
+        }
+        
+        .search-input-wrapper {
+            display: flex;
+            align-items: center;
+            background-color: #E9ECEF; 
+            border-radius: 25px;
+            padding: 8px 15px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0 0 0 10px; 
+            border: none;
+            outline: none;
+            background: none;
+            font-size: 0.95rem;
+            color: var(--text-color-dark);
+        }
+        
+        .search-icon {
+            color: var(--text-color-muted);
             width: 20px;
             height: 20px;
-            margin-right: 10px;
         }
-        .separator {
-            text-align: center;
-            margin: 15px 0;
-            color: var(--text-color-muted);
+
+        .hamburger-btn {
+            background: none;
+            border: none;
+            color: var(--text-color-dark); 
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+            display: flex; 
+            z-index: 1001;
+            margin-left: 10px;
         }
-        .auth-options {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.9em;
+        
+        /* --- Menu Hamburguer (NOVO ESTILO) --- */
+        .nav-menu { 
+            display: flex; 
+            flex-direction: column;
+            justify-content: space-between; 
+            position: fixed; top: 0; right: 0; width: 70%; max-width: 300px; height: 100%; 
+            background-color: var(--text-color-dark); 
+            box-shadow: -4px 0 10px rgba(0, 0, 0, 0.3);
+            padding: 10px 0; 
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(100%); z-index: 999;
         }
-        .auth-options a {
-            color: var(--secondary-highlight-color);
-            text-decoration: none;
+        .nav-menu.open { transform: translateX(0); }
+        .menu-overlay { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0, 0, 0, 0.5); z-index: 998; 
         }
-        .profile-link-item {
+        .nav-menu.open ~ .menu-overlay { display: block; }
+        
+        .nav-menu ul {
+            list-style: none;
+            padding: 10px 20px 20px 20px; 
+            overflow-y: auto; 
+            flex-grow: 1;
+        }
+        
+        /* Estilo dos Botões Grandes */
+        .nav-menu li {
+            margin-bottom: 10px;
+        }
+        .nav-menu a {
             display: flex;
             align-items: center;
+            gap: 15px;
+            padding: 15px; 
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-color-light);
             text-decoration: none;
-            color: var(--text-color-dark);
-            padding: 10px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background-color 0.2s;
         }
-        .profile-image-wrapper {
-            position: relative;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 10px;
+        .nav-menu a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
         }
-        .profile-image-wrapper img {
-            width: 100%;
-            height: 100%;
+        /* Ajuste para links SEM SVG (como o Suporte) */
+        .nav-menu a.no-icon {
+            padding-left: 15px; 
+            gap: 0;
+            justify-content: center; 
+            background-color: var(--highlight-color); 
+            color: var(--text-color-dark); 
+            font-weight: 700;
+        }
+        .nav-menu a.no-icon:hover {
+            background-color: #5ac743;
+        }
+        .nav-menu a svg {
+            min-width: 24px; 
+            height: 24px;
+            color: var(--highlight-color); 
+        }
+
+        /* Perfil e Rodapé */
+        .menu-profile-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 20px 20px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+        }
+        #profile-image-menu {
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             object-fit: cover;
+            border: 2px solid var(--highlight-color);
         }
-        .edit-icon-overlay {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            background-color: var(--highlight-color);
-            border-radius: 50%;
-            width: 16px;
-            height: 16px;
+        #profile-name-menu {
+            color: var(--text-color-light);
+            font-weight: 600;
+            font-size: 1.1rem;
+            flex-grow: 1;
+        }
+        .menu-footer {
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.5);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* --- Barra de Filtros (Estabilizada) --- */
+        .category-filter-bar {
+            display: flex;
+            overflow-x: auto;
+            padding: 0 5%;
+            margin-bottom: 20px;
+            background-color: var(--primary-bg-white);
+            -webkit-overflow-scrolling: touch;
+            padding-top: 10px; 
+            top: 55px; 
+            position: sticky; 
+            z-index: 990;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+        }
+        .category-filter-bar::-webkit-scrollbar { display: none; }
+
+        .filter-button {
+            flex-shrink: 0;
+            background-color: transparent;
+            border: 1px solid var(--text-color-muted);
+            color: var(--text-color-dark);
+            padding: 8px 15px;
+            margin-right: 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: background-color 0.2s, border-color 0.2s;
+            white-space: nowrap;
             display: flex;
             align-items: center;
-            justify-content: center;
-            border: 2px solid var(--primary-bg-white);
+            gap: 5px;
         }
-        .edit-icon-overlay svg {
-            width: 10px;
-            height: 10px;
-            fill: white;
+
+        .filter-button:hover {
+            background-color: #E9ECEF;
         }
-        .profile-info-text {
+
+        .filter-button.active {
+            background-color: var(--secondary-highlight-color);
+            border-color: var(--secondary-highlight-color);
+            color: var(--text-color-light);
+        }
+
+        /* --- Layout Principal e Cards --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
+        .content-section { margin-bottom: 30px; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .section-header h2 { font-size: 1.3rem; font-weight: 600; color: var(--text-color-dark); }
+        .view-all-link { color: var(--secondary-highlight-color); text-decoration: none; font-weight: 500; display: flex; align-items: center; gap: 5px; cursor: pointer; }
+        
+        .dynamic-feed-container { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); 
+            gap: 20px; 
+            padding-bottom: 30px; 
+        }
+        .dynamic-feed-container .app-card { width: 100%; flex-shrink: 1; }
+        
+        .content-grid { 
+            display: flex; 
+            overflow-x: auto; 
+            gap: 15px; 
+            padding-bottom: 15px; 
+            -webkit-overflow-scrolling: touch; 
+        }
+        .content-grid::-webkit-scrollbar { display: none; }
+        .app-card { 
+            background-color: var(--primary-bg-white); 
+            border-radius: var(--border-radius-base); 
+            padding: 0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            text-align: center; 
+            cursor: pointer; 
+            width: 100px; 
+            flex-shrink: 0; 
+            height: auto; 
+        }
+        .app-icon { width: 90px; height: 90px; border-radius: 15px; object-fit: cover; margin-bottom: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+        .app-title { font-size: 0.85rem; font-weight: 500; color: var(--text-color-dark); margin-bottom: 2px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; width: 100%; }
+        .app-description { font-size: 0.75rem; color: var(--text-color-muted); line-height: 1.2; height: 30px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .no-search-results { width: 100%; text-align: center; color: var(--text-color-muted); padding: 40px 0; font-size: 1.1rem; margin-top: 20px; }
+        
+        .full-list-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 20px; padding: 20px; }
+        #full-list-modal .app-card { width: 100%; flex-shrink: 1; }
+        
+        /* --- Modal Base e Estilos de Formulário --- */
+        .modal { 
+            display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; 
+            overflow: auto; background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; 
+            padding: 20px;
+        }
+        .modal-content { 
+            background-color: var(--primary-bg-white); padding: 0; border-radius: var(--border-radius-base); 
+            width: 90%; max-width: 450px; position: relative; max-height: 90vh; overflow-y: auto; 
+            box-shadow: var(--shadow-medium); 
+        }
+        .modal-close { 
+            position: absolute; top: 10px; right: 15px; color: #fff; font-size: 28px; font-weight: bold; 
+            cursor: pointer; z-index: 2001; text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); 
+        }
+        /* Estilos Comuns de Modal (Auth, Profile, Reset) */
+        .auth-modal-content, .profile-modal-content, .reset-modal-content {
+            padding: 25px;
             display: flex;
             flex-direction: column;
-            line-height: 1.2;
+            gap: 15px;
         }
-        .profile-info-text .edit-prompt {
-            font-size: 0.7em;
-            color: var(--text-color-muted);
+        .modal h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; text-align: center;}
+        .modal form { display: flex; flex-direction: column; gap: 15px; }
+        .modal input[type="email"], .modal input[type="password"], .modal input[type="text"], .modal input[type="date"], .modal input[type="tel"], .modal select {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
         }
-        .upload-container {
-            margin: 8px 0;
-            padding: 5px 0;
+        .main-btn {
+            padding: 12px;
+            background-color: var(--secondary-highlight-color);
+            color: var(--text-color-light);
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
         }
+        .main-btn:hover { background-color: #0056b3; }
+        .auth-options { text-align: center; font-size: 0.9rem; }
+        .auth-options a { color: var(--secondary-highlight-color); text-decoration: none; cursor: pointer; }
+        
+        /* Modal de Perfil Específico */
+        .profile-picture-edit { text-align: center; margin-bottom: 10px; }
+        #current-profile-image { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--highlight-color); }
+        .profile-field-group { display: flex; gap: 10px; }
+        .profile-field-group input, .profile-field-group select { flex-grow: 1; }
 
+        /* Modal de Detalhes (Mantido) */
+        .details-header { position: relative; width: 100%; height: 150px; overflow: hidden; border-top-left-radius: var(--border-radius-base); border-top-right-radius: var(--border-radius-base); margin-bottom: 20px; }
+        #details-icon { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .details-info { position: absolute; bottom: 0; left: 0; width: 100%; padding: 10px 20px; background: linear-gradient(transparent, rgba(0, 0, 0, 0.7)); color: var(--text-color-light); z-index: 10; }
+        .details-info h3 { font-size: 1.2rem; margin-bottom: 2px; }
+        #details-category-info { font-size: 0.8rem; color: rgba(255, 255, 255, 0.8); }
+        .modal-content > p { padding: 0 20px; }
+        .details-full-description { font-size: 0.95rem; color: var(--text-color-dark); margin-bottom: 25px; }
+        .details-download-btn { display: block; width: calc(100% - 40px); margin: 0 20px 20px; padding: 12px 20px; background-color: var(--highlight-color); color: var(--text-color-dark); border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s, transform 0.1s; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+        .details-download-btn:hover { background-color: #5ac743; transform: translateY(-1px); }
+        .details-download-btn:disabled { background-color: var(--text-color-muted); cursor: not-allowed; }
+        #related-apps-section { padding: 0 20px; margin-top: 20px; border-top: 1px solid #eee; }
+        .related-section-header { font-size: 1rem; margin-top: 15px; margin-bottom: 10px; padding: 0; }
+        #related-apps-grid { padding-bottom: 10px; margin-bottom: 0; }
+
+
+        @media (min-width: 768px) {
+            .hamburger-btn { display: none; }
+            .nav-menu { display: none !important; }
+            .menu-overlay { display: none !important; }
+            .content-grid .app-card { width: 120px; }
+            .app-icon { width: 110px; height: 110px; }
+            .dynamic-feed-container { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 25px; }
+            .full-list-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 25px; }
+            .modal-content { max-width: 500px; }
+        }
     </style>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    <header>
-        <div class="header-container">
-            <h1 class="logo">VICTOR STORE</h1>
-            <div class="search-bar">
-                <input type="text" id="search-input" placeholder="Pesquisar Apps, Jogos, Software...">
-            </div>
-            <button class="hamburger-menu" id="hamburger-menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+
+    <div class="top-bar">
+        <div class="logo">
+            <a href="#">VICTOR<span>STORE</span></a>
         </div>
-    </header>
+        
+        <div class="search-full-bar">
+            <div class="search-input-wrapper">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search search-icon"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="text" id="search-input" class="search-input" placeholder="Pesquisar Apps, Jogos, Software...">
+            </div>
+        </div>
+        
+        <button class="hamburger-btn" id="hamburger-btn" aria-label="Abrir Menu">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+        </button>
+    </div>
 
-    <div class="menu-overlay" id="menu-overlay"></div>
-    <nav class="nav-menu" id="nav-menu">
-        <ul class="menu-items-list">
-            
-            <li id="menu-login-link">
-                <a href="#" id="open-auth-modal-btn">
-                     <svg class="lucide-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                     <span>Login / Criar Conta</span>
-                </a>
-            </li>
-            
-            <li id="menu-profile-container" style="display: none;">
-                <a href="#" id="open-profile-modal-btn" class="profile-link-item">
-                    <div class="profile-image-wrapper">
-                        <img id="profile-image-menu" src="assets/default_profile.png" alt="Perfil">
-                        <span class="edit-icon-overlay">
-                            <svg class="lucide-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M17 3a2.85 2.85 0 0 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
-                        </span>
-                    </div>
-                    <div class="profile-info-text">
-                         <span id="profile-name-menu"></span>
-                         <span class="edit-prompt">Editar Perfil</span>
-                    </div>
-                </a>
-            </li>
-
-            <li><a href="#"><svg class="lucide-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Início</a></li>
-            <li><a href="#" id="open-full-list-btn" data-list-type="categories"><svg class="lucide-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg> Categorias</a></li>
-            <li><a href="#" id="open-full-list-btn" data-list-type="premium"><svg class="lucide-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17.5l-6-3.5L12 10l6 3.5z"/><path d="M12 21l-6-3.5L12 14l6 3.5z"/></svg> Premium</a></li>
-
-            <li id="menu-logout-link" style="display: none;">
-                <a href="#" id="logout-btn">
-                     <svg class="lucide-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
-                     <span>Sair</span>
-                </a>
-            </li>
+    <nav class="nav-menu" id="hamburger-menu">
+        
+        <div class="menu-profile-container" id="menu-profile-container" style="display: none;">
+            <img id="profile-image-menu" src="assets/default_profile.png" alt="Perfil">
+            <span id="profile-name-menu">Carregando...</span>
+            <a href="#" id="open-profile-modal-btn" style="padding: 5px 10px; background: none;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+            </a>
+        </div>
+        
+        <ul>
+            <li id="menu-login-link"><a href="#" id="open-auth-modal-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-in"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
+                Login / Criar Conta
+            </a></li>
+             
+             <li><a href="#" data-filter-type="jogo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gamepad-2"><path d="M6 10a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2Z"/><path d="M12 15h1"/><path d="M11 14v1"/></svg>
+                Jogos
+            </a></li>
+            <li><a href="#" data-filter-type="app_geral">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-app-window"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M12 11h.01"/><path d="M12 2v2"/><path d="M6 2v2"/><path d="M18 2v2"/></svg>
+                Apps
+            </a></li>
+            <li><a href="#" data-filter-type="frp">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lock-open"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                FRP/Desbloqueio
+            </a></li>
+            <li><a href="#" data-filter-type="software">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-monitor-dot"><path d="M12 12h.01"/><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M12 19v4"/><path d="M8 23h8"/></svg>
+                Software
+            </a></li>
+            <li><a href="https://wa.me/258857629056" target="_blank" rel="noopener noreferrer" class="no-icon">
+                Suporte
+            </a></li>
+            <li id="menu-logout-link" style="display: none;"><a href="#" id="logout-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
+                Terminar Sessão
+            </a></li>
         </ul>
+        <div class="menu-footer">
+            victorstore© 2025
+        </div>
     </nav>
+    <div class="menu-overlay"></div> 
+    
+    <nav class="category-filter-bar" id="category-filter-bar">
+        </nav>
+
 
     <main class="container">
-        <div class="content-grid" id="content-grid">
+        
+        <div id="search-results-message" class="no-search-results" style="display:none;"></div>
+        
+        <div id="main-content-container">
+            <div class="loading-message" style="width: 100%; text-align: center; padding: 50px 0;">Carregando conteúdo...</div>
             </div>
+
     </main>
-    
+
     <div id="details-modal" class="modal">
         <div class="modal-content">
             <span class="modal-close" data-modal="details-modal">&times;</span>
@@ -211,10 +459,8 @@
                 </div>
             </div>
             <p id="details-full-description" class="details-full-description"></p> 
-            
-            <button class="details-download-btn" id="details-download-btn" style="display: none;">Baixar Agora</button>
-            
-            <p id="details-login-prompt" class="login-prompt"></p>
+            <button class="details-download-btn" id="details-download-btn">Baixar Agora</button>
+            <p id="details-login-prompt" class="login-prompt" style="display: none; text-align: center; color: var(--secondary-highlight-color); font-weight: 500; padding: 0 20px 20px;"></p>
 
             <section id="related-apps-section" style="display: none;">
                 <h3 class="related-section-header">Mais da mesma Categoria</h3>
@@ -232,83 +478,85 @@
             </div>
         </div>
     </div>
-    
-    <div id="auth-modal" class="modal" style="display: none;">
-        <div class="modal-content auth-content">
+
+    <div id="auth-modal" class="modal">
+        <div class="modal-content auth-modal-content">
             <span class="modal-close" data-modal="auth-modal">&times;</span>
             <h2 id="auth-title">Faça Login</h2>
-
             <form id="auth-form" data-mode="login">
-                <input type="email" id="auth-email" placeholder="E-mail" required>
-                <input type="password" id="auth-password" placeholder="Palavra-passe" required>
+                <input type="email" id="auth-email" placeholder="Seu E-mail" required>
+                <input type="password" id="auth-password" placeholder="Sua Palavra-passe" required>
 
-                <div id="register-fields" style="display: none;">
-                    <input type="text" id="register-name" placeholder="Nome do Usuário" required>
-                    <input type="text" id="register-partner" placeholder="Nome do(a) Namorado(a)" required>
-                    
-                    <label for="register-bday" style="font-size: 0.8em; margin-top: 15px; display: block;">Data de Nascimento *</label>
-                    <input type="date" id="register-bday" required>
-
-                    <div class="upload-container">
-                        <label for="register-photo" style="font-size: 0.9em; display: block; margin-bottom: 5px;">Foto de Perfil (Opcional)</label>
-                        <input type="file" id="register-photo" accept="image/*">
+                <div id="register-fields" style="display: none; display: flex; flex-direction: column; gap: 15px;">
+                    <input type="text" id="register-name" placeholder="Seu Nome Completo">
+                    <input type="date" id="register-bday" placeholder="Data de Nascimento (dd/mm/aaaa)">
+                    <div class="profile-field-group">
+                        <select id="register-gender">
+                            <option value="">Seu Gênero</option>
+                            <option value="M">Masculino</option>
+                            <option value="F">Feminino</option>
+                            <option value="O">Outro</option>
+                        </select>
+                        <input type="text" id="register-partner" placeholder="Nome da(o) Namorada(o)">
                     </div>
+                    <label for="register-photo">Foto de Perfil (Opcional)</label>
+                    <input type="file" id="register-photo" accept="image/*">
                 </div>
                 
-                <input type="password" id="auth-password-confirm" placeholder="Confirme a Palavra-passe" style="display: none;" required>
-                
-                <button type="submit" id="auth-submit-btn" class="main-btn" style="margin-top: 15px;">Entrar</button>
+                <input type="password" id="auth-password-confirm" placeholder="Confirmar Palavra-passe" style="display: none;">
+
+                <button type="submit" id="auth-submit-btn" class="main-btn">Entrar</button>
+
+                <p class="auth-options">
+                    <a href="#" id="forgot-password-link">Esqueceu a Palavra-passe?</a>
+                </p>
+                <p class="auth-options">
+                    <a href="#" id="toggle-auth-link">Criar conta com E-mail</a>
+                </p>
             </form>
-
-            <p class="separator">ou</p>
-            <button type="button" class="google-login-btn">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png" alt="Google Logo"> Entrar com Google
-            </button>
-
-            <p class="auth-options">
-                <a href="#" id="forgot-password-link">Esqueci Palavra-passe</a>
-            </p>
-            <p class="auth-options">
-                <a href="#" id="toggle-auth-link">Criar conta com E-mail</a>
-            </p>
         </div>
     </div>
 
-    <div id="profile-modal" class="modal" style="display: none;">
-        <div class="modal-content profile-content">
+    <div id="profile-modal" class="modal">
+        <div class="modal-content profile-modal-content">
             <span class="modal-close" data-modal="profile-modal">&times;</span>
             <h2>Editar Perfil</h2>
-            
             <form id="profile-form">
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <img id="current-profile-image" src="assets/default_profile.png" alt="Foto de Perfil Atual" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+                <div class="profile-picture-edit">
+                    <img id="current-profile-image" src="assets/default_profile.png" alt="Foto de Perfil Atual">
                 </div>
+                <label for="edit-photo">Mudar Foto de Perfil (Opcional)</label>
+                <input type="file" id="edit-photo" accept="image/*">
 
                 <input type="text" id="edit-name-input" placeholder="Nome Completo" required>
-                <div class="upload-container">
-                    <label for="edit-photo">Alterar Foto de Perfil:</label>
-                    <input type="file" id="edit-photo" accept="image/*">
-                </div>
                 <input type="date" id="edit-bday-input" placeholder="Data de Nascimento" required>
-                <input type="text" id="edit-partner-input" placeholder="Nome da(o) Namorada(o)" required>
-                
-                <p class="separator">Alterar Senha (Opcional)</p>
-                <input type="password" id="new-password-input" placeholder="Nova Palavra-passe">
-                
-                <p class="separator">Confirmação (Obrigatório para Qualquer Alteração)</p>
-                <input type="password" id="edit-password-input" placeholder="Sua Palavra-passe Atual" required>
-                
+                <div class="profile-field-group">
+                    <select id="edit-gender-input">
+                        <option value="">Seu Gênero</option>
+                        <option value="M">Masculino</option>
+                        <option value="F">Feminino</option>
+                        <option value="O">Outro</option>
+                    </select>
+                    <input type="text" id="edit-partner-input" placeholder="Nome da(o) Namorada(o)">
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid #ccc; margin: 5px 0;">
+                <p style="font-size: 0.9em; text-align: center;">**Confirmação de Segurança**</p>
+
+                <input type="password" id="edit-password-input" placeholder="Palavra-passe Atual (Obrigatório para Salvar)" required>
+                <input type="password" id="new-password-input" placeholder="Nova Palavra-passe (Deixe em branco para não mudar)">
+
                 <button type="submit" class="main-btn">Salvar Alterações</button>
             </form>
         </div>
     </div>
 
-    <div id="reset-modal" class="modal" style="display: none;">
-        <div class="modal-content auth-content">
+    <div id="reset-modal" class="modal">
+        <div class="modal-content reset-modal-content">
             <span class="modal-close" data-modal="reset-modal">&times;</span>
-            <h2 id="reset-title"></h2>
+            <h2 id="reset-title">Redefinir Palavra-passe</h2>
             
-            <form id="forgot-password-form" style="display: none;">
+            <form id="forgot-password-form">
                 <input type="email" id="reset-email" placeholder="Seu E-mail" required>
                 <input type="date" id="reset-bday" placeholder="Sua Data de Nascimento" required>
                 <input type="text" id="reset-partner" placeholder="Nome da(o) Namorada(o)" required>
@@ -318,11 +566,11 @@
                 <p class="auth-options">
                     <a href="#" id="nao-lembro-de-nada-link">Não lembro de nada</a>
                 </p>
-                <p style="font-size: 0.8em; color: red; margin-top: 15px;">*AVISO: A checagem destes dados é feita pelo servidor por motivos de segurança.</p>
+                <p style="font-size: 0.8em; color: var(--text-color-muted); margin-top: 15px; text-align: center;">*Estes dados serão verificados para o envio do link.</p>
             </form>
 
             <form id="not-remember-form" style="display: none;">
-                <p>O administrador será notificado para entrar em contato e enviar um link de redefinição único.</p>
+                <p style="text-align: center; font-size: 0.95em;">O administrador será notificado para entrar em contato e enviar um link de redefinição único, após confirmar a identidade.</p>
                 <input type="email" id="not-remember-email" placeholder="Seu E-mail" required>
                 <input type="tel" id="not-remember-whatsapp" placeholder="Seu Número de WhatsApp (+258...)" required>
                 
@@ -330,7 +578,7 @@
             </form>
         </div>
     </div>
-
-    <script type="module" src="./main.js?v=2025102001"></script>
+    
+    <script type="module" src="./main.js?v=2025101801"></script>
 </body>
 </html>
