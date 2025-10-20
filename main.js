@@ -2,7 +2,7 @@
 
 // Versão atual do CÓDIGO web. Apenas mude este número quando fizer uma GRANDE atualização.
 // A versão do SERVIDOR (Firestore) deve ser MAIOR que esta para forçar o reload.
-const CURRENT_UI_VERSION = 2.1; 
+const CURRENT_UI_VERSION = 2.2; 
 
 // --- 1. CONFIGURAÇÃO E IMPORTS FIREBASE ---
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
