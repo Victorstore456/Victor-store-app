@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VICTOR STORE - Sua Loja de Apps (Design Dinâmico)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Cores Primárias e Secundárias */
+            --primary-bg-white: #F8F9FA; 
+            --highlight-color: #6DE350; /* Verde de destaque */
+            --secondary-highlight-color: #007BFF; /* Azul de destaque */
+
+            /* Cores de Texto */
+            --text-color-dark: #212B36; 
+            --text-color-light: #F8F9FA; 
+            --text-color-muted: #6B7B8F; 
+
+            /* Sombras e Bordas */
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 8px 16px rgba(0, 0, 0, 0.1);
+            --border-radius-base: 12px;
+            
+            /* Tipografia */
+            --font-family-base: 'Poppins', sans-serif;
+        }
+
+        /* --- Estilos Gerais --- */
+        body {
+            font-family: var(--font-family-base);
+            margin: 0;
+            padding: 0;
+            background-color: var(--primary-bg-white);
+            color: var(--text-color-dark);
+        }
+        
+        /* ... (Mantenha ou adicione seus estilos CSS aqui. Ajuste-os conforme necessário para os novos elementos.) ... */
+        
+        /* Estilos adicionais para Modais e Botões de Auth/Perfil */
+        .modal {
+            /* ... (Seu estilo de modal existente) ... */
+        }
+        .modal-content {
+            /* ... (Seu estilo de modal-content existente) ... */
+        }
+        .auth-content button, .profile-content button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: var(--border-radius-base);
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .auth-content input, .auth-content select {
+            width: calc(100% - 24px);
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        .google-login-btn {
+            background-color: #4285F4;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .google-login-btn img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+        .separator {
+            text-align: center;
+            margin: 15px 0;
+            color: var(--text-color-muted);
+        }
+        .auth-options {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+        .auth-options a {
+            color: var(--secondary-highlight-color);
+            text-decoration: none;
+        }
+        .profile-link-item {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-color-dark);
+            padding: 10px;
+        }
+        .profile-image-wrapper {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .profile-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .edit-icon-overlay {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: var(--highlight-color);
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--primary-bg-white);
+        }
+        .edit-icon-overlay svg {
+            width: 10px;
+            height: 10px;
+            fill: white;
+        }
+        .profile-info-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+        .profile-info-text .edit-prompt {
+            font-size: 0.7em;
+            color: var(--text-color-muted);
+        }
+        .upload-container {
+            margin: 8px 0;
+            padding: 5px 0;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1 class="logo">VICTOR STORE</h1>
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Pesquisar Apps, Jogos, Software...">
+            </div>
+            <button class="hamburger-menu" id="hamburger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <div class="menu-overlay" id="menu-overlay"></div>
+    <nav class="nav-menu" id="nav-menu">
+        <ul class="menu-items-list">
+            
+            <li id="menu-login-link">
+                <a href="#" id="open-auth-modal-btn">
+                     <svg class="lucide-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                     <span>Login / Criar Conta</span>
+                </a>
+            </li>
+            
+            <li id="menu-profile-container" style="display: none;">
+                <a href="#" id="open-profile-modal-btn" class="profile-link-item">
+                    <div class="profile-image-wrapper">
+                        <img id="profile-image-menu" src="assets/default_profile.png" alt="Perfil">
+                        <span class="edit-icon-overlay">
+                            <svg class="lucide-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M17 3a2.85 2.85 0 0 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                        </span>
+                    </div>
+                    <div class="profile-info-text">
+                         <span id="profile-name-menu"></span>
+                         <span class="edit-prompt">Editar Perfil</span>
+                    </div>
+                </a>
+            </li>
+
+            <li><a href="#"><svg class="lucide-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Início</a></li>
+            <li><a href="#" id="open-full-list-btn" data-list-type="categories"><svg class="lucide-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg> Categorias</a></li>
+            <li><a href="#" id="open-full-list-btn" data-list-type="premium"><svg class="lucide-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17.5l-6-3.5L12 10l6 3.5z"/><path d="M12 21l-6-3.5L12 14l6 3.5z"/></svg> Premium</a></li>
+
+            <li id="menu-logout-link" style="display: none;">
+                <a href="#" id="logout-btn">
+                     <svg class="lucide-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+                     <span>Sair</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <div class="content-grid" id="content-grid">
+            </div>
+    </main>
+    
+    <div id="details-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" data-modal="details-modal">&times;</span>
+            <div class="details-header">
+                <img id="details-icon" src="" alt="Capa do Item">
+                <div class="details-info">
+                    <h3 id="details-title"></h3>
+                    <p id="details-category-info"></p> 
+                </div>
+            </div>
+            <p id="details-full-description" class="details-full-description"></p> 
+            
+            <button class="details-download-btn" id="details-download-btn" style="display: none;">Baixar Agora</button>
+            
+            <p id="details-login-prompt" class="login-prompt"></p>
+
+            <section id="related-apps-section" style="display: none;">
+                <h3 class="related-section-header">Mais da mesma Categoria</h3>
+                <div class="content-grid" id="related-apps-grid" style="padding-bottom: 0; margin-bottom: 0;">
+                </div>
+            </section>
+        </div>
+    </div>
+    
+    <div id="full-list-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" data-modal="full-list-modal">&times;</span>
+            <h2 id="full-list-title"></h2>
+            <div class="full-list-grid" id="full-list-grid">
+            </div>
+        </div>
+    </div>
+    
+    <div id="auth-modal" class="modal" style="display: none;">
+        <div class="modal-content auth-content">
+            <span class="modal-close" data-modal="auth-modal">&times;</span>
+            <h2 id="auth-title">Faça Login</h2>
+            
+            <form id="auth-form" data-mode="login">
+                <button type="button" class="google-login-btn">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png" alt="Google"> Entrar com Google
+                </button>
+                <p class="separator">ou</p>
+
+                <input type="email" id="auth-email" placeholder="E-mail" required>
+                
+                <div id="register-fields" style="display: none;">
+                    <input type="text" id="register-name" placeholder="Nome Completo" required>
+                    <div class="upload-container">
+                        <label for="register-photo">Foto de Perfil:</label>
+                        <input type="file" id="register-photo" accept="image/*" required>
+                    </div>
+                    <input type="date" id="register-bday" placeholder="Data de Nascimento" required>
+                    <select id="register-gender" required>
+                        <option value="">Gênero</option>
+                        <option value="Masculino">Masculino</option>
+                        <option value="Feminino">Feminino</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                    <input type="text" id="register-partner" placeholder="Nome da(o) Namorada(o)" required>
+                </div>
+                
+                <input type="password" id="auth-password" placeholder="Palavra-passe" required>
+                
+                <input type="password" id="auth-password-confirm" placeholder="Confirme a Palavra-passe" style="display: none;">
+                
+                <button type="submit" id="auth-submit-btn" class="main-btn">Entrar</button>
+                
+                <p class="auth-options">
+                    <a href="#" id="forgot-password-link">Esquecí senha</a> | 
+                    <a href="#" id="toggle-auth-link">Criar conta com Google/E-mail</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <div id="profile-modal" class="modal" style="display: none;">
+        <div class="modal-content profile-content">
+            <span class="modal-close" data-modal="profile-modal">&times;</span>
+            <h2>Editar Perfil</h2>
+            
+            <form id="profile-form">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <img id="current-profile-image" src="assets/default_profile.png" alt="Foto de Perfil Atual" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+                </div>
+
+                <input type="text" id="edit-name-input" placeholder="Nome Completo" required>
+                <div class="upload-container">
+                    <label for="edit-photo">Alterar Foto de Perfil:</label>
+                    <input type="file" id="edit-photo" accept="image/*">
+                </div>
+                <input type="date" id="edit-bday-input" placeholder="Data de Nascimento" required>
+                <select id="edit-gender-input" required>
+                    <option value="">Gênero</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Feminino">Feminino</option>
+                    <option value="Outro">Outro</option>
+                </select>
+                <input type="text" id="edit-partner-input" placeholder="Nome da(o) Namorada(o)" required>
+                
+                <p class="separator">Alterar Senha (Opcional)</p>
+                <input type="password" id="new-password-input" placeholder="Nova Palavra-passe">
+                
+                <p class="separator">Confirmação (Obrigatório para Qualquer Alteração)</p>
+                <input type="password" id="edit-password-input" placeholder="Sua Palavra-passe Atual" required>
+                
+                <button type="submit" class="main-btn">Salvar Alterações</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="reset-modal" class="modal" style="display: none;">
+        <div class="modal-content auth-content">
+            <span class="modal-close" data-modal="reset-modal">&times;</span>
+            <h2 id="reset-title"></h2>
+            
+            <form id="forgot-password-form" style="display: none;">
+                <input type="email" id="reset-email" placeholder="Seu E-mail" required>
+                <input type="date" id="reset-bday" placeholder="Sua Data de Nascimento" required>
+                <input type="text" id="reset-partner" placeholder="Nome da(o) Namorada(o)" required>
+                
+                <button type="submit" class="main-btn">Redefinir Palavra-passe</button>
+                
+                <p class="auth-options">
+                    <a href="#" id="nao-lembro-de-nada-link">Não lembro de nada</a>
+                </p>
+                <p style="font-size: 0.8em; color: red; margin-top: 15px;">*AVISO: A checagem destes dados é feita pelo servidor por motivos de segurança.</p>
+            </form>
+
+            <form id="not-remember-form" style="display: none;">
+                <p>O administrador será notificado para entrar em contato e enviar um link de redefinição único.</p>
+                <input type="email" id="not-remember-email" placeholder="Seu E-mail" required>
+                <input type="tel" id="not-remember-whatsapp" placeholder="Seu Número de WhatsApp (+258...)" required>
+                
+                <button type="submit" class="main-btn">Notificar Administrador</button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="./main.js?v=2025102001"></script>
+</body>
+</html>
