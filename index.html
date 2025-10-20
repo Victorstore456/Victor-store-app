@@ -8,337 +8,623 @@
     <style>
         :root {
             /* Cores Primárias e Secundárias */
-            --primary-bg-white: #F8F9FA; 
+            --primary-bg-white: #212B36; /* ALTERADO: Cor de Fundo PRINCIPAL (Preto/Escuro) */
             --highlight-color: #6DE350; /* Verde de destaque */
             --secondary-highlight-color: #007BFF; /* Azul de destaque */
 
             /* Cores de Texto */
-            --text-color-dark: #212B36; 
+            --text-color-dark: #F8F9FA; /* ALTERADO: Texto principal agora é CLARO */
             --text-color-light: #F8F9FA; 
-            --text-color-muted: #6B7B8F; 
+            --text-color-muted: #ADB5BD; /* Cor de texto mudo mais claro para fundo escuro */
 
-            /* Sombras e Bordas */
-            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
-            --shadow-medium: 0 8px 16px rgba(0, 0, 0, 0.1);
-            --border-radius-base: 12px;
+            /* Sombras e Bordas (Ajustadas para fundos escuros) */
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --shadow-medium: 0 8px 16px rgba(0, 0, 0, 0.4);
             
-            /* Tipografia */
-            --font-family-base: 'Poppins', sans-serif;
+            /* UI Spacing */
+            --spacing-small: 8px;
+            --spacing-medium: 16px;
+            --spacing-large: 24px;
         }
 
-        /* --- Estilos Gerais --- */
+        /* Estilos Globais */
         body {
-            font-family: var(--font-family-base);
-            margin: 0;
-            padding: 0;
+            font-family: 'Poppins', sans-serif;
             background-color: var(--primary-bg-white);
             color: var(--text-color-dark);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        a {
+            color: var(--highlight-color);
+            text-decoration: none;
         }
         
-        /* ... (Mantenha ou adicione seus estilos CSS aqui. Ajuste-os conforme necessário para os novos elementos.) ... */
+        /* Layout Principal */
+        #app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-medium);
+        }
+
+        /* Cabeçalho */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-medium) 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: var(--spacing-large);
+            position: sticky;
+            top: 0;
+            background-color: var(--primary-bg-white);
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--highlight-color);
+        }
+
+        /* Menu Hamburguer */
+        .hamburger-menu {
+            display: none; /* Oculta em telas grandes */
+            cursor: pointer;
+            padding: 5px;
+            z-index: 1001;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background-color: var(--text-color-dark);
+            margin: 4px 0;
+            transition: 0.4s;
+        }
+
+        .hamburger-menu.open .bar:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .hamburger-menu.open .bar:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-menu.open .bar:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
         
-        /* Estilos adicionais para Modais e Botões de Auth/Perfil */
+        /* Overlay e Menu */
+        #menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            display: none;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            right: -250px;
+            width: 250px;
+            height: 100%;
+            background-color: var(--primary-bg-white);
+            box-shadow: var(--shadow-medium);
+            transition: right 0.3s;
+            z-index: 1000;
+            padding-top: 60px; /* Espaço para o menu hamburguer */
+        }
+
+        .hamburger-menu.open + #menu-overlay + nav {
+            right: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li a {
+            display: block;
+            padding: var(--spacing-medium);
+            color: var(--text-color-dark);
+            font-weight: 500;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: background-color 0.2s;
+        }
+
+        nav ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Barra de Pesquisa */
+        #search-container {
+            flex-grow: 1;
+            margin: 0 var(--spacing-medium);
+        }
+
+        #search-input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            background-color: #313a45; /* Um pouco mais claro que o BG */
+            color: var(--text-color-dark);
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        #search-input::placeholder {
+            color: var(--text-color-muted);
+        }
+
+        #search-input:focus {
+            outline: none;
+            border-color: var(--highlight-color);
+        }
+
+        /* Conteúdo em Destaque (Carousel/Destaque) */
+        #featured-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-large);
+            padding-bottom: var(--spacing-large);
+        }
+
+        .featured-item {
+            background-color: #2a343f;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .featured-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .featured-item-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .featured-item-info {
+            padding: var(--spacing-medium);
+        }
+
+        .featured-item-info h4 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--text-color-dark);
+        }
+
+        .featured-item-info p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: var(--text-color-muted);
+        }
+
+        /* Seções de Categorias/Listas */
+        .category-section {
+            margin-bottom: var(--spacing-large);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-medium);
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-color-dark);
+            margin: 0;
+        }
+
+        .section-header a {
+            color: var(--highlight-color);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        .section-header a:hover {
+            opacity: 0.8;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: var(--spacing-medium);
+            padding-bottom: var(--spacing-large);
+        }
+
+        /* Cartão de Item */
+        .content-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #2a343f;
+            border-radius: 10px;
+            padding: var(--spacing-medium) var(--spacing-small);
+            box-shadow: var(--shadow-light);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .content-item:hover {
+            background-color: #313a45;
+        }
+
+        .item-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            object-fit: cover;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .item-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-color-dark);
+            text-align: center;
+            margin: 0 0 5px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+
+        .item-category {
+            font-size: 0.75rem;
+            color: var(--text-color-muted);
+            text-align: center;
+            margin: 0;
+        }
+
+        /* Rodapé */
+        footer {
+            text-align: center;
+            padding: var(--spacing-large) 0;
+            margin-top: var(--spacing-large);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-color-muted);
+            font-size: 0.85rem;
+        }
+        
+        /* MODAL (Padrão) */
         .modal {
-            /* ... (Seu estilo de modal existente) ... */
+            display: none; 
+            position: fixed; 
+            z-index: 2000; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.8);
+            padding-top: 60px;
         }
+
         .modal-content {
-            /* ... (Seu estilo de modal-content existente) ... */
+            background-color: #2a343f;
+            margin: 5% auto; 
+            padding: var(--spacing-large);
+            border-radius: 15px;
+            box-shadow: var(--shadow-medium);
+            max-width: 500px;
+            position: relative;
         }
-        .auth-content button, .profile-content button {
+
+        .modal-close {
+            color: var(--text-color-muted);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover,
+        .modal-close:focus {
+            color: var(--text-color-dark);
+            text-decoration: none;
+        }
+        
+        /* Estilos do Modal de Detalhes */
+        .details-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--spacing-medium);
+        }
+
+        #details-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 18px;
+            object-fit: cover;
+            margin-right: var(--spacing-medium);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .details-info h3 {
+            margin: 0 0 5px 0;
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+
+        #details-category-info {
+            color: var(--text-color-muted);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .details-full-description {
+            color: var(--text-color-light);
+            font-size: 1rem;
+            margin-bottom: var(--spacing-large);
+            white-space: pre-wrap;
+        }
+
+        .details-download-btn {
             width: 100%;
             padding: 12px;
+            background-color: var(--highlight-color);
+            color: var(--primary-bg-white);
             border: none;
-            border-radius: var(--border-radius-base);
+            border-radius: 8px;
+            font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 10px;
+            transition: background-color 0.2s;
         }
-        .auth-content input, .auth-content select {
-            width: calc(100% - 24px);
-            padding: 12px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-sizing: border-box;
+
+        .details-download-btn:hover {
+            background-color: #5ceb3f; /* Um pouco mais claro */
         }
+        
+        .login-prompt {
+            color: red;
+            text-align: center;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        /* Estilos do Modal de Lista Completa */
+        .full-list-grid {
+            margin-top: var(--spacing-medium);
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: var(--spacing-medium);
+        }
+
+        .full-list-grid .content-item {
+            padding: 10px 5px;
+        }
+        
+        /* Estilos do NOVO Modal de Autenticação */
+        .auth-content h2 {
+            text-align: center;
+            margin-bottom: var(--spacing-medium);
+        }
+        
+        .auth-input {
+            width: 100%;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            background-color: #313a45;
+            color: var(--text-color-dark);
+            font-size: 1rem;
+        }
+        
+        .auth-btn {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        
+        .auth-submit-btn {
+            background-color: var(--highlight-color);
+            color: var(--primary-bg-white);
+        }
+        
+        .toggle-auth-btn {
+            background-color: transparent;
+            color: var(--secondary-highlight-color);
+            border: 1px solid var(--secondary-highlight-color);
+        }
+
         .google-login-btn {
-            background-color: #4285F4;
+            background-color: #4285F4; /* Cor do Google */
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 10px 0;
         }
-        .google-login-btn img {
-            width: 20px;
-            height: 20px;
-            margin-right: 10px;
-        }
-        .separator {
+        
+        .divider {
             text-align: center;
             margin: 15px 0;
-            color: var(--text-color-muted);
-        }
-        .auth-options {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.9em;
-        }
-        .auth-options a {
-            color: var(--secondary-highlight-color);
-            text-decoration: none;
-        }
-        .profile-link-item {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            color: var(--text-color-dark);
-            padding: 10px;
-        }
-        .profile-image-wrapper {
             position: relative;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-        .profile-image-wrapper img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        .edit-icon-overlay {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            background-color: var(--highlight-color);
-            border-radius: 50%;
-            width: 16px;
-            height: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid var(--primary-bg-white);
-        }
-        .edit-icon-overlay svg {
-            width: 10px;
-            height: 10px;
-            fill: white;
-        }
-        .profile-info-text {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.2;
-        }
-        .profile-info-text .edit-prompt {
-            font-size: 0.7em;
-            color: var(--text-color-muted);
-        }
-        .upload-container {
-            margin: 8px 0;
-            padding: 5px 0;
         }
 
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 0;
+        }
+
+        .divider span {
+            background-color: #2a343f;
+            padding: 0 10px;
+            position: relative;
+            z-index: 1;
+            color: var(--text-color-muted);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .hamburger-menu {
+                display: block;
+            }
+            
+            nav {
+                display: block;
+            }
+
+            header {
+                padding: var(--spacing-small) var(--spacing-medium);
+            }
+
+            #search-container {
+                display: none; /* Oculta a barra de pesquisa no topo em mobile */
+            }
+
+            .featured-item-info {
+                padding: var(--spacing-small);
+            }
+            
+            .content-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+            
+            .item-icon {
+                width: 60px;
+                height: 60px;
+            }
+        }
     </style>
 </head>
 <body>
-    <header>
-        <div class="header-container">
-            <h1 class="logo">VICTOR STORE</h1>
-            <div class="search-bar">
+    <div id="app-container">
+        <header>
+            <div class="logo">VICTOR STORE</div>
+            
+            <div id="search-container">
                 <input type="text" id="search-input" placeholder="Pesquisar Apps, Jogos, Software...">
             </div>
-            <button class="hamburger-menu" id="hamburger-menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </header>
-
-    <div class="menu-overlay" id="menu-overlay"></div>
-    <nav class="nav-menu" id="nav-menu">
-        <ul class="menu-items-list">
             
-            <li id="menu-login-link">
-                <a href="#" id="open-auth-modal-btn">
-                     <svg class="lucide-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                     <span>Login / Criar Conta</span>
-                </a>
-            </li>
-            
-            <li id="menu-profile-container" style="display: none;">
-                <a href="#" id="open-profile-modal-btn" class="profile-link-item">
-                    <div class="profile-image-wrapper">
-                        <img id="profile-image-menu" src="assets/default_profile.png" alt="Perfil">
-                        <span class="edit-icon-overlay">
-                            <svg class="lucide-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M17 3a2.85 2.85 0 0 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
-                        </span>
-                    </div>
-                    <div class="profile-info-text">
-                         <span id="profile-name-menu"></span>
-                         <span class="edit-prompt">Editar Perfil</span>
-                    </div>
-                </a>
-            </li>
-
-            <li><a href="#"><svg class="lucide-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Início</a></li>
-            <li><a href="#" id="open-full-list-btn" data-list-type="categories"><svg class="lucide-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg> Categorias</a></li>
-            <li><a href="#" id="open-full-list-btn" data-list-type="premium"><svg class="lucide-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17.5l-6-3.5L12 10l6 3.5z"/><path d="M12 21l-6-3.5L12 14l6 3.5z"/></svg> Premium</a></li>
-
-            <li id="menu-logout-link" style="display: none;">
-                <a href="#" id="logout-btn">
-                     <svg class="lucide-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
-                     <span>Sair</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-
-    <main class="container">
-        <div class="content-grid" id="content-grid">
+            <div class="hamburger-menu" id="hamburger-menu">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
             </div>
-    </main>
-    
-    <div id="details-modal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close" data-modal="details-modal">&times;</span>
-            <div class="details-header">
-                <img id="details-icon" src="" alt="Capa do Item">
-                <div class="details-info">
-                    <h3 id="details-title"></h3>
-                    <p id="details-category-info"></p> 
-                </div>
-            </div>
-            <p id="details-full-description" class="details-full-description"></p> 
-            
-            <button class="details-download-btn" id="details-download-btn" style="display: none;">Baixar Agora</button>
-            
-            <p id="details-login-prompt" class="login-prompt"></p>
+        </header>
+        
+        <div id="menu-overlay"></div>
+        <nav id="main-nav">
+            <ul>
+                <li><a href="#" data-action="home">Início</a></li>
+                </ul>
+        </nav>
 
-            <section id="related-apps-section" style="display: none;">
-                <h3 class="related-section-header">Mais da mesma Categoria</h3>
-                <div class="content-grid" id="related-apps-grid" style="padding-bottom: 0; margin-bottom: 0;">
+        <main id="main-content">
+            <section class="category-section">
+                <div class="section-header">
+                    <h2>Destaques</h2>
                 </div>
+                <div id="featured-content">
+                    </div>
             </section>
-        </div>
-    </div>
-    
-    <div id="full-list-modal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close" data-modal="full-list-modal">&times;</span>
-            <h2 id="full-list-title"></h2>
-            <div class="full-list-grid" id="full-list-grid">
+            
+            <div id="dynamic-categories">
+                </div>
+            
+        </main>
+        
+        <div id="details-modal" class="modal">
+            <div class="modal-content">
+                <span class="modal-close" data-modal="details-modal">&times;</span>
+                <div class="details-header">
+                    <img id="details-icon" src="" alt="Capa do Item">
+                    <div class="details-info">
+                        <h3 id="details-title"></h3>
+                        <p id="details-category-info"></p> 
+                    </div>
+                </div>
+                <p id="details-full-description" class="details-full-description"></p> 
+                <p id="details-login-prompt" class="login-prompt" style="display: none; color: var(--secondary-highlight-color);"></p>
+                <button class="details-download-btn" id="details-download-btn">Baixar Agora</button>
+
+
+                <section id="related-apps-section" style="display: none;">
+                    <h3 class="related-section-header">Mais da mesma Categoria</h3>
+                    <div class="content-grid" id="related-apps-grid" style="padding-bottom: 0; margin-bottom: 0;">
+                    </div>
+                </section>
             </div>
         </div>
+        
+        <div id="full-list-modal" class="modal">
+            <div class="modal-content">
+                <span class="modal-close" data-modal="full-list-modal">&times;</span>
+                <h2 id="full-list-title"></h2>
+                <div class="full-list-grid" id="full-list-grid">
+                </div>
+            </div>
+        </div>
+
+        <div id="auth-modal" class="modal">
+            <div class="modal-content auth-content">
+                <span class="modal-close" data-modal="auth-modal">&times;</span>
+                <h2 id="auth-title">Crie sua Conta</h2>
+                <p class="auth-message" id="auth-message" style="color: var(--highlight-color); margin-bottom: 15px; display: none; text-align: center;"></p>
+
+                <form id="auth-form">
+                    <input type="text" id="auth-name" placeholder="Seu Nome de Usuário (Opcional)" class="auth-input">
+                    <input type="email" id="auth-email" placeholder="Email" class="auth-input" required>
+                    <input type="password" id="auth-password" placeholder="Senha (Mínimo 6 caracteres)" class="auth-input" required>
+                    
+                    <button type="submit" id="auth-submit-btn" class="auth-btn auth-submit-btn">Criar Conta</button>
+                </form>
+
+                <button id="toggle-auth-btn" class="auth-btn toggle-auth-btn">Já Tenho Conta? Fazer Login</button>
+                
+                <div class="divider"><span>ou</span></div>
+                
+                <button id="google-login-btn" class="auth-btn google-login-btn">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2013_Google.png" alt="Google Icon" style="width: 20px; height: 20px; margin-right: 10px;">
+                    Continuar com Google
+                </button>
+            </div>
+        </div>
+        
+        <footer>
+            &copy; 2025 VICTOR STORE. Todos os direitos reservados.
+        </footer>
     </div>
     
-    <div id="auth-modal" class="modal" style="display: none;">
-        <div class="modal-content auth-content">
-            <span class="modal-close" data-modal="auth-modal">&times;</span>
-            <h2 id="auth-title">Faça Login</h2>
-            
-            <form id="auth-form" data-mode="login">
-                <button type="button" class="google-login-btn">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png" alt="Google"> Entrar com Google
-                </button>
-                <p class="separator">ou</p>
-
-                <input type="email" id="auth-email" placeholder="E-mail" required>
-                
-                <div id="register-fields" style="display: none;">
-                    <input type="text" id="register-name" placeholder="Nome Completo" required>
-                    <div class="upload-container">
-                        <label for="register-photo">Foto de Perfil:</label>
-                        <input type="file" id="register-photo" accept="image/*" required>
-                    </div>
-                    <input type="date" id="register-bday" placeholder="Data de Nascimento" required>
-                    <select id="register-gender" required>
-                        <option value="">Gênero</option>
-                        <option value="Masculino">Masculino</option>
-                        <option value="Feminino">Feminino</option>
-                        <option value="Outro">Outro</option>
-                    </select>
-                    <input type="text" id="register-partner" placeholder="Nome da(o) Namorada(o)" required>
-                </div>
-                
-                <input type="password" id="auth-password" placeholder="Palavra-passe" required>
-                
-                <input type="password" id="auth-password-confirm" placeholder="Confirme a Palavra-passe" style="display: none;">
-                
-                <button type="submit" id="auth-submit-btn" class="main-btn">Entrar</button>
-                
-                <p class="auth-options">
-                    <a href="#" id="forgot-password-link">Esquecí senha</a> | 
-                    <a href="#" id="toggle-auth-link">Criar conta com Google/E-mail</a>
-                </p>
-            </form>
-        </div>
-    </div>
-
-    <div id="profile-modal" class="modal" style="display: none;">
-        <div class="modal-content profile-content">
-            <span class="modal-close" data-modal="profile-modal">&times;</span>
-            <h2>Editar Perfil</h2>
-            
-            <form id="profile-form">
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <img id="current-profile-image" src="assets/default_profile.png" alt="Foto de Perfil Atual" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
-                </div>
-
-                <input type="text" id="edit-name-input" placeholder="Nome Completo" required>
-                <div class="upload-container">
-                    <label for="edit-photo">Alterar Foto de Perfil:</label>
-                    <input type="file" id="edit-photo" accept="image/*">
-                </div>
-                <input type="date" id="edit-bday-input" placeholder="Data de Nascimento" required>
-                <select id="edit-gender-input" required>
-                    <option value="">Gênero</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Feminino">Feminino</option>
-                    <option value="Outro">Outro</option>
-                </select>
-                <input type="text" id="edit-partner-input" placeholder="Nome da(o) Namorada(o)" required>
-                
-                <p class="separator">Alterar Senha (Opcional)</p>
-                <input type="password" id="new-password-input" placeholder="Nova Palavra-passe">
-                
-                <p class="separator">Confirmação (Obrigatório para Qualquer Alteração)</p>
-                <input type="password" id="edit-password-input" placeholder="Sua Palavra-passe Atual" required>
-                
-                <button type="submit" class="main-btn">Salvar Alterações</button>
-            </form>
-        </div>
-    </div>
-
-    <div id="reset-modal" class="modal" style="display: none;">
-        <div class="modal-content auth-content">
-            <span class="modal-close" data-modal="reset-modal">&times;</span>
-            <h2 id="reset-title"></h2>
-            
-            <form id="forgot-password-form" style="display: none;">
-                <input type="email" id="reset-email" placeholder="Seu E-mail" required>
-                <input type="date" id="reset-bday" placeholder="Sua Data de Nascimento" required>
-                <input type="text" id="reset-partner" placeholder="Nome da(o) Namorada(o)" required>
-                
-                <button type="submit" class="main-btn">Redefinir Palavra-passe</button>
-                
-                <p class="auth-options">
-                    <a href="#" id="nao-lembro-de-nada-link">Não lembro de nada</a>
-                </p>
-                <p style="font-size: 0.8em; color: red; margin-top: 15px;">*AVISO: A checagem destes dados é feita pelo servidor por motivos de segurança.</p>
-            </form>
-
-            <form id="not-remember-form" style="display: none;">
-                <p>O administrador será notificado para entrar em contato e enviar um link de redefinição único.</p>
-                <input type="email" id="not-remember-email" placeholder="Seu E-mail" required>
-                <input type="tel" id="not-remember-whatsapp" placeholder="Seu Número de WhatsApp (+258...)" required>
-                
-                <button type="submit" class="main-btn">Notificar Administrador</button>
-            </form>
-        </div>
-    </div>
-
-    <script type="module" src="./main.js?v=2025102001"></script>
+    <script type="module" src="./main.js?v=13"></script>
 </body>
 </html>
