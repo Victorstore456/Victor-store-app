@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VICTOR STORE - Sua Loja de Apps (Login Simplificado v3.8)</title>
+    <title>VICTOR STORE - Sua Loja de Apps (Login Simplificado v3.8 - MOD)</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -106,7 +106,7 @@
             margin-left: 10px;
         }
         
-        /* --- Menu Hamburguer --- */
+        /* --- Menu Hamburguer (Sem Alterações) --- */
         .nav-menu { 
             display: flex; 
             flex-direction: column;
@@ -134,7 +134,6 @@
             flex-grow: 1;
         }
         
-        /* Estilo dos Botões Grandes */
         .nav-menu li {
             margin-bottom: 10px;
         }
@@ -154,7 +153,6 @@
         .nav-menu a:hover {
             background-color: rgba(255, 255, 255, 0.2);
         }
-        /* Ajuste para links SEM SVG (como o Suporte) */
         .nav-menu a.no-icon {
             padding-left: 15px; 
             gap: 0;
@@ -241,35 +239,84 @@
             color: var(--text-color-light);
         }
 
-        /* --- Layout Principal e Cards --- */
+        /* --- Layout Principal e Cards (MODIFICADO) --- */
         .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
         
-        .content-grid { 
-            display: flex; 
-            overflow-x: auto; 
-            gap: 15px; 
-            padding-bottom: 15px; 
-            -webkit-overflow-scrolling: touch; 
+        /* O Grid Principal agora é um grid de repetição flexível */
+        .dynamic-feed-container { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); /* Agora mais largo e responsivo */
+            gap: 20px; 
+            padding-bottom: 20px; 
         }
-        .content-grid::-webkit-scrollbar { display: none; }
+
         .app-card { 
             background-color: var(--primary-bg-white); 
             border-radius: var(--border-radius-base); 
-            padding: 0; 
+            padding: 15px; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
             text-align: center; 
             cursor: pointer; 
-            width: 100px; 
-            flex-shrink: 0; 
-            height: auto; 
+            width: 100%; /* Ajustado para o grid */
+            box-shadow: var(--shadow-light); 
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .app-icon { width: 90px; height: 90px; border-radius: 15px; object-fit: cover; margin-bottom: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
-        .app-title { font-size: 0.85rem; font-weight: 500; color: var(--text-color-dark); margin-bottom: 2px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; width: 100%; }
-        .app-description { font-size: 0.75rem; color: var(--text-color-muted); line-height: 1.2; height: 30px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .app-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+        }
 
-        /* Estilos de Seção (para o novo título) */
+        .app-icon { 
+            width: 100px; 
+            height: 100px; 
+            border-radius: 20px; 
+            object-fit: cover; 
+            margin-bottom: 10px; 
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+        }
+        .app-title { 
+            font-size: 0.95rem; 
+            font-weight: 600; 
+            color: var(--text-color-dark); 
+            margin-bottom: 4px; 
+            overflow: hidden; 
+            white-space: nowrap; 
+            text-overflow: ellipsis; 
+            width: 100%; 
+        }
+        .app-description { 
+            font-size: 0.8rem; 
+            color: var(--text-color-muted); 
+            line-height: 1.2; 
+            height: 30px; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            display: -webkit-box; 
+            -webkit-line-clamp: 2; 
+            -webkit-box-orient: vertical; 
+            margin-bottom: 10px; 
+        }
+
+        /* NOVO BOTÃO DE DOWNLOAD ABAIXO DO CARD */
+        .app-card .download-btn {
+            width: 100%;
+            padding: 8px 10px;
+            background-color: var(--highlight-color);
+            color: var(--text-color-dark);
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .app-card .download-btn:hover:not(:disabled) { background-color: #5ac743; }
+        .app-card .download-btn:disabled { background-color: #ccc; cursor: not-allowed; color: #666; }
+
+
+        /* Estilos de Seção (Simplificado) */
         .content-section {
             margin-bottom: 20px;
         }
@@ -280,56 +327,36 @@
             margin-bottom: 10px;
         }
         .section-header h2 {
-            font-size: 1.2rem;
-            font-weight: 600;
+            font-size: 1.5rem;
+            font-weight: 700;
             color: var(--text-color-dark);
         }
         .view-all-link {
-            font-size: 0.9rem;
-            color: var(--secondary-highlight-color);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
+            /* Removido, pois o layout agora mostra todos */
+            display: none;
         }
 
-
-        /* --- MODAL DE DETALHES E LISTA (Estilo Imagem Anexada) --- */
+        /* --- MODAL DE AUTENTICAÇÃO (MANTIDO) --- */
         .modal { 
             display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; 
             overflow: auto; 
-            /* Fundo escuro conforme a imagem */
             background-color: rgba(0,0,0,0.8); 
             justify-content: center; align-items: center; 
             padding: 20px;
         }
         .modal-content { 
-            background-color: #2c2c2c; /* Fundo escuro para detalhes */
-            padding: 0; border-radius: var(--border-radius-base); 
+            background-color: var(--primary-bg-white); 
+            padding: 25px; border-radius: var(--border-radius-base); 
             width: 90%; max-width: 450px; position: relative; max-height: 90vh; overflow-y: auto; 
             box-shadow: var(--shadow-medium); 
         }
         .modal-close { 
-            position: absolute; top: 10px; right: 15px; color: #fff; font-size: 28px; font-weight: bold; 
-            cursor: pointer; z-index: 2002; text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); 
+            position: absolute; top: 10px; right: 15px; color: #212B36; font-size: 28px; font-weight: bold; 
+            cursor: pointer; z-index: 2002; 
         }
-        .auth-modal-content {
-            background-color: var(--primary-bg-white); /* Mantém branco para login/cadastro */
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+        
         .modal h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; text-align: center; color: var(--text-color-dark);}
         
-        /* Ajuste para o Título do Modal de Detalhes e Lista */
-        #details-modal .modal-content h2,
-        #full-list-modal .modal-content h2 {
-            color: var(--text-color-light); /* Cor clara para fundos escuros */
-            padding: 20px 25px 0;
-            text-align: left;
-        }
-
-
         .modal form { display: flex; flex-direction: column; gap: 15px; }
         .modal input[type="email"], .modal input[type="password"] {
             padding: 12px;
@@ -390,119 +417,8 @@
             margin-left: .5em;
         }
         
-        /* ESTILOS ESPECÍFICOS DO DETALHES MODAL (COMO A IMAGEM) */
-        .details-header {
-            position: relative;
-            height: 200px; /* Altura fixa para a imagem de capa */
-            overflow: hidden;
-            border-top-left-radius: var(--border-radius-base);
-            border-top-right-radius: var(--border-radius-base);
-        }
-        #details-icon {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .details-info-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 15px;
-            color: var(--text-color-light);
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
-        }
-        #details-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-        #details-category-info {
-            font-size: 0.9rem;
-            font-weight: 400;
-            color: var(--highlight-color);
-        }
-        #details-full-description {
-            padding: 15px 25px;
-            font-size: 0.9rem;
-            color: #ccc; /* Cor de texto mais clara para fundo escuro */
-        }
-        .details-download-area {
-            padding: 0 25px 25px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .details-download-btn {
-            padding: 15px;
-            background-color: var(--highlight-color); /* Verde vibrante */
-            color: var(--text-color-dark);
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .details-download-btn:hover {
-            background-color: #5ac743;
-        }
-        .details-login-prompt {
-            font-size: 0.9rem;
-            color: #ddd;
-            text-align: center;
-        }
-
-        #related-apps-section {
-            padding: 0 25px 20px;
-            margin-top: 15px;
-        }
-        .related-section-header {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #ddd;
-            margin-bottom: 10px;
-        }
-        #related-apps-grid .app-card {
-            width: 80px; /* Reduz o tamanho do card relacionado */
-        }
-        #related-apps-grid .app-icon {
-            width: 70px;
-            height: 70px;
-        }
-        /* Ajuste de cor de texto para os cards relacionados no modal escuro */
-        #related-apps-grid .app-title,
-        #related-apps-grid .app-description {
-            color: var(--text-color-light);
-            text-align: center;
-        }
-        #related-apps-grid .app-description {
-            color: #aaa;
-        }
-
-        /* --- NOVO ESTILO PARA O MODAL DE LISTA COMPLETA --- */
-        #full-list-modal .modal-content {
-            background-color: #2c2c2c;
-        }
-        .full-list-grid {
-            padding: 20px 25px; /* Adiciona padding no grid */
-            /* Estilos de Grid aplicados via JS para ser mais flexível */
-        }
-        .full-list-grid .app-card {
-            width: 100%; 
-            text-align: center;
-        }
-        .full-list-grid .app-icon {
-            margin: 0 auto 8px; /* Centraliza o ícone */
-        }
-        .full-list-grid .app-title,
-        .full-list-grid .app-description {
-            color: var(--text-color-light);
-        }
-        .full-list-grid .app-description {
-            color: #aaa;
-        }
-
+        /* Ocultar modais de Detalhes e Lista Completa (já que não serão mais usados) */
+        #details-modal, #full-list-modal { display: none !important; }
 
         @media (min-width: 768px) {
             .hamburger-btn { display: none; }
@@ -591,44 +507,8 @@
 
     </main>
 
-    <div id="details-modal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close" data-modal="details-modal">&times;</span>
-            <div class="details-header">
-                <img id="details-icon" src="" alt="Capa do Item">
-                <div class="details-info-overlay">
-                    <h3 id="details-title"></h3>
-                    <p id="details-category-info"></p> 
-                </div>
-            </div>
-            
-            <div class="details-download-area">
-                <button class="details-download-btn" id="details-download-btn">Baixar Agora</button>
-                <p id="details-login-prompt" class="details-login-prompt" style="display: none;">Faça Login para Baixar (ou Cadastre-se)</p>
-            </div>
-            
-            <p id="details-full-description" class="details-full-description"></p> 
-            
-
-            <section id="related-apps-section" style="display: none;">
-                <h3 class="related-section-header">Mais da mesma Categoria</h3>
-                <div class="content-grid" id="related-apps-grid" style="padding-bottom: 0; margin-bottom: 0;">
-                </div>
-            </section>
-        </div>
-    </div>
-    
-    <div id="full-list-modal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close" data-modal="full-list-modal">&times;</span>
-            <h2 id="full-list-title"></h2>
-            <div class="full-list-grid" id="full-list-grid">
-            </div>
-        </div>
-    </div>
-
     <div id="auth-modal" class="modal">
-        <div class="modal-content auth-modal-content">
+        <div class="modal-content">
             <span class="modal-close" data-modal="auth-modal">&times;</span>
             <h2 id="auth-title">Acesse sua Conta</h2>
             
@@ -663,7 +543,7 @@
     
     <script type="module">
         
-        const CURRENT_UI_VERSION = 3.8; // *** VERSÃO ATUALIZADA PARA 3.8 ***
+        const CURRENT_UI_VERSION = 3.8; 
 
         // --- 1. CONFIGURAÇÃO E IMPORTS FIREBASE ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
@@ -673,7 +553,6 @@
             query, 
             orderBy, 
             getDocs,
-            
         } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
         import { 
             getAuth, 
@@ -682,7 +561,6 @@
             onAuthStateChanged,
             signOut,
             GoogleAuthProvider,
-            // Importações alteradas para usar Redirect:
             signInWithRedirect, 
             getRedirectResult,
             createUserWithEmailAndPassword, 
@@ -701,18 +579,15 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app); 
-        const googleProvider = new GoogleAuthProvider(); // Provedor Google
+        const googleProvider = new GoogleAuthProvider(); 
 
-        // --- CORREÇÃO DE BLOQUEIO GOOGLE: Configuração para forçar o seletor de conta ---
-        // Isso ajuda a garantir que o popup não seja bloqueado em algumas WebViews
         googleProvider.setCustomParameters({
-            prompt: 'select_account' // Força o Google a pedir a seleção de conta
+            prompt: 'select_account' 
         });
 
 
         // --- 2. VARIÁVEIS GLOBAIS E REFERÊNCIAS DOM ---
 
-        let selectedItem = null; 
         let allContent = []; 
         let currentUser = null; 
         let isRegisterMode = false; 
@@ -733,22 +608,14 @@
         };
 
         const contentSectionsOrder = ['jogo', 'app_geral', 'frp', 'software']; 
-        const INJECTION_INTERVAL = 15; 
-        let injectionIndex = 0; 
 
         // Referências DOM - Content
         const hamburgerBtn = document.getElementById('hamburger-btn');
         const navMenu = document.getElementById('hamburger-menu'); 
         const menuOverlay = document.querySelector('.menu-overlay');
         const searchInput = document.getElementById('search-input');
-        const detailsModal = document.getElementById('details-modal');
-        const fullListModal = document.getElementById('full-list-modal');
-        const fullListTitle = document.getElementById('full-list-title');
-        const fullListGrid = document.getElementById('full-list-grid');
-        const detailsDownloadBtn = document.getElementById('details-download-btn');
+        // const detailsModal = document.getElementById('details-modal'); // REMOVIDO
         const searchResultsMessage = document.getElementById('search-results-message');
-        const relatedAppsGrid = document.getElementById('related-apps-grid'); 
-        const relatedAppsSection = document.getElementById('related-apps-section');
         const categoryFilterBar = document.getElementById('category-filter-bar');
         const mainContentContainer = document.getElementById('main-content-container'); 
 
@@ -770,9 +637,8 @@
         const logoutBtn = document.getElementById('logout-btn');
 
 
-        // --- 3. LÓGICA DE FIREBASE E AUTENTICAÇÃO ---
+        // --- 3. LÓGICA DE FIREBASE E AUTENTICAÇÃO (MANTIDA) ---
         
-        // Função para alternar entre Login e Cadastro
         function toggleAuthMode() {
             isRegisterMode = !isRegisterMode;
             if (isRegisterMode) {
@@ -797,10 +663,22 @@
 
         // B. Atualização da Interface (UI)
         function updateUIAfterAuth(user) {
-            const loginPrompt = document.getElementById('details-login-prompt');
+            // Atualiza o estado dos botões de download nos cards
+            document.querySelectorAll('.app-card').forEach(card => {
+                const downloadBtn = card.querySelector('.download-btn');
+                if (downloadBtn) {
+                    if (user) {
+                        downloadBtn.disabled = false;
+                        downloadBtn.textContent = 'Baixar Agora';
+                    } else {
+                        downloadBtn.disabled = true;
+                        downloadBtn.textContent = 'Faça Login para Baixar';
+                    }
+                }
+            });
             
+            // Atualiza o menu do hamburger
             if (user) {
-                // Usuário Logado
                 menuLoginLink.style.display = 'none';
                 menuProfileContainer.style.display = 'flex';
                 menuLogoutLink.style.display = 'list-item';
@@ -808,57 +686,39 @@
                 profileImageMenu.src = user.photoURL || 'assets/default_profile.png';
                 profileNameMenu.textContent = user.displayName || user.email.split('@')[0];
 
-                // Lógica do Download Gate (Habilitar botão)
-                if (detailsDownloadBtn) detailsDownloadBtn.style.display = 'block'; 
-                if (loginPrompt) loginPrompt.style.display = 'none';
-
             } else {
-                // Usuário Deslogado
                 menuLoginLink.style.display = 'list-item';
                 menuProfileContainer.style.display = 'none';
                 menuLogoutLink.style.display = 'none';
-                
-                // Lógica do Download Gate (Desabilitar botão e mostrar prompt)
-                if (detailsDownloadBtn) detailsDownloadBtn.style.display = 'none';
-                if (loginPrompt) {
-                    loginPrompt.textContent = "Faça Login para Baixar (ou Cadastre-se)";
-                    loginPrompt.style.display = 'block';
-                }
             }
         }
 
-        // C. Login/Cadastro com Google (AGORA COM REDIRECT PARA COMPATIBILIDADE EXTERNA)
+        // C. Login/Cadastro com Google
         googleLoginBtn.addEventListener('click', async () => {
-            // Desabilita botões para feedback
             googleLoginBtn.disabled = true;
             authSubmitBtn.disabled = true;
-            googleLoginBtn.textContent = 'Redirecionando...'; // Feedback
+            googleLoginBtn.textContent = 'Redirecionando...'; 
 
             try {
-                // *** CORREÇÃO: Usar signInWithRedirect para evitar problemas de pop-up/webview ***
                 await signInWithRedirect(auth, googleProvider);
-                // O código abaixo desta linha NÃO será executado.
-                // O Firebase redireciona o usuário para o provedor Google.
 
             } catch (error) {
                 console.error("Erro no Redirecionamento de Login com Google:", error.code, error.message);
                 alert(`Erro no Login com Google: ${error.message}. Tente novamente.`);
                 
             } finally {
-                // Reabilita botões caso haja uma falha imediata antes do redirect
                 googleLoginBtn.disabled = false;
                 authSubmitBtn.disabled = false;
                 googleLoginBtn.innerHTML = `<svg class="google-icon" viewBox="0 0 48 48" width="48px" height="48px"><path fill="#FFC107" d="M43.6 20.4H24v7.2h11.2c-.5 2.5-2 4.6-4.3 6.1v4.7h6.1c3.7-3.4 5.9-8.4 5.9-14.7 0-1-.1-2-.3-3z"/><path fill="#FF3D00" d="M24 10.9c4.7 0 8.6 1.9 11.4 5.2l-6.1 4.7c-1.5-.9-3.4-1.5-5.3-1.5-4.1 0-7.7 2.8-8.9 6.6H7.1V15c3.2-3.7 7.9-6.9 16.9-6.9z"/><path fill="#4CAF50" d="M15.1 29.5c-.3-1-.5-2.1-.5-3.2s.2-2.2.5-3.2v-4.1H7.1v4.1c-.8 1.6-1.2 3.3-1.2 5.2s.4 3.6 1.2 5.2l6.1 4.7-6.1-4.7z"/><path fill="#1976D2" d="M24 37.1c4.4 0 8.1-1.6 10.8-4.3l6.1 4.7c-3.7 3.4-8.4 5.3-16.9 5.3-9 0-13.7-3.2-16.9-6.9l6.1-4.7c1.3 3.8 4.9 6.6 8.9 6.6z"/></svg> Entrar com Google`;
             }
         });
 
-        // D. Verificação do Resultado do Redirect (Necessário para signInWithRedirect)
+        // D. Verificação do Resultado do Redirect
         async function handleGoogleRedirectResult() {
             try {
                 const result = await getRedirectResult(auth);
                 if (result) {
                     console.log("Login com Google por Redirect concluído com sucesso.");
-                    // O onAuthStateChanged cuidará da atualização da UI.
                 }
             } catch (error) {
                 console.error("Erro ao processar resultado do Google Redirect:", error.message);
@@ -874,22 +734,18 @@
             const email = document.getElementById('auth-email').value;
             const password = document.getElementById('auth-password').value;
 
-            // Desabilita botões para feedback
             authSubmitBtn.disabled = true;
             googleLoginBtn.disabled = true;
             authSubmitBtn.textContent = isRegisterMode ? 'Cadastrando...' : 'Entrando...';
 
             try {
                 if (isRegisterMode) {
-                    // Tenta CADASTRAR
                     await createUserWithEmailAndPassword(auth, email, password);
                     alert("Conta criada com sucesso! Você já está logado.");
                 } else {
-                    // Tenta FAZER LOGIN
                     await signInWithEmailAndPassword(auth, email, password);
                 }
                 
-                // SUCESSO!
                 authModal.style.display = 'none';
 
             } catch (error) {
@@ -909,15 +765,15 @@
                 }
                 alert(errorMessage);
             } finally {
-                // Reabilita o botão em caso de sucesso ou falha
                 authSubmitBtn.disabled = false;
                 googleLoginBtn.disabled = false;
                 authSubmitBtn.textContent = isRegisterMode ? 'Cadastrar' : 'Entrar';
+                updateUIAfterAuth(currentUser); // Força atualização dos botões de download
             }
         });
 
 
-        // F. Lógica de Recuperação de Senha (Simplificada)
+        // F. Lógica de Recuperação de Senha
         forgotPasswordLink.addEventListener('click', async (e) => {
             e.preventDefault();
             const email = document.getElementById('auth-email').value;
@@ -946,6 +802,7 @@
                 alert("Sessão encerrada com sucesso.");
                 navMenu.classList.remove('open');
                 menuOverlay.style.display = 'none';
+                updateUIAfterAuth(null); // Atualiza botões de download após logout
             } catch (error) {
                 console.error("Erro ao sair: ", error);
             }
@@ -954,19 +811,48 @@
         // H. Abrir Modal de Login
         document.getElementById('open-auth-modal-btn').addEventListener('click', (e) => {
             e.preventDefault();
-            isRegisterMode = false; // Garante que começa no modo Login
+            isRegisterMode = false; 
             toggleAuthMode();
-            authModal.style.display = 'flex'; // Usa flex para centralizar
+            authModal.style.display = 'flex'; 
         });
 
+        // --- NOVO: LÓGICA DE DOWNLOAD DIRETO DO CARD ---
+        function handleDownloadClick(itemData) {
+            
+            if (!currentUser) {
+                authModal.style.display = 'flex';
+                isRegisterMode = false;
+                toggleAuthMode();
+                return;
+            }
+            
+            const downloadUrl = itemData.downloadLink; 
+            
+            if (downloadUrl && downloadUrl.startsWith('http')) {
+                // 1. Feedback Imediato
+                alert("Download iniciado!"); 
+                
+                // 2. Simulação de "Não sair do App" (Redireciona após delay)
+                setTimeout(() => {
+                    // *** AÇÃO DE DOWNLOAD REAL ***
+                    window.location.href = downloadUrl;
+                    // *****************************
+                }, 1500); // 1.5 segundo de delay para dar tempo do usuário ler a mensagem
+                
+            } else {
+                alert("Erro: Link de download inválido ou não configurado no Firebase.");
+            }
+        }
+        // --- FIM NOVO: LÓGICA DE DOWNLOAD DIRETO DO CARD ---
 
-        // --- 4. FUNÇÕES DE CONTEÚDO E RENDERIZAÇÃO ---
+
+        // --- 4. FUNÇÕES DE CONTEÚDO E RENDERIZAÇÃO (MODIFICADAS) ---
         
         async function checkForForcedUpdate() {
-            // Simulação de verificação de atualização forçada
             console.log("Checando por atualizações forçadas (Simulado)...");
         }
         
+        // MODIFICADO: Agora renderiza o botão de download diretamente no card
         function renderAppCard(data, gridElement) {
             const card = document.createElement('div');
             card.className = 'app-card';
@@ -977,54 +863,27 @@
             const descriptionText = data.category || data.description || 'Geral'; 
             
             card.innerHTML = `
-                <img src="${data.image}" class="app-icon" alt="Ícone de ${data.name}" onerror="this.onerror=null; this.src='https://placehold.co/90x90/212B36/F8F9FA?text=${data.type.toUpperCase().substring(0,3)}';">
-                <div class="app-title">${data.name}</div>
-                <div class="app-description">${descriptionText}</div> `;
-            
-            card.itemData = data; 
-            gridElement.appendChild(card);
-        }
-        
-        // Função para renderizar um card dentro do modal de lista completa
-        function renderFullListAppCard(data, gridElement) {
-            const card = document.createElement('div');
-            card.className = 'app-card full-list-card'; 
-            card.dataset.id = data.id; 
-            card.itemData = data; 
-            
-            const descriptionText = data.category || data.description || 'Geral'; 
-
-            card.innerHTML = `
-                <img src="${data.image}" class="app-icon" alt="Ícone de ${data.name}" onerror="this.onerror=null; this.src='https://placehold.co/90x90/212B36/F8F9FA?text=${data.type.toUpperCase().substring(0,3)}';">
+                <img src="${data.image}" class="app-icon" alt="Ícone de ${data.name}" onerror="this.onerror=null; this.src='https://placehold.co/100x100/212B36/F8F9FA?text=${data.type.toUpperCase().substring(0,3)}';">
                 <div class="app-title">${data.name}</div>
                 <div class="app-description">${descriptionText}</div>
+                <button class="download-btn" data-id="${data.id}" ${currentUser ? '' : 'disabled'}>
+                    ${currentUser ? 'Baixar Agora' : 'Faça Login para Baixar'}
+                </button>
             `;
             
+            card.itemData = data; 
             gridElement.appendChild(card);
+            
+            // Adiciona o ouvinte de evento ao botão de download
+            card.querySelector('.download-btn').addEventListener('click', (e) => {
+                e.stopPropagation(); // Impede que o clique no botão abra um modal de detalhes (se existisse)
+                handleDownloadClick(data);
+            });
         }
-
-        // Título das seções horizontais
-        function injectHorizontalSection(typeId, sectionContent) {
-            const sectionTitle = typeMap[typeId] || 'Destaques';
-            
-            const sectionElement = document.createElement('section');
-            sectionElement.className = 'content-section';
-            sectionElement.id = `${typeId}-injected-section`;
-            
-            sectionElement.innerHTML = `
-                <div class="section-header">
-                    <h2>${sectionTitle} (Lançamentos)</h2> <a href="#" class="view-all-link" data-type-id="${typeId}">Ver todos <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg></a>
-                </div>
-                <div class="content-grid" id="${typeId}-injected-grid">
-                    </div>
-            `;
-            
-            const gridElement = sectionElement.querySelector('.content-grid');
-            sectionContent.forEach(data => renderAppCard(data, gridElement));
-            mainContentContainer.appendChild(sectionElement); 
-        }
-
-        // Título do feed principal
+        
+        // REMOVIDO: injectHorizontalSection (não separa mais por categorias)
+        
+        // MODIFICADO: Renderiza todos os apps em um único grid
         function renderDynamicFeedLayout(content) {
             mainContentContainer.innerHTML = ''; 
             
@@ -1033,119 +892,27 @@
                 return;
             }
             
-            // NOVO: Seção de Últimos Lançamentos (Main Feed)
             const mainFeedSection = document.createElement('section');
             mainFeedSection.className = 'content-section';
             mainFeedSection.innerHTML = `
                 <div class="section-header">
                     <h2>Últimos Lançamentos</h2> </div>
-                <div class="content-grid dynamic-feed-container" id="main-feed-grid"></div>
+                <div class="dynamic-feed-container" id="main-feed-grid"></div>
             `;
             mainContentContainer.appendChild(mainFeedSection);
 
             const feedContainer = document.getElementById('main-feed-grid');
             
-            const injectedTypes = new Set();
-            injectionIndex = 0; 
-
-            content.forEach((item, index) => {
+            content.forEach((item) => {
                 renderAppCard(item, feedContainer); 
-
-                if ((index + 1) % INJECTION_INTERVAL === 0) {
-                    let typeToInject = null;
-                    let initialIndex = injectionIndex;
-                    
-                    do {
-                        let currentType = contentSectionsOrder[injectionIndex];
-                        if (!injectedTypes.has(currentType) && allContent.some(app => app.type === currentType)) {
-                            typeToInject = currentType;
-                            break;
-                        }
-                        injectionIndex = (injectionIndex + 1) % contentSectionsOrder.length;
-                    } while (injectionIndex !== initialIndex);
-
-                    if (typeToInject) {
-                        const sectionContent = allContent.filter(app => app.type === typeToInject).slice(0, 8);
-                        
-                        if (sectionContent.length > 0) {
-                            injectHorizontalSection(typeToInject, sectionContent);
-                            injectedTypes.add(typeToInject);
-                            injectionIndex = (injectionIndex + 1) % contentSectionsOrder.length;
-                        }
-                    }
-                }
             });
             
-            bindViewAllEvents(); // Chamada atualizada
+            updateUIAfterAuth(currentUser); // Garante que os botões de download estejam no estado correto
         }
         
-        // Função para mostrar o modal de detalhes (como na imagem)
-        function showDetailsModal(itemData) {
-            selectedItem = itemData;
-
-            document.getElementById('details-icon').src = itemData.image;
-            document.getElementById('details-title').textContent = itemData.name;
-            document.getElementById('details-category-info').textContent = typeMap[itemData.type] || itemData.category || 'Geral';
-            document.getElementById('details-full-description').textContent = itemData.description;
-
-            // Lógica do Download Gate (Habilitar/Desabilitar Download)
-            const loginPrompt = document.getElementById('details-login-prompt');
-            if (currentUser) {
-                detailsDownloadBtn.style.display = 'block';
-                loginPrompt.style.display = 'none';
-            } else {
-                detailsDownloadBtn.style.display = 'none';
-                loginPrompt.style.display = 'block';
-            }
-            
-            // Lógica de Apps Relacionados (simulada)
-            const related = allContent.filter(app => app.type === itemData.type && app.id !== itemData.id).slice(0, 5);
-            
-            if (related.length > 0) {
-                relatedAppsSection.style.display = 'block';
-                relatedAppsGrid.innerHTML = '';
-                related.forEach(data => renderAppCard(data, relatedAppsGrid));
-            } else {
-                relatedAppsSection.style.display = 'none';
-            }
-
-            detailsModal.style.display = 'flex';
-        }
-
-        // --- CORREÇÃO DO BOTÃO "VER TODOS" ---
-        
-        function bindViewAllEvents() {
-            document.querySelectorAll('.view-all-link').forEach(link => {
-                // Remove qualquer ouvinte anterior para evitar duplicação
-                link.removeEventListener('click', handleViewAllClick);
-                link.addEventListener('click', handleViewAllClick);
-            });
-        }
-
-        function handleViewAllClick(e) {
-            e.preventDefault();
-            const typeId = e.currentTarget.dataset.typeId; 
-
-            if (typeId) {
-                const categoryName = typeMap[typeId] || 'Categoria Desconhecida';
-                const filteredList = allContent.filter(item => item.type === typeId);
-
-                // 1. Atualiza o título e o conteúdo do modal
-                fullListTitle.textContent = categoryName;
-                fullListGrid.innerHTML = ''; // Limpa o conteúdo anterior
-
-                filteredList.forEach(data => renderFullListAppCard(data, fullListGrid));
-
-                // 2. Aplica um estilo de grid
-                fullListGrid.style.display = 'grid';
-                fullListGrid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(100px, 1fr))';
-                fullListGrid.style.gap = '15px';
-                
-                // 3. Mostra o modal
-                fullListModal.style.display = 'flex';
-            }
-        }
-        // --- FIM DA CORREÇÃO DO BOTÃO "VER TODOS" ---
+        // REMOVIDO: showDetailsModal (não usa mais)
+        // REMOVIDO: bindViewAllEvents (não usa mais)
+        // REMOVIDO: handleViewAllClick (não usa mais)
 
         async function loadContentFromFirestore() {
             const contentCollection = collection(db, 'content');
@@ -1201,14 +968,11 @@
         }
         
         function filterByCategory(typeId) {
-            // Remove 'active' de todos
             document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
             
-            // Adiciona 'active' ao botão clicado
             const activeBtn = document.querySelector(`.filter-button[data-filter-type="${typeId}"]`);
             if (activeBtn) activeBtn.classList.add('active');
             
-            // Lógica do filtro
             let filteredContent = allContent;
             if (typeId !== 'all') {
                 filteredContent = allContent.filter(item => item.type === typeId);
@@ -1217,37 +981,11 @@
             renderDynamicFeedLayout(filteredContent); 
             window.scrollTo(0, 0); 
             
-            // Oculta/mostra a barra de filtro
             categoryFilterBar.style.display = 'flex'; 
         }
         
 
         // --- 5. EVENTOS GERAIS E INICIALIZAÇÃO ---
-
-
-        // Chamar modal de login automaticamente no clique do Download
-        detailsDownloadBtn.addEventListener('click', (e) => {
-            e.preventDefault(); 
-            
-            if (!currentUser) {
-                // Se não está logado, fecha detalhes e abre login
-                detailsModal.style.display = 'none'; 
-                isRegisterMode = false;
-                toggleAuthMode();
-                authModal.style.display = 'flex'; 
-                return;
-            }
-            
-            // Usuário logado: prosseguir com o download
-            const downloadUrl = selectedItem.downloadLink; 
-            if (downloadUrl && downloadUrl.startsWith('http')) {
-                // Redireciona para o link de download
-                window.location.href = downloadUrl;
-            } else {
-                alert("Erro: Link de download inválido ou não configurado no Firebase.");
-            }
-            detailsModal.style.display = 'none';
-        });
 
         // Toggle do Menu Hamburguer
         hamburgerBtn.addEventListener('click', () => {
@@ -1268,24 +1006,14 @@
             });
         });
 
-        // Abrir Modal de Detalhes
-        mainContentContainer.addEventListener('click', (event) => {
+        // REMOVIDO: Abrir Modal de Detalhes (função foi removida, o clique agora não faz nada no card)
+        /* mainContentContainer.addEventListener('click', (event) => {
             const card = event.target.closest('.app-card');
             if (card && card.itemData) {
-                showDetailsModal(card.itemData);
+                 showDetailsModal(card.itemData); // Não faz nada
             }
-        });
+        }); */
         
-        // Abrir Modal de Detalhes também nos cards do modal de lista completa
-        fullListGrid.addEventListener('click', (event) => {
-            const card = event.target.closest('.app-card');
-            if (card && card.itemData) {
-                fullListModal.style.display = 'none'; // Fecha o modal de lista
-                showDetailsModal(card.itemData); // Abre o modal de detalhes
-            }
-        });
-
-
         // Fechar Menu e Modais 
         document.addEventListener('click', (event) => {
             const target = event.target;
@@ -1298,7 +1026,7 @@
             if (target.classList.contains('modal-close')) {
                  target.closest('.modal').style.display = 'none';
             }
-            if (target === detailsModal || target === fullListModal || target === authModal) {
+            if (target === authModal) {
                 target.style.display = 'none';
             }
         });
@@ -1318,14 +1046,13 @@
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
-            console.log("DOM e Script Carregados. Inicializando App. (v3.8 - Correções de Login e Ver Todos)"); 
+            console.log("DOM e Script Carregados. Inicializando App. (v3.8 - Modificado)"); 
             
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons(); 
                 console.log("Ícones Lucide renderizados.");
             }
             
-            // Verifica e processa o resultado do login por redirecionamento
             await handleGoogleRedirectResult(); 
 
             await loadContentFromFirestore();
