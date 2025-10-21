@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VICTOR STORE - Sua Loja de Apps (Login Simplificado v3.4)</title>
+    <title>VICTOR STORE - Sua Loja de Apps (Login Simplificado v3.5)</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -244,6 +244,41 @@
         /* --- Layout Principal e Cards --- */
         .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
         
+        /* NOVO ESTILO: Grade vertical de 2 colunas para o feed principal e listas completas */
+        .dynamic-feed-container, .full-list-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+            padding-bottom: 20px;
+        }
+        
+        /* Estilos para as seções injetadas (horizontais) */
+        .content-section {
+            grid-column: 1 / -1; /* Ocupa a largura total da grade */
+            margin-top: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 0; /* O grid horizontal já tem padding */
+        }
+        .content-section .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 0 5px; 
+        }
+        .content-section .section-header h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .content-section .section-header .view-all-link {
+            font-size: 0.8rem;
+            color: var(--secondary-highlight-color);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
         .content-grid { 
             display: flex; 
             overflow-x: auto; 
@@ -261,15 +296,50 @@
             align-items: center; 
             text-align: center; 
             cursor: pointer; 
-            width: 100px; 
-            flex-shrink: 0; 
+            width: 100%; /* Ocupa a coluna na grade vertical */
+            flex-shrink: 0; /* Permite deslizar no grid horizontal */
             height: auto; 
         }
-        .app-icon { width: 90px; height: 90px; border-radius: 15px; object-fit: cover; margin-bottom: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+        .app-icon { width: 100%; /* Ajuste para preencher a largura */ max-width: 90px; height: 90px; border-radius: 15px; object-fit: cover; margin-bottom: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
         .app-title { font-size: 0.85rem; font-weight: 500; color: var(--text-color-dark); margin-bottom: 2px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; width: 100%; }
         .app-description { font-size: 0.75rem; color: var(--text-color-muted); line-height: 1.2; height: 30px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        
+        /* Ajuste do card para grids verticais */
+        .dynamic-feed-container .app-card, .full-list-grid .app-card {
+            width: 100%;
+            height: auto;
+            align-items: flex-start; /* Alinha o texto à esquerda */
+            text-align: left;
+            display: flex;
+            flex-direction: row; /* Coloca ícone ao lado do texto */
+            padding: 10px 0;
+            border-bottom: 1px solid #E9ECEF;
+            border-radius: 0;
+        }
+        .dynamic-feed-container .app-card .app-icon, .full-list-grid .app-card .app-icon {
+            width: 50px;
+            min-width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            margin-right: 10px;
+            box-shadow: none;
+        }
+        .dynamic-feed-container .app-card .app-title, .full-list-grid .app-card .app-title {
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
+        }
+        .dynamic-feed-container .app-card .app-description, .full-list-grid .app-card .app-description {
+            height: auto;
+            -webkit-line-clamp: 1;
+        }
+        .dynamic-feed-container .app-card div:not(.app-icon), .full-list-grid .app-card div:not(.app-icon) {
+            max-width: calc(100% - 60px); 
+            display: block;
+        }
+        /* Fim dos Ajustes de Card */
 
-        /* --- Modal Base e Estilos de Formulário --- */
+        /* --- Modal Base e Estilos de Formulário (SEM ALTERAÇÃO) --- */
         .modal { 
             display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; 
             overflow: auto; background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; 
@@ -355,6 +425,31 @@
             .hamburger-btn { display: none; }
             .nav-menu { display: none !important; }
             .menu-overlay { display: none !important; }
+            /* Garante 4 colunas em telas maiores para listas verticais */
+            .dynamic-feed-container, .full-list-grid {
+                 grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            }
+            .dynamic-feed-container .app-card, .full-list-grid .app-card {
+                /* Volta ao layout de card grande em telas maiores para o feed principal */
+                width: auto;
+                height: auto;
+                align-items: center; 
+                text-align: center;
+                flex-direction: column;
+                padding: 10px;
+                border: none;
+                box-shadow: var(--shadow-light);
+            }
+             .dynamic-feed-container .app-card .app-icon, .full-list-grid .app-card .app-icon {
+                width: 90px;
+                min-width: 90px;
+                height: 90px;
+                border-radius: 15px;
+                margin-right: 0;
+            }
+             .dynamic-feed-container .app-card div:not(.app-icon), .full-list-grid .app-card div:not(.app-icon) {
+                max-width: 100%; 
+            }
         }
     </style>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -501,7 +596,7 @@
     
     <script type="module">
         
-        const CURRENT_UI_VERSION = 3.4; // *** VERSÃO ATUALIZADA PARA 3.4 ***
+        const CURRENT_UI_VERSION = 3.5; // *** VERSÃO ATUALIZADA PARA 3.5 (com fix 403 e novo layout) ***
 
         // --- 1. CONFIGURAÇÃO E IMPORTS FIREBASE ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
@@ -522,7 +617,8 @@
             onAuthStateChanged,
             signOut,
             GoogleAuthProvider,
-            signInWithPopup
+            signInWithRedirect, /* Mudança: Importado para usar Redirect */
+            getRedirectResult
         } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
 
@@ -563,7 +659,7 @@
         };
 
         const contentSectionsOrder = ['jogo', 'app_geral', 'frp', 'software']; 
-        const INJECTION_INTERVAL = 15; 
+        const INJECTION_INTERVAL = 15; // Intervalo para injetar a seção horizontal
         let injectionIndex = 0; 
 
         // Referências DOM - Content
@@ -596,8 +692,23 @@
         const profileNameMenu = document.getElementById('profile-name-menu');
         const logoutBtn = document.getElementById('logout-btn');
 
-
+        
         // --- 3. LÓGICA DE FIREBASE E AUTENTICAÇÃO ---
+        
+        // CUIDADO: Verifica se houve um redirecionamento de login do Google
+        async function handleGoogleRedirect() {
+             try {
+                const result = await getRedirectResult(auth);
+                if (result) {
+                    // Usuário logado com sucesso após o redirect
+                    console.log("Login com Google via Redirect bem-sucedido.");
+                }
+            } catch (error) {
+                console.error("Erro no Login com Google (Redirect):", error.code, error.message);
+                alert(`Erro no Login com Google: ${error.message}`);
+            }
+        }
+
 
         // A. Gerenciamento do Estado do Usuário
         onAuthStateChanged(auth, (user) => {
@@ -637,33 +748,25 @@
             }
         }
 
-        // C. Login com Google
+        // C. Login com Google (MUDANÇA AQUI: de Popup para Redirect)
         googleLoginBtn.addEventListener('click', async () => {
+             // Desabilita botões para feedback
+            googleLoginBtn.disabled = true;
+            authSubmitBtn.disabled = true;
+            googleLoginBtn.textContent = 'Redirecionando...';
+            
             try {
-                // Desabilita botões para feedback
-                googleLoginBtn.disabled = true;
-                authSubmitBtn.disabled = true;
-                googleLoginBtn.textContent = 'Acessando...';
-
-                await signInWithPopup(auth, googleProvider);
-                
-                // Sucesso
-                authModal.style.display = 'none';
-
+                // *** MUDANÇA PRINCIPAL PARA CORRIGIR O ERRO 403 ***
+                await signInWithRedirect(auth, googleProvider);
+                // O código após o redirect não será executado. O estado será verificado na recarga.
             } catch (error) {
-                console.error("Erro no Login com Google:", error.code, error.message);
-                if (error.code === 'auth/popup-closed-by-user') {
-                     alert("A janela de Login foi fechada. Tente novamente.");
-                } else if (error.code === 'auth/cancelled-popup-request') {
-                     // Ignora: geralmente ocorre quando há vários popups
-                } else {
-                    alert(`Erro no Login com Google: ${error.message}`);
-                }
-            } finally {
-                // Reabilita botões
+                console.error("Erro ao iniciar Redirect Google:", error.code, error.message);
+                alert(`Erro ao iniciar Login: ${error.message}`);
+                
+                // Reabilita botões em caso de falha antes do redirect
                 googleLoginBtn.disabled = false;
                 authSubmitBtn.disabled = false;
-                googleLoginBtn.innerHTML = `<svg class="google-icon" viewBox="0 0 48 48" width="48px" height="48px"><path fill="#FFC107" d="M43.6 20.4H24v7.2h11.2c-.5 2.5-2 4.6-4.3 6.1v4.7h6.1c3.7-3.4 5.9-8.4 5.9-14.7 0-1-.1-2-.3-3z"/><path fill="#FF3D00" d="M24 10.9c4.7 0 8.6 1.9 11.4 5.2l-6.1 4.7c-1.5-.9-3.4-1.5-5.3-1.5-4.1 0-7.7 2.8-8.9 6.6H7.1V15c3.2-3.7 7.9-6.9 16.9-6.9z"/><path fill="#4CAF50" d="M15.1 29.5c-.3-1-.5-2.1-.5-3.2s.2-2.2.5-3.2v-4.1H7.1v4.1c-.8 1.6-1.2 3.3-1.2 5.2s.4 3.6 1.2 5.2l6.1 4.7-6.1-4.7z"/><path fill="#1976D2" d="M24 37.1c4.4 0 8.1-1.6 10.8-4.3l6.1 4.7c-3.7 3.4-8.4 5.3-16.9 5.3-9 0-13.7-3.2-16.9-6.9l6.1-4.7c1.3 3.8 4.9 6.6 8.9 6.6z"/></svg> Entrar com Google`;
+                 googleLoginBtn.innerHTML = `<svg class="google-icon" viewBox="0 0 48 48" width="48px" height="48px"><path fill="#FFC107" d="M43.6 20.4H24v7.2h11.2c-.5 2.5-2 4.6-4.3 6.1v4.7h6.1c3.7-3.4 5.9-8.4 5.9-14.7 0-1-.1-2-.3-3z"/><path fill="#FF3D00" d="M24 10.9c4.7 0 8.6 1.9 11.4 5.2l-6.1 4.7c-1.5-.9-3.4-1.5-5.3-1.5-4.1 0-7.7 2.8-8.9 6.6H7.1V15c3.2-3.7 7.9-6.9 16.9-6.9z"/><path fill="#4CAF50" d="M15.1 29.5c-.3-1-.5-2.1-.5-3.2s.2-2.2.5-3.2v-4.1H7.1v4.1c-.8 1.6-1.2 3.3-1.2 5.2s.4 3.6 1.2 5.2l6.1 4.7-6.1-4.7z"/><path fill="#1976D2" d="M24 37.1c4.4 0 8.1-1.6 10.8-4.3l6.1 4.7c-3.7 3.4-8.4 5.3-16.9 5.3-9 0-13.7-3.2-16.9-6.9l6.1-4.7c1.3 3.8 4.9 6.6 8.9 6.6z"/></svg> Entrar com Google`;
             }
         });
 
@@ -782,14 +885,16 @@
             
             card.innerHTML = `
                 <img src="${data.image}" class="app-icon" alt="Ícone de ${data.name}" onerror="this.onerror=null; this.src='https://placehold.co/90x90/212B36/F8F9FA?text=${data.type.toUpperCase().substring(0,3)}';">
-                <div class="app-title">${data.name}</div>
-                <div class="app-description">${descriptionText}</div> `;
+                <div>
+                    <div class="app-title">${data.name}</div>
+                    <div class="app-description">${descriptionText}</div>
+                </div>`;
             
             card.itemData = data; 
             gridElement.appendChild(card);
         }
 
-        function injectHorizontalSection(typeId, sectionContent) {
+        function injectHorizontalSection(typeId, sectionContent, targetContainer) {
             const sectionTitle = typeMap[typeId] || 'Destaques';
             
             const sectionElement = document.createElement('section');
@@ -806,15 +911,44 @@
             `;
             
             const gridElement = sectionElement.querySelector('.content-grid');
-            sectionContent.forEach(data => renderAppCard(data, gridElement));
-            mainContentContainer.appendChild(sectionElement); 
+            sectionContent.forEach(data => renderAppCardHorizontal(data, gridElement));
+            targetContainer.appendChild(sectionElement); 
         }
+        
+        function renderAppCardHorizontal(data, gridElement) {
+            // Renderiza o card no layout menor (horizontal scroll)
+            const card = document.createElement('div');
+            card.className = 'app-card';
+            card.dataset.id = data.id; 
+            card.dataset.type = data.type; 
+            
+            const descriptionText = data.category || data.description || 'Geral'; 
 
+            card.style.width = '100px'; 
+            card.style.flexShrink = 0; 
+            card.style.display = 'flex';
+            card.style.flexDirection = 'column';
+            card.style.alignItems = 'center';
+            card.style.textAlign = 'center';
+            card.style.padding = '0';
+            card.style.borderBottom = 'none';
+
+            card.innerHTML = `
+                <img src="${data.image}" class="app-icon" alt="Ícone de ${data.name}" onerror="this.onerror=null; this.src='https://placehold.co/90x90/212B36/F8F9FA?text=${data.type.toUpperCase().substring(0,3)}';" 
+                    style="width: 90px; height: 90px; border-radius: 15px; margin-bottom: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+                <div class="app-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; text-align: center;">${data.name}</div>
+                <div class="app-description" style="height: 30px; -webkit-line-clamp: 2; text-align: center;">${descriptionText}</div>`;
+            
+            card.itemData = data; 
+            gridElement.appendChild(card);
+        }
+        
+        // NOVO: Renderiza o feed com injeções
         function renderDynamicFeedLayout(content) {
             mainContentContainer.innerHTML = ''; 
             
             if (content.length === 0) {
-                mainContentContainer.innerHTML = `<div class="no-search-results">Nenhum conteúdo encontrado para exibir. Verifique suas regras do Firestore.</div>`;
+                mainContentContainer.innerHTML = `<div class="no-search-results">Nenhum conteúdo encontrado para exibir.</div>`;
                 return;
             }
             
@@ -826,12 +960,19 @@
             injectionIndex = 0; 
 
             content.forEach((item, index) => {
-                renderAppCard(item, feedContainer); 
+                const isVerticalCard = true; // Todo card no feed principal é vertical
+                
+                if (isVerticalCard) {
+                    // Renderiza o card no layout vertical (2 colunas)
+                    renderAppCard(item, feedContainer); 
+                }
 
+                // Lógica de injeção a cada INJECTION_INTERVAL itens no feed vertical
                 if ((index + 1) % INJECTION_INTERVAL === 0) {
                     let typeToInject = null;
                     let initialIndex = injectionIndex;
                     
+                    // Roda em loop para encontrar o próximo tipo de conteúdo ainda não injetado
                     do {
                         let currentType = contentSectionsOrder[injectionIndex];
                         if (!injectedTypes.has(currentType) && allContent.some(app => app.type === currentType)) {
@@ -845,7 +986,8 @@
                         const sectionContent = allContent.filter(app => app.type === typeToInject).slice(0, 8);
                         
                         if (sectionContent.length > 0) {
-                            injectHorizontalSection(typeToInject, sectionContent);
+                            // Injeta a seção horizontal
+                            injectHorizontalSection(typeToInject, sectionContent, mainContentContainer);
                             injectedTypes.add(typeToInject);
                             injectionIndex = (injectionIndex + 1) % contentSectionsOrder.length;
                         }
@@ -853,6 +995,16 @@
                 }
             });
             
+            // Coloca as "sugestões de apps" ou "mais da mesma categoria" no final se não foram injetadas
+            contentSectionsOrder.forEach(typeId => {
+                if (!injectedTypes.has(typeId)) {
+                     const sectionContent = allContent.filter(app => app.type === typeId).slice(0, 8);
+                     if (sectionContent.length > 0) {
+                         injectHorizontalSection(typeId, sectionContent, mainContentContainer);
+                     }
+                }
+            });
+
             bindViewAllEvents();
         }
 
@@ -867,7 +1019,7 @@
                 return;
             }
             
-            content.forEach(data => renderAppCard(data, grid));
+            content.forEach(data => renderAppCard(data, grid)); // Usa a renderização vertical (2 colunas)
             targetElement.appendChild(grid);
         }
 
@@ -935,7 +1087,8 @@
             } else {
                 const filteredContent = allContent.filter(item => item.type === typeId);
                 mainContentContainer.innerHTML = '';
-                renderVerticalGrid(filteredContent, mainContentContainer);
+                // Quando o filtro de categoria é ativado, mostra apenas a grade vertical
+                renderVerticalGrid(filteredContent, mainContentContainer); 
             }
         }
 
@@ -995,7 +1148,7 @@
             if (relatedItems.length > 0) {
                 relatedAppsSection.style.display = 'block';
                 relatedItems.forEach(item => {
-                    renderAppCard(item, relatedAppsGrid); 
+                    renderAppCardHorizontal(item, relatedAppsGrid); /* Usa a renderização horizontal aqui */
                 });
             } else {
                 relatedAppsSection.style.display = 'none';
@@ -1110,12 +1263,15 @@
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
-            console.log("DOM e Script Carregados. Inicializando App. (v3.4)"); 
+            console.log("DOM e Script Carregados. Inicializando App. (v3.5)"); 
             
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons(); 
                 console.log("Ícones Lucide renderizados.");
             }
+
+            // Tratamento do Redirect antes de carregar o conteúdo
+            await handleGoogleRedirect(); 
 
             await loadContentFromFirestore();
             await checkForForcedUpdate(); 
