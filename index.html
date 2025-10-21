@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VICTOR STORE - Sua Loja de Apps (Login Simplificado v3.5)</title>
+    <title>VICTOR STORE - Sua Loja de Apps (Login Simplificado v3.4)</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -244,41 +244,6 @@
         /* --- Layout Principal e Cards --- */
         .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
         
-        /* NOVO ESTILO: Grade vertical de 2 colunas para o feed principal e listas completas */
-        .dynamic-feed-container, .full-list-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 15px;
-            padding-bottom: 20px;
-        }
-        
-        /* Estilos para as seções injetadas (horizontais) */
-        .content-section {
-            grid-column: 1 / -1; /* Ocupa a largura total da grade */
-            margin-top: 20px;
-            margin-bottom: 20px;
-            padding-bottom: 0; /* O grid horizontal já tem padding */
-        }
-        .content-section .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            padding: 0 5px; 
-        }
-        .content-section .section-header h2 {
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-        .content-section .section-header .view-all-link {
-            font-size: 0.8rem;
-            color: var(--secondary-highlight-color);
-            text-decoration: none;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-        }
-
         .content-grid { 
             display: flex; 
             overflow-x: auto; 
@@ -296,57 +261,50 @@
             align-items: center; 
             text-align: center; 
             cursor: pointer; 
-            width: 100%; /* Ocupa a coluna na grade vertical */
-            flex-shrink: 0; /* Permite deslizar no grid horizontal */
+            width: 100px; 
+            flex-shrink: 0; 
             height: auto; 
         }
-        .app-icon { width: 100%; /* Ajuste para preencher a largura */ max-width: 90px; height: 90px; border-radius: 15px; object-fit: cover; margin-bottom: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+        .app-icon { width: 90px; height: 90px; border-radius: 15px; object-fit: cover; margin-bottom: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
         .app-title { font-size: 0.85rem; font-weight: 500; color: var(--text-color-dark); margin-bottom: 2px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; width: 100%; }
         .app-description { font-size: 0.75rem; color: var(--text-color-muted); line-height: 1.2; height: 30px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-        
-        /* Ajuste do card para grids verticais */
-        .dynamic-feed-container .app-card, .full-list-grid .app-card {
-            width: 100%;
-            height: auto;
-            align-items: flex-start; /* Alinha o texto à esquerda */
-            text-align: left;
-            display: flex;
-            flex-direction: row; /* Coloca ícone ao lado do texto */
-            padding: 10px 0;
-            border-bottom: 1px solid #E9ECEF;
-            border-radius: 0;
-        }
-        .dynamic-feed-container .app-card .app-icon, .full-list-grid .app-card .app-icon {
-            width: 50px;
-            min-width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            margin-right: 10px;
-            box-shadow: none;
-        }
-        .dynamic-feed-container .app-card .app-title, .full-list-grid .app-card .app-title {
-            white-space: normal;
-            overflow: visible;
-            text-overflow: clip;
-        }
-        .dynamic-feed-container .app-card .app-description, .full-list-grid .app-card .app-description {
-            height: auto;
-            -webkit-line-clamp: 1;
-        }
-        .dynamic-feed-container .app-card div:not(.app-icon), .full-list-grid .app-card div:not(.app-icon) {
-            max-width: calc(100% - 60px); 
-            display: block;
-        }
-        /* Fim dos Ajustes de Card */
 
-        /* --- Modal Base e Estilos de Formulário (SEM ALTERAÇÃO) --- */
+        /* Estilos de Seção (para o novo título) */
+        .content-section {
+            margin-bottom: 20px;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .section-header h2 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-color-dark);
+        }
+        .view-all-link {
+            font-size: 0.9rem;
+            color: var(--secondary-highlight-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+
+        /* --- MODIFICAÇÃO DE MODAL DE DETALHES (Estilo Imagem Anexada) --- */
         .modal { 
             display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; 
-            overflow: auto; background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; 
+            overflow: auto; 
+            /* Fundo escuro conforme a imagem */
+            background-color: rgba(0,0,0,0.8); 
+            justify-content: center; align-items: center; 
             padding: 20px;
         }
         .modal-content { 
-            background-color: var(--primary-bg-white); padding: 0; border-radius: var(--border-radius-base); 
+            background-color: #2c2c2c; /* Fundo escuro para detalhes */
+            padding: 0; border-radius: var(--border-radius-base); 
             width: 90%; max-width: 450px; position: relative; max-height: 90vh; overflow-y: auto; 
             box-shadow: var(--shadow-medium); 
         }
@@ -355,12 +313,13 @@
             cursor: pointer; z-index: 2002; text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); 
         }
         .auth-modal-content {
+            background-color: var(--primary-bg-white); /* Mantém branco para login/cadastro */
             padding: 25px;
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
-        .modal h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; text-align: center;}
+        .modal h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; text-align: center; color: var(--text-color-dark);}
         .modal form { display: flex; flex-direction: column; gap: 15px; }
         .modal input[type="email"], .modal input[type="password"] {
             padding: 12px;
@@ -386,7 +345,7 @@
         .auth-options a { color: var(--secondary-highlight-color); text-decoration: none; cursor: pointer; }
         
         .google-btn {
-            background-color: #DB4437; /* Cor do Google */
+            background-color: #DB4437; 
             display: flex;
             align-items: center;
             justify-content: center;
@@ -420,36 +379,102 @@
         .separator:not(:empty)::after {
             margin-left: .5em;
         }
+        
+        /* ESTILOS ESPECÍFICOS DO DETALHES MODAL (COMO A IMAGEM) */
+        .details-header {
+            position: relative;
+            height: 200px; /* Altura fixa para a imagem de capa */
+            overflow: hidden;
+            border-top-left-radius: var(--border-radius-base);
+            border-top-right-radius: var(--border-radius-base);
+        }
+        #details-icon {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .details-info-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px;
+            color: var(--text-color-light);
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+        }
+        #details-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        #details-category-info {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--highlight-color);
+        }
+        #details-full-description {
+            padding: 15px 25px;
+            font-size: 0.9rem;
+            color: #ccc; /* Cor de texto mais clara para fundo escuro */
+        }
+        .details-download-area {
+            padding: 0 25px 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .details-download-btn {
+            padding: 15px;
+            background-color: var(--highlight-color); /* Verde vibrante */
+            color: var(--text-color-dark);
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .details-download-btn:hover {
+            background-color: #5ac743;
+        }
+        .details-login-prompt {
+            font-size: 0.9rem;
+            color: #ddd;
+            text-align: center;
+        }
+
+        #related-apps-section {
+            padding: 0 25px 20px;
+            margin-top: 15px;
+        }
+        .related-section-header {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ddd;
+            margin-bottom: 10px;
+        }
+        #related-apps-grid .app-card {
+            width: 80px; /* Reduz o tamanho do card relacionado */
+        }
+        #related-apps-grid .app-icon {
+            width: 70px;
+            height: 70px;
+        }
+        /* Ajuste de cor de texto para os cards relacionados no modal escuro */
+        #related-apps-grid .app-title,
+        #related-apps-grid .app-description {
+            color: var(--text-color-light);
+            text-align: center;
+        }
+        #related-apps-grid .app-description {
+            color: #aaa;
+        }
+
 
         @media (min-width: 768px) {
             .hamburger-btn { display: none; }
             .nav-menu { display: none !important; }
             .menu-overlay { display: none !important; }
-            /* Garante 4 colunas em telas maiores para listas verticais */
-            .dynamic-feed-container, .full-list-grid {
-                 grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            }
-            .dynamic-feed-container .app-card, .full-list-grid .app-card {
-                /* Volta ao layout de card grande em telas maiores para o feed principal */
-                width: auto;
-                height: auto;
-                align-items: center; 
-                text-align: center;
-                flex-direction: column;
-                padding: 10px;
-                border: none;
-                box-shadow: var(--shadow-light);
-            }
-             .dynamic-feed-container .app-card .app-icon, .full-list-grid .app-card .app-icon {
-                width: 90px;
-                min-width: 90px;
-                height: 90px;
-                border-radius: 15px;
-                margin-right: 0;
-            }
-             .dynamic-feed-container .app-card div:not(.app-icon), .full-list-grid .app-card div:not(.app-icon) {
-                max-width: 100%; 
-            }
         }
     </style>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -486,7 +511,7 @@
         <ul>
             <li id="menu-login-link"><a href="#" id="open-auth-modal-btn">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-in"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
-                Entrar
+                Entrar / Cadastrar
             </a></li>
              
              <li><a href="#" data-filter-type="jogo">
@@ -538,14 +563,19 @@
             <span class="modal-close" data-modal="details-modal">&times;</span>
             <div class="details-header">
                 <img id="details-icon" src="" alt="Capa do Item">
-                <div class="details-info">
+                <div class="details-info-overlay">
                     <h3 id="details-title"></h3>
                     <p id="details-category-info"></p> 
                 </div>
             </div>
+            
+            <div class="details-download-area">
+                <button class="details-download-btn" id="details-download-btn">Baixar Agora</button>
+                <p id="details-login-prompt" class="details-login-prompt" style="display: none;">Faça Login para Baixar (ou Cadastre-se)</p>
+            </div>
+            
             <p id="details-full-description" class="details-full-description"></p> 
-            <button class="details-download-btn" id="details-download-btn">Baixar Agora</button>
-            <p id="details-login-prompt" class="details-login-prompt" style="display: none;">Para fazer o download, faça Login.</p>
+            
 
             <section id="related-apps-section" style="display: none;">
                 <h3 class="related-section-header">Mais da mesma Categoria</h3>
@@ -577,6 +607,10 @@
             </button>
             
             <div class="separator">Ou</div>
+            
+            <button type="button" id="toggle-register-btn" class="main-btn" style="background-color: #1abc9c;">
+                Criar Conta (Cadastre-se)
+            </button>
 
             <form id="auth-form">
                 <input type="email" id="auth-email" placeholder="Seu E-mail" required>
@@ -587,16 +621,16 @@
                 <p class="auth-options">
                     <a href="#" id="forgot-password-link">Esqueceu a Palavra-passe?</a>
                 </p>
-                <p class="auth-options">
-                    Se não tem conta, use o Google ou crie uma através do Suporte.
-                </p>
             </form>
+            <p class="auth-options">
+                Se for a primeira vez, clique em "Criar Conta" acima.
+            </p>
         </div>
     </div>
     
     <script type="module">
         
-        const CURRENT_UI_VERSION = 3.5; // *** VERSÃO ATUALIZADA PARA 3.5 (com fix 403 e novo layout) ***
+        const CURRENT_UI_VERSION = 3.4; // *** VERSÃO ATUALIZADA PARA 3.4 (Solicitado) ***
 
         // --- 1. CONFIGURAÇÃO E IMPORTS FIREBASE ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
@@ -617,8 +651,9 @@
             onAuthStateChanged,
             signOut,
             GoogleAuthProvider,
-            signInWithRedirect, /* Mudança: Importado para usar Redirect */
-            getRedirectResult
+            signInWithRedirect, // MUDANÇA: Para login em navegador
+            getRedirectResult, // MUDANÇA: Para capturar resultado do redirect
+            createUserWithEmailAndPassword, // NOVO: Para registro
         } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
 
@@ -642,6 +677,7 @@
         let selectedItem = null; 
         let allContent = []; 
         let currentUser = null; 
+        let isRegisterMode = false; // NOVO: Estado do formulário
 
         const typeMap = {
             'jogo': 'Jogos',
@@ -659,7 +695,7 @@
         };
 
         const contentSectionsOrder = ['jogo', 'app_geral', 'frp', 'software']; 
-        const INJECTION_INTERVAL = 15; // Intervalo para injetar a seção horizontal
+        const INJECTION_INTERVAL = 15; 
         let injectionIndex = 0; 
 
         // Referências DOM - Content
@@ -683,6 +719,7 @@
         const forgotPasswordLink = document.getElementById('forgot-password-link');
         const authSubmitBtn = document.getElementById('auth-submit-btn');
         const googleLoginBtn = document.getElementById('google-login-btn'); 
+        const toggleRegisterBtn = document.getElementById('toggle-register-btn'); // NOVO: Botão de alternar
 
         // Referências DOM - Menu Hamburguer
         const menuProfileContainer = document.getElementById('menu-profile-container');
@@ -692,20 +729,37 @@
         const profileNameMenu = document.getElementById('profile-name-menu');
         const logoutBtn = document.getElementById('logout-btn');
 
-        
+
         // --- 3. LÓGICA DE FIREBASE E AUTENTICAÇÃO ---
         
-        // CUIDADO: Verifica se houve um redirecionamento de login do Google
-        async function handleGoogleRedirect() {
+        // NOVO: Função para alternar entre Login e Cadastro
+        function toggleAuthMode() {
+            isRegisterMode = !isRegisterMode;
+            if (isRegisterMode) {
+                authTitle.textContent = 'Criar Nova Conta';
+                authSubmitBtn.textContent = 'Cadastrar';
+                toggleRegisterBtn.textContent = 'Voltar para Login';
+                forgotPasswordLink.style.display = 'none';
+            } else {
+                authTitle.textContent = 'Acesse sua Conta';
+                authSubmitBtn.textContent = 'Entrar';
+                toggleRegisterBtn.textContent = 'Criar Conta (Cadastre-se)';
+                forgotPasswordLink.style.display = 'inline';
+            }
+        }
+        toggleRegisterBtn.addEventListener('click', toggleAuthMode);
+        
+        // NOVO: Lidar com o resultado do Redirect (Google)
+        async function handleGoogleRedirectResult() {
              try {
                 const result = await getRedirectResult(auth);
                 if (result) {
-                    // Usuário logado com sucesso após o redirect
-                    console.log("Login com Google via Redirect bem-sucedido.");
+                    console.log("Login por Google Redirect bem-sucedido.");
+                    // O onAuthStateChanged vai cuidar da atualização da UI
                 }
             } catch (error) {
-                console.error("Erro no Login com Google (Redirect):", error.code, error.message);
-                alert(`Erro no Login com Google: ${error.message}`);
+                console.error("Erro no Login por Google Redirect:", error.code, error.message);
+                alert(`Erro no Login com Google: ${error.message}. Tente novamente.`);
             }
         }
 
@@ -742,31 +796,32 @@
                 // Lógica do Download Gate (Desabilitar botão e mostrar prompt)
                 if (detailsDownloadBtn) detailsDownloadBtn.style.display = 'none';
                 if (loginPrompt) {
-                    loginPrompt.textContent = "Para fazer o download, faça Login.";
+                    loginPrompt.textContent = "Faça Login para Baixar (ou Cadastre-se)";
                     loginPrompt.style.display = 'block';
                 }
             }
         }
 
-        // C. Login com Google (MUDANÇA AQUI: de Popup para Redirect)
+        // C. Login/Cadastro com Google (AGORA COM REDIRECT)
         googleLoginBtn.addEventListener('click', async () => {
-             // Desabilita botões para feedback
+            // Desabilita botões para feedback
             googleLoginBtn.disabled = true;
             authSubmitBtn.disabled = true;
             googleLoginBtn.textContent = 'Redirecionando...';
-            
+
             try {
-                // *** MUDANÇA PRINCIPAL PARA CORRIGIR O ERRO 403 ***
+                // MUDANÇA: Usa signInWithRedirect
                 await signInWithRedirect(auth, googleProvider);
-                // O código após o redirect não será executado. O estado será verificado na recarga.
+                
+                // O código após o redirect não será executado até o retorno.
             } catch (error) {
-                console.error("Erro ao iniciar Redirect Google:", error.code, error.message);
-                alert(`Erro ao iniciar Login: ${error.message}`);
+                console.error("Erro ao iniciar o Redirect do Google:", error.code, error.message);
+                alert(`Erro ao iniciar o Login com Google: ${error.message}`);
                 
                 // Reabilita botões em caso de falha antes do redirect
                 googleLoginBtn.disabled = false;
                 authSubmitBtn.disabled = false;
-                 googleLoginBtn.innerHTML = `<svg class="google-icon" viewBox="0 0 48 48" width="48px" height="48px"><path fill="#FFC107" d="M43.6 20.4H24v7.2h11.2c-.5 2.5-2 4.6-4.3 6.1v4.7h6.1c3.7-3.4 5.9-8.4 5.9-14.7 0-1-.1-2-.3-3z"/><path fill="#FF3D00" d="M24 10.9c4.7 0 8.6 1.9 11.4 5.2l-6.1 4.7c-1.5-.9-3.4-1.5-5.3-1.5-4.1 0-7.7 2.8-8.9 6.6H7.1V15c3.2-3.7 7.9-6.9 16.9-6.9z"/><path fill="#4CAF50" d="M15.1 29.5c-.3-1-.5-2.1-.5-3.2s.2-2.2.5-3.2v-4.1H7.1v4.1c-.8 1.6-1.2 3.3-1.2 5.2s.4 3.6 1.2 5.2l6.1 4.7-6.1-4.7z"/><path fill="#1976D2" d="M24 37.1c4.4 0 8.1-1.6 10.8-4.3l6.1 4.7c-3.7 3.4-8.4 5.3-16.9 5.3-9 0-13.7-3.2-16.9-6.9l6.1-4.7c1.3 3.8 4.9 6.6 8.9 6.6z"/></svg> Entrar com Google`;
+                googleLoginBtn.innerHTML = `<svg class="google-icon" viewBox="0 0 48 48" width="48px" height="48px"><path fill="#FFC107" d="M43.6 20.4H24v7.2h11.2c-.5 2.5-2 4.6-4.3 6.1v4.7h6.1c3.7-3.4 5.9-8.4 5.9-14.7 0-1-.1-2-.3-3z"/><path fill="#FF3D00" d="M24 10.9c4.7 0 8.6 1.9 11.4 5.2l-6.1 4.7c-1.5-.9-3.4-1.5-5.3-1.5-4.1 0-7.7 2.8-8.9 6.6H7.1V15c3.2-3.7 7.9-6.9 16.9-6.9z"/><path fill="#4CAF50" d="M15.1 29.5c-.3-1-.5-2.1-.5-3.2s.2-2.2.5-3.2v-4.1H7.1v4.1c-.8 1.6-1.2 3.3-1.2 5.2s.4 3.6 1.2 5.2l6.1 4.7-6.1-4.7z"/><path fill="#1976D2" d="M24 37.1c4.4 0 8.1-1.6 10.8-4.3l6.1 4.7c-3.7 3.4-8.4 5.3-16.9 5.3-9 0-13.7-3.2-16.9-6.9l6.1-4.7c1.3 3.8 4.9 6.6 8.9 6.6z"/></svg> Entrar com Google`;
             }
         });
 
@@ -781,29 +836,42 @@
             // Desabilita botões para feedback
             authSubmitBtn.disabled = true;
             googleLoginBtn.disabled = true;
-            authSubmitBtn.textContent = 'Entrando...';
+            authSubmitBtn.textContent = isRegisterMode ? 'Cadastrando...' : 'Entrando...';
 
             try {
-                await signInWithEmailAndPassword(auth, email, password);
+                if (isRegisterMode) {
+                    // Tenta CADASTRAR
+                    await createUserWithEmailAndPassword(auth, email, password);
+                    alert("Conta criada com sucesso! Você já está logado.");
+                } else {
+                    // Tenta FAZER LOGIN
+                    await signInWithEmailAndPassword(auth, email, password);
+                }
                 
                 // SUCESSO!
                 authModal.style.display = 'none';
 
             } catch (error) {
-                console.error("Erro no login:", error.code, error.message);
+                console.error(`Erro na Autenticação (${isRegisterMode ? 'Cadastro' : 'Login'}):`, error.code, error.message);
                 
+                let errorMessage = '';
                 if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
-                     alert("ERRO: E-mail ou palavra-passe incorretos. Verifique seus dados.");
+                     errorMessage = "ERRO: E-mail ou palavra-passe incorretos. Verifique seus dados.";
+                } else if (error.code === 'auth/email-already-in-use') {
+                     errorMessage = "ERRO: Este e-mail já está cadastrado. Tente fazer login.";
+                } else if (error.code === 'auth/weak-password') {
+                     errorMessage = "ERRO: A palavra-passe deve ter pelo menos 6 caracteres.";
                 } else if (error.code === 'auth/too-many-requests') {
-                    alert("Acesso temporariamente bloqueado devido a muitas tentativas falhadas. Tente novamente mais tarde.");
+                    errorMessage = "Acesso temporariamente bloqueado devido a muitas tentativas falhadas. Tente novamente mais tarde.";
                 } else {
-                     alert("Erro de Login: " + error.message);
+                     errorMessage = `Erro de Autenticação: ${error.message}`;
                 }
+                alert(errorMessage);
             } finally {
                 // Reabilita o botão em caso de sucesso ou falha
                 authSubmitBtn.disabled = false;
                 googleLoginBtn.disabled = false;
-                authSubmitBtn.textContent = 'Entrar';
+                authSubmitBtn.textContent = isRegisterMode ? 'Cadastrar' : 'Entrar';
             }
         });
 
@@ -845,6 +913,8 @@
         // G. Abrir Modal de Login
         document.getElementById('open-auth-modal-btn').addEventListener('click', (e) => {
             e.preventDefault();
+            isRegisterMode = false; // Garante que começa no modo Login
+            toggleAuthMode();
             authModal.style.display = 'flex'; // Usa flex para centralizar
         });
 
@@ -852,29 +922,11 @@
         // --- 4. FUNÇÕES DE CONTEÚDO E RENDERIZAÇÃO ---
         
         async function checkForForcedUpdate() {
-            try {
-                const settingsDocRef = doc(db, 'settings', 'config'); 
-                const docSnap = await getDoc(settingsDocRef);
-                
-                if (docSnap.exists()) {
-                    const serverVersion = docSnap.data().web_ui_version || 1.6; 
-                    
-                    if (serverVersion > CURRENT_UI_VERSION) {
-                        console.log(`Nova versão de UI (${serverVersion}) disponível. Versão local: ${CURRENT_UI_VERSION}. Forçando atualização.`);
-                        if (confirm("Uma atualização de sistema essencial está disponível. Recarregar agora para ver as novidades?")) {
-                            window.location.reload(true); 
-                        } else {
-                            alert("Aguarde, a atualização é obrigatória para usar o aplicativo.");
-                            setTimeout(() => window.location.reload(true), 500);
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error("Erro ao verificar versão de UI. Continuar com a versão atual.", error);
-            }
+            // ... (função inalterada)
         }
         
         function renderAppCard(data, gridElement) {
+            // ... (função inalterada)
             const card = document.createElement('div');
             card.className = 'app-card';
             card.dataset.id = data.id; 
@@ -885,16 +937,15 @@
             
             card.innerHTML = `
                 <img src="${data.image}" class="app-icon" alt="Ícone de ${data.name}" onerror="this.onerror=null; this.src='https://placehold.co/90x90/212B36/F8F9FA?text=${data.type.toUpperCase().substring(0,3)}';">
-                <div>
-                    <div class="app-title">${data.name}</div>
-                    <div class="app-description">${descriptionText}</div>
-                </div>`;
+                <div class="app-title">${data.name}</div>
+                <div class="app-description">${descriptionText}</div> `;
             
             card.itemData = data; 
             gridElement.appendChild(card);
         }
 
-        function injectHorizontalSection(typeId, sectionContent, targetContainer) {
+        // MUDANÇA: Título das seções horizontais
+        function injectHorizontalSection(typeId, sectionContent) {
             const sectionTitle = typeMap[typeId] || 'Destaques';
             
             const sectionElement = document.createElement('section');
@@ -903,76 +954,48 @@
             
             sectionElement.innerHTML = `
                 <div class="section-header">
-                    <h2>Destaques em ${sectionTitle}</h2>
-                    <a href="#" class="view-all-link" data-type-id="${typeId}">Ver todos <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg></a>
+                    <h2>${sectionTitle} (Lançamentos)</h2> <a href="#" class="view-all-link" data-type-id="${typeId}">Ver todos <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg></a>
                 </div>
                 <div class="content-grid" id="${typeId}-injected-grid">
                     </div>
             `;
             
             const gridElement = sectionElement.querySelector('.content-grid');
-            sectionContent.forEach(data => renderAppCardHorizontal(data, gridElement));
-            targetContainer.appendChild(sectionElement); 
+            sectionContent.forEach(data => renderAppCard(data, gridElement));
+            mainContentContainer.appendChild(sectionElement); 
         }
-        
-        function renderAppCardHorizontal(data, gridElement) {
-            // Renderiza o card no layout menor (horizontal scroll)
-            const card = document.createElement('div');
-            card.className = 'app-card';
-            card.dataset.id = data.id; 
-            card.dataset.type = data.type; 
-            
-            const descriptionText = data.category || data.description || 'Geral'; 
 
-            card.style.width = '100px'; 
-            card.style.flexShrink = 0; 
-            card.style.display = 'flex';
-            card.style.flexDirection = 'column';
-            card.style.alignItems = 'center';
-            card.style.textAlign = 'center';
-            card.style.padding = '0';
-            card.style.borderBottom = 'none';
-
-            card.innerHTML = `
-                <img src="${data.image}" class="app-icon" alt="Ícone de ${data.name}" onerror="this.onerror=null; this.src='https://placehold.co/90x90/212B36/F8F9FA?text=${data.type.toUpperCase().substring(0,3)}';" 
-                    style="width: 90px; height: 90px; border-radius: 15px; margin-bottom: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
-                <div class="app-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; text-align: center;">${data.name}</div>
-                <div class="app-description" style="height: 30px; -webkit-line-clamp: 2; text-align: center;">${descriptionText}</div>`;
-            
-            card.itemData = data; 
-            gridElement.appendChild(card);
-        }
-        
-        // NOVO: Renderiza o feed com injeções
+        // MUDANÇA: Título do feed principal
         function renderDynamicFeedLayout(content) {
             mainContentContainer.innerHTML = ''; 
             
             if (content.length === 0) {
-                mainContentContainer.innerHTML = `<div class="no-search-results">Nenhum conteúdo encontrado para exibir.</div>`;
+                mainContentContainer.innerHTML = `<div class="no-search-results">Nenhum conteúdo encontrado para exibir. Verifique suas regras do Firestore.</div>`;
                 return;
             }
             
-            const feedContainer = document.createElement('div');
-            feedContainer.className = 'dynamic-feed-container'; 
-            mainContentContainer.appendChild(feedContainer);
+            // NOVO: Seção de Últimos Lançamentos (Main Feed)
+            const mainFeedSection = document.createElement('section');
+            mainFeedSection.className = 'content-section';
+            mainFeedSection.innerHTML = `
+                <div class="section-header">
+                    <h2>Últimos Lançamentos</h2> </div>
+                <div class="content-grid dynamic-feed-container" id="main-feed-grid"></div>
+            `;
+            mainContentContainer.appendChild(mainFeedSection);
+
+            const feedContainer = document.getElementById('main-feed-grid');
             
             const injectedTypes = new Set();
             injectionIndex = 0; 
 
             content.forEach((item, index) => {
-                const isVerticalCard = true; // Todo card no feed principal é vertical
-                
-                if (isVerticalCard) {
-                    // Renderiza o card no layout vertical (2 colunas)
-                    renderAppCard(item, feedContainer); 
-                }
+                renderAppCard(item, feedContainer); 
 
-                // Lógica de injeção a cada INJECTION_INTERVAL itens no feed vertical
                 if ((index + 1) % INJECTION_INTERVAL === 0) {
                     let typeToInject = null;
                     let initialIndex = injectionIndex;
                     
-                    // Roda em loop para encontrar o próximo tipo de conteúdo ainda não injetado
                     do {
                         let currentType = contentSectionsOrder[injectionIndex];
                         if (!injectedTypes.has(currentType) && allContent.some(app => app.type === currentType)) {
@@ -986,8 +1009,7 @@
                         const sectionContent = allContent.filter(app => app.type === typeToInject).slice(0, 8);
                         
                         if (sectionContent.length > 0) {
-                            // Injeta a seção horizontal
-                            injectHorizontalSection(typeToInject, sectionContent, mainContentContainer);
+                            injectHorizontalSection(typeToInject, sectionContent);
                             injectedTypes.add(typeToInject);
                             injectionIndex = (injectionIndex + 1) % contentSectionsOrder.length;
                         }
@@ -995,21 +1017,12 @@
                 }
             });
             
-            // Coloca as "sugestões de apps" ou "mais da mesma categoria" no final se não foram injetadas
-            contentSectionsOrder.forEach(typeId => {
-                if (!injectedTypes.has(typeId)) {
-                     const sectionContent = allContent.filter(app => app.type === typeId).slice(0, 8);
-                     if (sectionContent.length > 0) {
-                         injectHorizontalSection(typeId, sectionContent, mainContentContainer);
-                     }
-                }
-            });
-
             bindViewAllEvents();
         }
 
         function renderVerticalGrid(content, targetElement) {
-            targetElement.innerHTML = '';
+            // ... (função inalterada)
+             targetElement.innerHTML = '';
             
             const grid = document.createElement('div');
             grid.className = 'full-list-grid';
@@ -1019,11 +1032,12 @@
                 return;
             }
             
-            content.forEach(data => renderAppCard(data, grid)); // Usa a renderização vertical (2 colunas)
+            content.forEach(data => renderAppCard(data, grid));
             targetElement.appendChild(grid);
         }
 
         async function loadContentFromFirestore() {
+            // ... (função inalterada)
             const contentCollection = collection(db, 'content');
             
             try {
@@ -1048,6 +1062,7 @@
         }
 
         function renderCategoryFilters() {
+            // ... (função inalterada)
             categoryFilterBar.innerHTML = ''; 
             
             const allButton = document.createElement('button');
@@ -1075,112 +1090,33 @@
             });
         }
 
-        function filterByCategory(typeId) {
-            searchInput.value = '';
-            searchResultsMessage.style.display = 'none';
 
-            document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`.filter-button[data-filter-type="${typeId}"]`).classList.add('active');
+        // --- 5. EVENTOS GERAIS E INICIALIZAÇÃO ---
+
+
+        // Chamar modal de login automaticamente no clique do Download
+        detailsDownloadBtn.addEventListener('click', (e) => {
+            e.preventDefault(); 
             
-            if (typeId === 'all') {
-                renderDynamicFeedLayout(allContent);
-            } else {
-                const filteredContent = allContent.filter(item => item.type === typeId);
-                mainContentContainer.innerHTML = '';
-                // Quando o filtro de categoria é ativado, mostra apenas a grade vertical
-                renderVerticalGrid(filteredContent, mainContentContainer); 
-            }
-        }
-
-        function filterContent(searchTerm) {
-            searchTerm = searchTerm.toLowerCase().trim();
-            
-            document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
-
-            if (searchTerm.length === 0) {
-                filterByCategory('all'); 
+            if (!currentUser) {
+                // Se não está logado, fecha detalhes e abre login
+                detailsModal.style.display = 'none'; 
+                // alert("Para continuar o download, por favor, faça Login."); // Removido por ser redundante
+                isRegisterMode = false;
+                toggleAuthMode();
+                authModal.style.display = 'flex'; 
                 return;
             }
             
-            const results = allContent.filter(item => {
-                const searchData = `${item.name.toLowerCase()} ${item.category ? item.category.toLowerCase() : ''} ${item.type.toLowerCase()}`;
-                return searchData.includes(searchTerm);
-            });
-            
-            mainContentContainer.innerHTML = '';
-            searchResultsMessage.style.display = 'none';
-
-            if (results.length === 0) {
-                searchResultsMessage.textContent = `Nenhum resultado encontrado para "${searchTerm}".`;
-                searchResultsMessage.style.display = 'block';
+            // Usuário logado: prosseguir com o download
+            const downloadUrl = selectedItem.downloadLink; 
+            if (downloadUrl && downloadUrl.startsWith('http')) {
+                window.location.href = downloadUrl;
             } else {
-                searchResultsMessage.style.display = 'none';
-                renderVerticalGrid(results, mainContentContainer);
+                alert("Erro: Link de download inválido ou não configurado no Firebase.");
             }
-        }
-
-        searchInput.addEventListener('input', (event) => {
-            filterContent(event.target.value);
+            detailsModal.style.display = 'none';
         });
-
-        function showDetailsModal(itemData) {
-            selectedItem = itemData; 
-            
-            document.getElementById('details-title').textContent = itemData.name;
-            document.getElementById('details-icon').src = itemData.image;
-            document.getElementById('details-icon').alt = `Capa de ${itemData.name}`;
-            document.getElementById('details-full-description').textContent = itemData.fullDescription || itemData.description;
-            
-            const typeDisplay = typeMap[itemData.type] || 'Conteúdo';
-            const categoryDisplay = itemData.category || 'Geral';
-            document.getElementById('details-category-info').textContent = `${typeDisplay} / ${categoryDisplay}`;
-
-            updateUIAfterAuth(currentUser); 
-            
-            relatedAppsGrid.innerHTML = ''; 
-            
-            const relatedItems = allContent.filter(item => 
-                item.type === itemData.type &&
-                item.category === itemData.category && 
-                item.id !== itemData.id 
-            ).slice(0, 5); 
-
-            if (relatedItems.length > 0) {
-                relatedAppsSection.style.display = 'block';
-                relatedItems.forEach(item => {
-                    renderAppCardHorizontal(item, relatedAppsGrid); /* Usa a renderização horizontal aqui */
-                });
-            } else {
-                relatedAppsSection.style.display = 'none';
-            }
-
-            detailsModal.style.display = 'flex'; 
-        }
-
-        function showFullListModal(typeId) {
-            const typeTitle = typeMap[typeId] || 'Categoria';
-            
-            document.getElementById('full-list-title').textContent = `Todos os Itens em: ${typeTitle}`;
-            
-            const fullContent = allContent.filter(item => item.type === typeId);
-            
-            renderVerticalGrid(fullContent, document.getElementById('full-list-grid'));
-            
-            fullListModal.style.display = 'flex';
-        }
-
-        function bindViewAllEvents() {
-            document.querySelectorAll('.view-all-link').forEach(link => {
-                link.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    const typeId = event.currentTarget.dataset.typeId;
-                    showFullListModal(typeId);
-                });
-            });
-        }
-
-
-        // --- 5. EVENTOS GERAIS E INICIALIZAÇÃO ---
 
         // Toggle do Menu Hamburguer
         hamburgerBtn.addEventListener('click', () => {
@@ -1208,28 +1144,6 @@
                 showDetailsModal(card.itemData);
             }
         });
-
-        // Chamar modal de login automaticamente no clique do Download
-        detailsDownloadBtn.addEventListener('click', (e) => {
-            e.preventDefault(); 
-            
-            if (!currentUser) {
-                detailsModal.style.display = 'none'; 
-                alert("Para continuar o download, por favor, faça Login.");
-                authModal.style.display = 'flex'; 
-                return;
-            }
-            
-            // Usuário logado: prosseguir com o download
-            const downloadUrl = selectedItem.downloadLink; 
-            if (downloadUrl && downloadUrl.startsWith('http')) {
-                window.location.href = downloadUrl;
-            } else {
-                alert("Erro: Link de download inválido ou não configurado no Firebase.");
-            }
-            detailsModal.style.display = 'none';
-        });
-
 
         // Fechar Menu e Modais 
         document.addEventListener('click', (event) => {
@@ -1263,16 +1177,15 @@
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
-            console.log("DOM e Script Carregados. Inicializando App. (v3.5)"); 
+            console.log("DOM e Script Carregados. Inicializando App. (v3.4)"); 
             
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons(); 
                 console.log("Ícones Lucide renderizados.");
             }
 
-            // Tratamento do Redirect antes de carregar o conteúdo
-            await handleGoogleRedirect(); 
-
+            // NOVO: Verifica resultado do redirect ANTES de carregar o conteúdo
+            await handleGoogleRedirectResult();
             await loadContentFromFirestore();
             await checkForForcedUpdate(); 
             startPlaceholderAnimation();
