@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VICTOR STORE - Sua Loja de Apps (Login Simplificado v3.4)</title>
+    <title>VICTOR STORE - Sua Loja de Apps (Login Simplificado v3.8)</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -293,7 +293,7 @@
         }
 
 
-        /* --- MODIFICAÇÃO DE MODAL DE DETALHES (Estilo Imagem Anexada) --- */
+        /* --- MODAL DE DETALHES E LISTA (Estilo Imagem Anexada) --- */
         .modal { 
             display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; 
             overflow: auto; 
@@ -320,6 +320,16 @@
             gap: 15px;
         }
         .modal h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; text-align: center; color: var(--text-color-dark);}
+        
+        /* Ajuste para o Título do Modal de Detalhes e Lista */
+        #details-modal .modal-content h2,
+        #full-list-modal .modal-content h2 {
+            color: var(--text-color-light); /* Cor clara para fundos escuros */
+            padding: 20px 25px 0;
+            text-align: left;
+        }
+
+
         .modal form { display: flex; flex-direction: column; gap: 15px; }
         .modal input[type="email"], .modal input[type="password"] {
             padding: 12px;
@@ -467,6 +477,29 @@
             text-align: center;
         }
         #related-apps-grid .app-description {
+            color: #aaa;
+        }
+
+        /* --- NOVO ESTILO PARA O MODAL DE LISTA COMPLETA --- */
+        #full-list-modal .modal-content {
+            background-color: #2c2c2c;
+        }
+        .full-list-grid {
+            padding: 20px 25px; /* Adiciona padding no grid */
+            /* Estilos de Grid aplicados via JS para ser mais flexível */
+        }
+        .full-list-grid .app-card {
+            width: 100%; 
+            text-align: center;
+        }
+        .full-list-grid .app-icon {
+            margin: 0 auto 8px; /* Centraliza o ícone */
+        }
+        .full-list-grid .app-title,
+        .full-list-grid .app-description {
+            color: var(--text-color-light);
+        }
+        .full-list-grid .app-description {
             color: #aaa;
         }
 
@@ -630,7 +663,7 @@
     
     <script type="module">
         
-        const CURRENT_UI_VERSION = 3.4; // *** VERSÃO ATUALIZADA PARA 3.4 (Solicitado) ***
+        const CURRENT_UI_VERSION = 3.8; // *** VERSÃO ATUALIZADA PARA 3.8 ***
 
         // --- 1. CONFIGURAÇÃO E IMPORTS FIREBASE ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
@@ -640,8 +673,6 @@
             query, 
             orderBy, 
             getDocs,
-            doc,
-            getDoc,
             
         } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
         import { 
@@ -651,9 +682,10 @@
             onAuthStateChanged,
             signOut,
             GoogleAuthProvider,
-            signInWithRedirect, // MUDANÇA: Para login em navegador
-            getRedirectResult, // MUDANÇA: Para capturar resultado do redirect
-            createUserWithEmailAndPassword, // NOVO: Para registro
+            // Importações alteradas para usar Redirect:
+            signInWithRedirect, 
+            getRedirectResult,
+            createUserWithEmailAndPassword, 
         } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
 
@@ -671,13 +703,19 @@
         const auth = getAuth(app); 
         const googleProvider = new GoogleAuthProvider(); // Provedor Google
 
+        // --- CORREÇÃO DE BLOQUEIO GOOGLE: Configuração para forçar o seletor de conta ---
+        // Isso ajuda a garantir que o popup não seja bloqueado em algumas WebViews
+        googleProvider.setCustomParameters({
+            prompt: 'select_account' // Força o Google a pedir a seleção de conta
+        });
+
 
         // --- 2. VARIÁVEIS GLOBAIS E REFERÊNCIAS DOM ---
 
         let selectedItem = null; 
         let allContent = []; 
         let currentUser = null; 
-        let isRegisterMode = false; // NOVO: Estado do formulário
+        let isRegisterMode = false; 
 
         const typeMap = {
             'jogo': 'Jogos',
@@ -705,6 +743,8 @@
         const searchInput = document.getElementById('search-input');
         const detailsModal = document.getElementById('details-modal');
         const fullListModal = document.getElementById('full-list-modal');
+        const fullListTitle = document.getElementById('full-list-title');
+        const fullListGrid = document.getElementById('full-list-grid');
         const detailsDownloadBtn = document.getElementById('details-download-btn');
         const searchResultsMessage = document.getElementById('search-results-message');
         const relatedAppsGrid = document.getElementById('related-apps-grid'); 
@@ -719,7 +759,7 @@
         const forgotPasswordLink = document.getElementById('forgot-password-link');
         const authSubmitBtn = document.getElementById('auth-submit-btn');
         const googleLoginBtn = document.getElementById('google-login-btn'); 
-        const toggleRegisterBtn = document.getElementById('toggle-register-btn'); // NOVO: Botão de alternar
+        const toggleRegisterBtn = document.getElementById('toggle-register-btn'); 
 
         // Referências DOM - Menu Hamburguer
         const menuProfileContainer = document.getElementById('menu-profile-container');
@@ -732,7 +772,7 @@
 
         // --- 3. LÓGICA DE FIREBASE E AUTENTICAÇÃO ---
         
-        // NOVO: Função para alternar entre Login e Cadastro
+        // Função para alternar entre Login e Cadastro
         function toggleAuthMode() {
             isRegisterMode = !isRegisterMode;
             if (isRegisterMode) {
@@ -749,21 +789,6 @@
         }
         toggleRegisterBtn.addEventListener('click', toggleAuthMode);
         
-        // NOVO: Lidar com o resultado do Redirect (Google)
-        async function handleGoogleRedirectResult() {
-             try {
-                const result = await getRedirectResult(auth);
-                if (result) {
-                    console.log("Login por Google Redirect bem-sucedido.");
-                    // O onAuthStateChanged vai cuidar da atualização da UI
-                }
-            } catch (error) {
-                console.error("Erro no Login por Google Redirect:", error.code, error.message);
-                alert(`Erro no Login com Google: ${error.message}. Tente novamente.`);
-            }
-        }
-
-
         // A. Gerenciamento do Estado do Usuário
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
@@ -802,31 +827,47 @@
             }
         }
 
-        // C. Login/Cadastro com Google (AGORA COM REDIRECT)
+        // C. Login/Cadastro com Google (AGORA COM REDIRECT PARA COMPATIBILIDADE EXTERNA)
         googleLoginBtn.addEventListener('click', async () => {
             // Desabilita botões para feedback
             googleLoginBtn.disabled = true;
             authSubmitBtn.disabled = true;
-            googleLoginBtn.textContent = 'Redirecionando...';
+            googleLoginBtn.textContent = 'Redirecionando...'; // Feedback
 
             try {
-                // MUDANÇA: Usa signInWithRedirect
+                // *** CORREÇÃO: Usar signInWithRedirect para evitar problemas de pop-up/webview ***
                 await signInWithRedirect(auth, googleProvider);
-                
-                // O código após o redirect não será executado até o retorno.
+                // O código abaixo desta linha NÃO será executado.
+                // O Firebase redireciona o usuário para o provedor Google.
+
             } catch (error) {
-                console.error("Erro ao iniciar o Redirect do Google:", error.code, error.message);
-                alert(`Erro ao iniciar o Login com Google: ${error.message}`);
+                console.error("Erro no Redirecionamento de Login com Google:", error.code, error.message);
+                alert(`Erro no Login com Google: ${error.message}. Tente novamente.`);
                 
-                // Reabilita botões em caso de falha antes do redirect
+            } finally {
+                // Reabilita botões caso haja uma falha imediata antes do redirect
                 googleLoginBtn.disabled = false;
                 authSubmitBtn.disabled = false;
                 googleLoginBtn.innerHTML = `<svg class="google-icon" viewBox="0 0 48 48" width="48px" height="48px"><path fill="#FFC107" d="M43.6 20.4H24v7.2h11.2c-.5 2.5-2 4.6-4.3 6.1v4.7h6.1c3.7-3.4 5.9-8.4 5.9-14.7 0-1-.1-2-.3-3z"/><path fill="#FF3D00" d="M24 10.9c4.7 0 8.6 1.9 11.4 5.2l-6.1 4.7c-1.5-.9-3.4-1.5-5.3-1.5-4.1 0-7.7 2.8-8.9 6.6H7.1V15c3.2-3.7 7.9-6.9 16.9-6.9z"/><path fill="#4CAF50" d="M15.1 29.5c-.3-1-.5-2.1-.5-3.2s.2-2.2.5-3.2v-4.1H7.1v4.1c-.8 1.6-1.2 3.3-1.2 5.2s.4 3.6 1.2 5.2l6.1 4.7-6.1-4.7z"/><path fill="#1976D2" d="M24 37.1c4.4 0 8.1-1.6 10.8-4.3l6.1 4.7c-3.7 3.4-8.4 5.3-16.9 5.3-9 0-13.7-3.2-16.9-6.9l6.1-4.7c1.3 3.8 4.9 6.6 8.9 6.6z"/></svg> Entrar com Google`;
             }
         });
 
+        // D. Verificação do Resultado do Redirect (Necessário para signInWithRedirect)
+        async function handleGoogleRedirectResult() {
+            try {
+                const result = await getRedirectResult(auth);
+                if (result) {
+                    console.log("Login com Google por Redirect concluído com sucesso.");
+                    // O onAuthStateChanged cuidará da atualização da UI.
+                }
+            } catch (error) {
+                console.error("Erro ao processar resultado do Google Redirect:", error.message);
+                alert("Erro ao retornar do Login com Google. Tente novamente.");
+            }
+        }
 
-        // D. Submissão do Formulário de Login (E-mail/Senha)
+
+        // E. Submissão do Formulário de Login (E-mail/Senha)
         authForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -876,7 +917,7 @@
         });
 
 
-        // E. Lógica de Recuperação de Senha (Simplificada)
+        // F. Lógica de Recuperação de Senha (Simplificada)
         forgotPasswordLink.addEventListener('click', async (e) => {
             e.preventDefault();
             const email = document.getElementById('auth-email').value;
@@ -897,7 +938,7 @@
         });
 
 
-        // F. Terminar Sessão
+        // G. Terminar Sessão
         logoutBtn.addEventListener('click', async (e) => {
             e.preventDefault();
             try {
@@ -910,7 +951,7 @@
             }
         });
 
-        // G. Abrir Modal de Login
+        // H. Abrir Modal de Login
         document.getElementById('open-auth-modal-btn').addEventListener('click', (e) => {
             e.preventDefault();
             isRegisterMode = false; // Garante que começa no modo Login
@@ -922,11 +963,11 @@
         // --- 4. FUNÇÕES DE CONTEÚDO E RENDERIZAÇÃO ---
         
         async function checkForForcedUpdate() {
-            // ... (função inalterada)
+            // Simulação de verificação de atualização forçada
+            console.log("Checando por atualizações forçadas (Simulado)...");
         }
         
         function renderAppCard(data, gridElement) {
-            // ... (função inalterada)
             const card = document.createElement('div');
             card.className = 'app-card';
             card.dataset.id = data.id; 
@@ -943,8 +984,26 @@
             card.itemData = data; 
             gridElement.appendChild(card);
         }
+        
+        // Função para renderizar um card dentro do modal de lista completa
+        function renderFullListAppCard(data, gridElement) {
+            const card = document.createElement('div');
+            card.className = 'app-card full-list-card'; 
+            card.dataset.id = data.id; 
+            card.itemData = data; 
+            
+            const descriptionText = data.category || data.description || 'Geral'; 
 
-        // MUDANÇA: Título das seções horizontais
+            card.innerHTML = `
+                <img src="${data.image}" class="app-icon" alt="Ícone de ${data.name}" onerror="this.onerror=null; this.src='https://placehold.co/90x90/212B36/F8F9FA?text=${data.type.toUpperCase().substring(0,3)}';">
+                <div class="app-title">${data.name}</div>
+                <div class="app-description">${descriptionText}</div>
+            `;
+            
+            gridElement.appendChild(card);
+        }
+
+        // Título das seções horizontais
         function injectHorizontalSection(typeId, sectionContent) {
             const sectionTitle = typeMap[typeId] || 'Destaques';
             
@@ -965,7 +1024,7 @@
             mainContentContainer.appendChild(sectionElement); 
         }
 
-        // MUDANÇA: Título do feed principal
+        // Título do feed principal
         function renderDynamicFeedLayout(content) {
             mainContentContainer.innerHTML = ''; 
             
@@ -1017,31 +1076,83 @@
                 }
             });
             
-            bindViewAllEvents();
+            bindViewAllEvents(); // Chamada atualizada
         }
+        
+        // Função para mostrar o modal de detalhes (como na imagem)
+        function showDetailsModal(itemData) {
+            selectedItem = itemData;
 
-        function renderVerticalGrid(content, targetElement) {
-            // ... (função inalterada)
-             targetElement.innerHTML = '';
-            
-            const grid = document.createElement('div');
-            grid.className = 'full-list-grid';
-            
-            if (content.length === 0) {
-                targetElement.innerHTML = `<div class="loading-message" style="width: 100%; text-align: center; padding: 30px;">Nenhum item encontrado nesta visualização.</div>`;
-                return;
+            document.getElementById('details-icon').src = itemData.image;
+            document.getElementById('details-title').textContent = itemData.name;
+            document.getElementById('details-category-info').textContent = typeMap[itemData.type] || itemData.category || 'Geral';
+            document.getElementById('details-full-description').textContent = itemData.description;
+
+            // Lógica do Download Gate (Habilitar/Desabilitar Download)
+            const loginPrompt = document.getElementById('details-login-prompt');
+            if (currentUser) {
+                detailsDownloadBtn.style.display = 'block';
+                loginPrompt.style.display = 'none';
+            } else {
+                detailsDownloadBtn.style.display = 'none';
+                loginPrompt.style.display = 'block';
             }
             
-            content.forEach(data => renderAppCard(data, grid));
-            targetElement.appendChild(grid);
+            // Lógica de Apps Relacionados (simulada)
+            const related = allContent.filter(app => app.type === itemData.type && app.id !== itemData.id).slice(0, 5);
+            
+            if (related.length > 0) {
+                relatedAppsSection.style.display = 'block';
+                relatedAppsGrid.innerHTML = '';
+                related.forEach(data => renderAppCard(data, relatedAppsGrid));
+            } else {
+                relatedAppsSection.style.display = 'none';
+            }
+
+            detailsModal.style.display = 'flex';
         }
 
+        // --- CORREÇÃO DO BOTÃO "VER TODOS" ---
+        
+        function bindViewAllEvents() {
+            document.querySelectorAll('.view-all-link').forEach(link => {
+                // Remove qualquer ouvinte anterior para evitar duplicação
+                link.removeEventListener('click', handleViewAllClick);
+                link.addEventListener('click', handleViewAllClick);
+            });
+        }
+
+        function handleViewAllClick(e) {
+            e.preventDefault();
+            const typeId = e.currentTarget.dataset.typeId; 
+
+            if (typeId) {
+                const categoryName = typeMap[typeId] || 'Categoria Desconhecida';
+                const filteredList = allContent.filter(item => item.type === typeId);
+
+                // 1. Atualiza o título e o conteúdo do modal
+                fullListTitle.textContent = categoryName;
+                fullListGrid.innerHTML = ''; // Limpa o conteúdo anterior
+
+                filteredList.forEach(data => renderFullListAppCard(data, fullListGrid));
+
+                // 2. Aplica um estilo de grid
+                fullListGrid.style.display = 'grid';
+                fullListGrid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(100px, 1fr))';
+                fullListGrid.style.gap = '15px';
+                
+                // 3. Mostra o modal
+                fullListModal.style.display = 'flex';
+            }
+        }
+        // --- FIM DA CORREÇÃO DO BOTÃO "VER TODOS" ---
+
         async function loadContentFromFirestore() {
-            // ... (função inalterada)
             const contentCollection = collection(db, 'content');
             
             try {
-                const qAll = query(contentCollection, orderBy('createdAt', 'desc'));
+                // Ordena por data de criação (mais recente primeiro)
+                const qAll = query(contentCollection, orderBy('createdAt', 'desc')); 
                 const snapshotAll = await getDocs(qAll);
                 
                 allContent = [];
@@ -1062,7 +1173,6 @@
         }
 
         function renderCategoryFilters() {
-            // ... (função inalterada)
             categoryFilterBar.innerHTML = ''; 
             
             const allButton = document.createElement('button');
@@ -1089,7 +1199,28 @@
                 }
             });
         }
-
+        
+        function filterByCategory(typeId) {
+            // Remove 'active' de todos
+            document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
+            
+            // Adiciona 'active' ao botão clicado
+            const activeBtn = document.querySelector(`.filter-button[data-filter-type="${typeId}"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+            
+            // Lógica do filtro
+            let filteredContent = allContent;
+            if (typeId !== 'all') {
+                filteredContent = allContent.filter(item => item.type === typeId);
+            }
+            
+            renderDynamicFeedLayout(filteredContent); 
+            window.scrollTo(0, 0); 
+            
+            // Oculta/mostra a barra de filtro
+            categoryFilterBar.style.display = 'flex'; 
+        }
+        
 
         // --- 5. EVENTOS GERAIS E INICIALIZAÇÃO ---
 
@@ -1101,7 +1232,6 @@
             if (!currentUser) {
                 // Se não está logado, fecha detalhes e abre login
                 detailsModal.style.display = 'none'; 
-                // alert("Para continuar o download, por favor, faça Login."); // Removido por ser redundante
                 isRegisterMode = false;
                 toggleAuthMode();
                 authModal.style.display = 'flex'; 
@@ -1111,6 +1241,7 @@
             // Usuário logado: prosseguir com o download
             const downloadUrl = selectedItem.downloadLink; 
             if (downloadUrl && downloadUrl.startsWith('http')) {
+                // Redireciona para o link de download
                 window.location.href = downloadUrl;
             } else {
                 alert("Erro: Link de download inválido ou não configurado no Firebase.");
@@ -1144,6 +1275,16 @@
                 showDetailsModal(card.itemData);
             }
         });
+        
+        // Abrir Modal de Detalhes também nos cards do modal de lista completa
+        fullListGrid.addEventListener('click', (event) => {
+            const card = event.target.closest('.app-card');
+            if (card && card.itemData) {
+                fullListModal.style.display = 'none'; // Fecha o modal de lista
+                showDetailsModal(card.itemData); // Abre o modal de detalhes
+            }
+        });
+
 
         // Fechar Menu e Modais 
         document.addEventListener('click', (event) => {
@@ -1177,15 +1318,16 @@
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
-            console.log("DOM e Script Carregados. Inicializando App. (v3.4)"); 
+            console.log("DOM e Script Carregados. Inicializando App. (v3.8 - Correções de Login e Ver Todos)"); 
             
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons(); 
                 console.log("Ícones Lucide renderizados.");
             }
+            
+            // Verifica e processa o resultado do login por redirecionamento
+            await handleGoogleRedirectResult(); 
 
-            // NOVO: Verifica resultado do redirect ANTES de carregar o conteúdo
-            await handleGoogleRedirectResult();
             await loadContentFromFirestore();
             await checkForForcedUpdate(); 
             startPlaceholderAnimation();
